@@ -6,218 +6,328 @@ config:
 erDiagram
 Direction LR
     %% ==== ENTITY CHÍNH ====
-    NhanVien ||--|| ThongTinLienLac : co
-    NhanVien ||--|| TiepNhanNhanSu : tiepNhan
-    NhanVien ||--|| TaiKhoan : co
-    NhanVien ||--|| TrinhDo : hoc
-    NhanVien ||--|| CongViec : lam
-    NhanVien ||--|| Thue : quyetToan
-    NhanVien ||--|| BaoHiem : duoc
+    NhanVien ||--|| ThongTinLienLac : lienLac
+    NhanVien ||--|{ QuyetDinhNhanSu : quyetDinh
+    NhanVien ||--o| TaiKhoan : taiKhoan
+    NhanVien ||--|{ TrinhDo : trinhDo
+    NhanVien ||--o| Thue : quyetToan
+    NhanVien ||--o| BaoHiem : baoHiem
     NhanVien ||--o{ ChamCong : chamCong
-    NhanVien ||--o{ HopDong : "ky"
-    NhanVien ||--o{ Luong : "co"
+    NhanVien ||--o{ HopDong : "hopDong"
+    NhanVien ||--o{ Luong : "luong"
+    NhanVien ||--o| DanhMucNhomMau : "nhomMau"
+
+    Luong o{--|| DanhMucDoiTuongOT : "doiTuongOT"
+
+    ThongTinLienLac ||--|| DiaChi : diaChiThuongTru
+    ThongTinLienLac ||--|| DiaChi : diaChiHienTai
+    ThongTinLienLac ||--|| DanhMucTinhThanh : nguyenQuan
+    ThongTinLienLac ||--|| DanhMucTinhThanh : noiSinh
+    ThongTinLienLac ||--|| DanhMucTinhThanh : noiCapCCCD
+
  
     %% ==== LIÊN KẾT DANH MỤC ====
-    NhanVien }|--|| DanhMucGioiTinh : co
-    NhanVien }|--|| DanhMucHonNhan : co
-    NhanVien }|--|| DanhMucQuocTich : co
-    NhanVien }|--|| DanhMucTrangThaiLaoDong : co
+    NhanVien }o--o| DanhMucGioiTinh : gioiTinh
+    NhanVien }o--o| DanhMucHonNhan : honNhan
+    NhanVien }o--|| DanhMucQuocTich : quocTich
+    NhanVien }o--|| DanhMucTrangThaiLaoDong : trangThai
+
+    DiaChi ||--|| DanhMucPhuongXa: phuongXa
+    TaiKhoan |o--|| DanhMucNganHang : nganHang
+    DanhMucCaLamViec }o--|| DanhMucNhomCa : nhomCa
+
+    QuyetDinhNhanSu }o--o| DanhMucPhanLoaiChiPhi: chiPhiCap1
+    QuyetDinhNhanSu }o--o| DanhMucPhanLoaiChiPhi: chiPhiCap2
 
     NhanVien_NgoaiNgu }o--|| DanhMucNgoaiNgu : thuoc
-    NhanVien_NgoaiNgu }o--|| NhanVien : co
+    NhanVien_NgoaiNgu }o--|| NhanVien : thuoc
  
-    TiepNhanNhanSu }|--|| DanhMucPhongBan : thuoc
-    TiepNhanNhanSu }|--|| DanhMucViTri : viTri
-    TiepNhanNhanSu }|--|| DanhMucCapBac : capBac
+    QuyetDinhNhanSu }o--|| DanhMucPhongBan : phongBan
+    QuyetDinhNhanSu }o--|| DanhMucViTri : viTri
+    QuyetDinhNhanSu }o--|| DanhMucCapBac : capBac
+    QuyetDinhNhanSu }o--o| DanhMucLoaiNhanVien : thuocLoai
+    QuyetDinhNhanSu }o--|| DanhMucChucDanh : chucDanh
+    QuyetDinhNhanSu }o--|o NhanVien: quanLyTrucTiep
  
-    TrinhDo }|--|| DanhMucTrinhDo : co
-    TrinhDo }|--|| DanhMucTruongHoc : hoc
-    TrinhDo }|--|| DanhMucChuyenNganh : hoc
+    TrinhDo }o--o| DanhMucTrinhDo : trinhDo
+    TrinhDo }o--o| DanhMucTruongHoc : truong
+    TrinhDo }o--o| DanhMucNganhHoc : nganhHoc
+    TrinhDo }o--o| DanhMucChuyenNganh : chuyenNganh
  
-    BaoHiem }|--|| DanhMucNoiKCB : kham
+    BaoHiem }o--|| DanhMucNoiKCB : kham
  
-    ChamCong }|--|| DanhMucNhomCa : thuoc
+    ChamCong }|--|| DanhMucCaLamViec : caLamViec
+    ChamCong }|--|| DanhMucMayChamCong : mayChamCong
+    ChamCong }|--|| DanhMucDoiTuongChamCong : doiTuongChamCong
 
-    HopDong ||--|| DanhMucLoaiHopDong : "thuoc"
+    HopDong ||--|| DanhMucLoaiHopDong : "loaiHD"
+
+    DanhMucTinhThanh ||--o{ DanhMucQuanHuyen : "quanHuyen"
+    DanhMucQuanHuyen ||--o{ DanhMucPhuongXa : "phuongXa"
  
     %% ==== THỰC THỂ CHÍNH ====
     NhanVien {
-        string maNhanVien PK
-        string maGioiTinh FK
-        string maHonNhan FK
-        string maQuocTich FK
-        string maTrangThaiLaoDong FK
-        string hoTen
-        string tenThuongGoi
-        date ngaySinh
-        date ngayBatDauLam
-        date ngayChinhThuc
-        date ngayTinhThamNien
-        int soNgayTruThamNien
+        maNhanVien Text PK
+        maGioiTinh Text FK
+        maHonNhan Text FK
+        maQuocTich Text FK
+        maTrangThaiLaoDong Text FK
+        hoTen Text
+        tenThuongGoi Text
+        ngaySinh date
+        ngayBatDauLam date
+        ngayChinhThuc date
+        ngayTinhThamNien date
+        soNgayTruThamNien Number
     }
  
     ThongTinLienLac {
-        string maNhanVien PK, FK
-        string diaChiHienTai
-        string diaChiThuongTru
-        string nguyenQuan
-        string noiSinh
-        string soCCCD
-        date ngayCapCCCD
-        string dienThoai
-        string emailCongTy
-        string emailCaNhan
-        string lienHeKhanCap
-        string sdtLienHeKhanCap
+        maNhanVien Text FK
+        diaChiHienTai Text FK
+        diaChiThuongTru Text FK
+        nguyenQuan Text FK
+        noiSinh Text FK
+        noiCapCCD Text FK
+        nhomMau Text FK
+        soCCCD Text
+        ngayCapCCCD date
+        dienThoai Text
+        emailCongTy Text
+        emailCaNhan Text
+        lienHeKhanCap Text
+        sdtLienHeKhanCap Text
     }
  
-    TiepNhanNhanSu {
-        string maNhanVien PK, FK
-        string maPhongBan FK
-        string maViTri FK
-        string maCapBac FK
-        string soQuyetDinh
-        date ngayQuyetDinh
-        string loaiNhanVien
-        string chucDanh
-        string chiPhiCap1
-        string chiPhiCap2
+    QuyetDinhNhanSu {
+        maNhanVien Text FK
+        maPhongBan Text FK
+        maViTri Text FK
+        maCapBac Text FK
+        maNhanVienQuanLyTrucTiep Text FK        
+        loaiNhanVien Text FK
+        chucDanh Text FK
+        chiPhiCap1 Text FK
+        chiPhiCap2 Text FK
+        soQuyetDinh Text
+        ngayQuyetDinh date
     }
  
     TaiKhoan {
-        string maNhanVien PK, FK
-        string taiKhoanNganHang
-        string nganHang
-        string chiNhanh
-        string maSoThue
+        maNhanVien Text PK, FK        
+        maNganHang Text FK
+        taiKhoanNganHang Text
+        chiNhanh Text
+        maSoThue Text
     }
  
     TrinhDo {
-        string maNhanVien PK, FK
-        string maNganhHoc FK
-        string maChuyenNganh FK
-        string maTrinhDoHocVan FK
-        string maTruongHoc FK
+        maNhanVien Text FK
+        maNganhHoc Text FK
+        maChuyenNganh Text FK
+        maTrinhDoHocVan Text FK
+        maTruongHoc Text FK
     }
 
     NhanVien_NgoaiNgu {
-        string maNhanVien FK
-        string maNgoaiNgu FK
-        string trinhDo
-    }
- 
-    CongViec {
-        string maNhanVien PK, FK
-        string maNhanVienQuanLyTrucTiep FK
+        maNhanVien Text FK
+        maNgoaiNgu Text FK
+        trinhDo Text
     }
  
     Thue {
-        string maNhanVien PK, FK
-        boolean uyQuyen
-        boolean khongTinhGiamTru
+        maNhanVien Text PK, FK
+        uyQuyen boolean
+        khongTinhGiamTru boolean
     }
  
     BaoHiem {
-        string maNhanVien PK, FK
-        string maNoiKCB FK
-        date ngayNghiViec
-        string soSoBHXH
-        string maBHXH
-        string theBHYT
-        date ngayCapTheBHYT
-        date ngayHetHanBHYT
+        maNhanVien Text PK, FK
+        maNoiKCB Text FK
+        ngayNghiViec date
+        soSoBHXH Text
+        maBHXH Text
+        theBHYT Text
+        ngayCapTheBHYT date
+        ngayHetHanBHYT date
     }
 
     Luong {
-        string id PK
-        string maNhanVien FK
-        decimal luongCoBan
-        decimal phuCap
-        decimal heSoLuong
-        date ngayHieuLuc
+        maLuong Text PK
+        maNhanVien Text FK
+        maDoiTuongOT Text FK
+        luongCoBan decimal
+        phuCap decimal
+        heSoLuong decimal
+        ngayHieuLuc date
+    }
+
+    DiaChi {
+        maDiaChi Text PK
+        maPhuongXa Text FK
+        soDuong Text
     }
  
     HopDong {
-        string id PK
-        string maNhanVien FK
-        string maLoaiHopDong FK
-        string soHopDong
-        date ngayBatDau
-        date ngayKetThuc
+        maHopDong Text PK
+        maNhanVien Text FK
+        maLoaiHopDong Text FK
+        soHopDong Text
+        ngayBatDau date
+        ngayKetThuc date
+    }
+    
+    ChamCong {
+        maNhanVien Text FK
+        maDoiTuongChamCong Text FK
+        maCaLamViec Text FK
+        ngayChamCong date
     }
     %% ==== DANH MỤC ====
-    ChamCong {
-        string maNhanVien FK
-        string maNhomCa FK
-        date ngayChamCong
+    DanhMucTinhThanh {
+        maTinhThanh Text PK
+
     }
 
     DanhMucTrangThaiLaoDong {
-        string maTrangThaiLaoDong PK
-        string ten
+        maTrangThaiLaoDong Text PK
+        ten Text
     }
 
     DanhMucLoaiHopDong {
-        string maLoaiHopDong PK
-        string ten
+        maLoaiHopDong Text PK
+        ten Text
     }
 
     DanhMucGioiTinh {
-        string maGioiTinh PK
-        string ten
+        maGioiTinh Text PK
+        ten Text
     }
  
     DanhMucHonNhan {
-        string maHonNhan PK
-        string ten
+        maHonNhan Text PK
+        ten Text
     }
  
     DanhMucQuocTich {
-        string maQuocTich PK
-        string ten
+        maQuocTich Text PK
+        ten Text
     }
  
     DanhMucPhongBan {
-        string maPhongBan PK
-        string ten
+        maPhongBan Text PK
+        ten Text
     }
  
     DanhMucViTri {
-        string maViTri PK
-        string ten
+        maViTri Text PK
+        ten Text
     }
  
     DanhMucCapBac {
-        string maCapBac PK
-        string ten
+        maCapBac Text PK
+        ten Text
+    }
+    
+    DanhMucChucDanh {
+        Text maChucDanh PK
+        Text ten
     }
  
     DanhMucTrinhDo {
-        string maTrinhDo PK
-        string ten
+        maTrinhDo Text PK
+        ten Text
     }
  
     DanhMucTruongHoc {
-        string maTruongHoc PK
-        string ten
+        maTruongHoc Text PK
+        ten Text
+    }
+ 
+    DanhMucNganhHoc {
+        maNganhHoc Text PK
+        ten Text
     }
  
     DanhMucChuyenNganh {
-        string maChuyenNganh PK
-        string ten
+        maChuyenNganh Text PK
+        ten Text
     }
  
     DanhMucNgoaiNgu {
-        string maNgoaiNgu PK
-        string ten
+        maNgoaiNgu Text PK
+        ten Text
     }
  
     DanhMucNoiKCB {
-        string maNoiKCB PK
-        string ten
+        maNoiKCB Text PK
+        ten Text
     }
  
     DanhMucNhomCa {
-        string maNhomCa PK
-        string ten
+        maNhomCa Text PK
+        ten Text
+    }
+
+
+    DanhMucTinhThanh {
+        Text maTinhThanh PK
+        Text ten
+        Text ghiChu
+    }
+
+    DanhMucQuanHuyen {
+        Text maQuanHuyen PK
+        Text maTinhThanh FK
+        Text ten
+    }
+
+    DanhMucPhuongXa {
+        Text maPhuongXa PK
+        Text maQuanHuyen FK
+        Text ten
+    }
+
+    DanhMucPhanLoaiChiPhi {
+        Text maLoaiChiPhi PK
+        Text ten
+    }
+
+    DanhMucNganHang {
+        Text maNganHang PK
+        Text ten
+        Text tenVietTat
+    }
+
+    DanhMucCaLamViec {
+        Text maCa PK
+        Text tenCa
+        time gioBatDau
+        time gioKetThuc
+    }
+
+    DanhMucMayChamCong {
+        Text maMay PK
+        Text ten
+        Text diaChiIP
+        Text viTri
+    }
+
+    DanhMucDoiTuongChamCong {
+        Text maDoiTuong PK
+        Text ten
+    }
+
+    DanhMucDoiTuongOT {
+        Text maDoiTuongOT PK
+        Text ten
+    }
+
+    DanhMucLoaiNhanVien {
+        Text maLoaiNhanVien PK
+        Text ten
+    }
+
+    DanhMucNhomMau {
+        Text maNhomMau PK
+        Text ten
     }

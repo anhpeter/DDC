@@ -7,296 +7,313 @@ erDiagram
 Direction LR
  
     NganSach {
-        string maNganSach PK
-        string ten
+        maNganSach Text PK
+        ten Text
     }
 
     LoaiNganSach {
-        string maLoaiNganSach PK
-        string ten
+        maLoaiNganSach Text PK
+        ten Text
+    }
+    
+    KhoanMucKeToan {
+        maKhoanMucKeToan Text PK
+        ten Text
     }
 
     NganSach_DuAn {
-        string maDuAn PK
-        string maNganSach PK
-        string donVi
-        int soLuong
-        float donGia
-        string maKhoanMucKeToan        
+        maDuAn Text FK
+        maNganSach Text FK
+        maKhoanMucKeToan Text FK
+        donVi Text
+        soLuong Number
+        donGia Number
+        maKhoanMucKeToan Text        
     }
 
     DuAn {
-        string maDuAn PK
-        string maKhachHang FK
-        string ten
+        maDuAn Text PK
+        maKhachHang Text FK
+        ten Text
+        ngayBatDau date
+        ngayKetThuc date
     }
 
     HangMuc {
-        string maHangMuc PK
-        string maDuAn FK
-        string maLoaiHinhSanPham FK
-        string ten
+        maHangMuc Text PK
+        maDuAn Text FK
+        maLoaiHinhSanPham Text FK
+        ten Text
     }
 
     PR {
-        string maPR PK
-        string maDiaChiGiaoHang FK
-        string maHangMuc FK
-        string maNhanVienDeNghi FK
-        string maNhanVienPheDuyet FK
-        string trangThai
-        date ngayTao
-        date ngayDuyet
+        maPR Text PK
+        maDiaChiGiaoHang Text FK
+        maHangMuc Text FK
+        maNhanVienDeNghi Text FK
+        maNhanVienPheDuyet Text FK
+        trangThai Text
+        ngayTao date
+        ngayDuyet date
     }
 
     PRChiTiet {
-        string maVatTu FK
-        string maPR FK
-        int soLuong
+        maVatTu Text FK
+        maPR Text FK
+        soLuong Number
     }
 
     PO {
-        string maPO PK
-        string maBoPhanLapDonHang FK
-        string maNhanVienLapDonHang FK
-        string maNhanVienPheDuyet FK
-        string trangThai
-        date ngayTao
-        date ngayDuyet
-        date ngayGiaoHangDuKien
+        maPO Text PK
+        maBoPhanLapDonHang Text FK
+        maNhanVienLapDonHang Text FK
+        maNhanVienPheDuyet Text FK
+        trangThai Text
+        ngayTao date
+        ngayDuyet date
+        ngayGiaoHangDuKien date
     }
 
     POChiTiet {
-        string maPO PK
-        string maNCC PK
-        string maNganSach FK
-        int soLuong
-        float donGia
+        maPO Text PK
+        maPR Text FK
+        maNCC Text FK
+        maNganSach Text FK
+        soLuong Number
+        donGia Number
     }
 
-    PRChiTiet_POChiTiet {
-        string maPOChiTiet FK
-        string maPR FK
-    }
 
     BOM {
-        string maBOM PK
-        int phienBan
-        string ten
+        maBOM Text PK
+        phienBan Number
+        ten Text
     }    
 
     BOMChiTiet {
-        string maBOM PK
-        string maHangMuc FK
-        string maVatTu FK
-        int soLuong
-        float haoHut
+        maBOM Text PK
+        maHangMuc Text FK
+        maVatTu Text FK
+        soLuong Number
+        haoHut Number
     }
 
     VatTu {
-        string maVatTu PK
-        string maDonViTinh FK
-        string maNhomHang FK
-        string maLoaiHinhSanPham FK
-        string maTaiKhoanKeToan FK
-        string ten
+        maVatTu Text PK
+        maDonViTinh Text FK
+        maNhomHang Text FK
+        maLoaiHinhSanPham Text FK
+        maTaiKhoanKeToan Text FK
+        maPhanCapVatTu1 Text FK
+        maPhanCapVatTu2 Text FK
+        ten Text        
+    }
+
+    PhanCapVatTu {
+        maCayPhanCapVatTu Text PK
+        maNhomCha Text FK
+        ten Text
     }
 
     TinhChatVatTu {
-        string maTinhChatVatTu PK
-        string ten
+        maTinhChatVatTu Text PK
+        ten Text
     }
 
     LoaiHinhSanPham {
-        string maLoaiHinhSanPham PK
-        string ten
+        maLoaiHinhSanPham Text PK
+        ten Text
     }
 
     TaiKhoanKeToan {
-        string maTaiKhoanKeToan PK
-        string ten
+        maTaiKhoanKeToan Text PK
+        ten Text
     }
 
     ThueGTGT {
-        string maThueGTGT PK
-        string tenThue
-        string loaiThue
+        maThueGTGT Text PK
+        tenThue Text
+        loaiThue Text
     }
 
     TaiKhoanKeToan_ThueGTGT {
-        string maTaiKhoanKeToan FK
-        string maThueGTGT FK
+        maTaiKhoanKeToan Text FK
+        maThueGTGT Text FK
     }
 
     DangKyTaiSan {
-        string maDangKyTaiSan PK
-        string maTaiKhoanNguyenGia FK
-        string maTaiKhoanKH FK
-        string maTaiKhoanHangBan FK
-        string maDonViTinh FK
-        string maBoPhan FK
+        maDangKyTaiSan Text PK
+        maTaiKhoanNguyenGia Text FK
+        maTaiKhoanKH Text FK
+        maTaiKhoanHangBan Text FK
+        maDonViTinh Text FK
+        maBoPhan Text FK
     }
 
     BoPhan {
-        string maBoPhan PK
-        string ten
+        maBoPhan Text PK
+        ten Text
     }
 
     DonViTinh {
-        string maDonViTinh PK
-        string ten
+        maDonViTinh Text PK
+        ten Text
     }
 
     NhomHang {
-        string maNhomHang PK
-        string maTaiKhoanTonKho FK
-        string maTaiKhoanGiaVon FK
-        string maTaiKhoanDoanhThu FK
-        string maTaiKhoanHangBan FK
-        string ten
+        maNhomHang Text PK
+        maTaiKhoanTonKho Text FK
+        maTaiKhoanGiaVon Text FK
+        maTaiKhoanDoanhThu Text FK
+        maTaiKhoanHangBan Text FK
+        ten Text
     }
 
     YeuToVatTu {
-        string maYeuToVatTu PK
-        string ten
+        maYeuToVatTu Text PK
+        ten Text
     }
 
     VatTu_TinhChatVatTu {
-        string maVatTu FK
-        string maTinhChatVatTu FK
+        maVatTu Text FK
+        maTinhChatVatTu Text FK
     }
 
     "DoiTuong_KH&NCC" {
-        string maDoiTuong PK
-        string ten
+        maDoiTuong Text PK
+        ten Text
     }
 
     DiaChiGiaoHang {
-        string maDiaChiGiaoHang PK
-        string diaChi
+        maDiaChiGiaoHang Text PK
+        diaChi Text
     }
 
     NhanVien {
-        string maNhanVien PK
-        string ten
+        maNhanVien Text PK
+        ten Text
     }
 
     LenhNhapKho {
-        string maPNK PK
-        string maKho FK
-        date ngayTao
-        date ngayDuyet
-        string trangThai
+        maLenhNhapKho Text PK
+        maKho Text FK
+        maPO Text FK
+        ngayTao date
+        ngayDuyet date
+        trangThai Text
     }
 
     PhieuNhapKho {
-        string maPNK PK
-        string maKho FK
+        maPhieuNhapKho Text PK
+        maLenhNhapKho TextFK        
+        maKho Text FK
     }
 
     LenhXuatKho {
-        string maLXK PK
-        string maKho FK
-        date ngayTao
-        date ngayDuyet
-        string trangThai
+        maLenhNhapKho Text PK
+        maKho Text FK
+        ngayTao date
+        ngayDuyet date
+        trangThai Text
     }
 
     PhieuXuatKho {
-        string maPXK PK
-        string maKho FK
+        maPhieuXuatKho Text PK
+        maLenhXuatKho Text FK
+        maKho Text FK
     }
 
     LenhXuatKhoChiTiet {
-        string maLXK PK
-        string maVatTu FK
-        int soLuong
+        maLXK Text PK
+        maVatTu Text FK
+        soLuong Number
     }
 
     PhieuNhapKhoChiTiet {
-        string maPNK PK
-        string maVatTu FK
-        int soLuong
+        maPNK Text PK
+        maVatTu Text FK
+        soLuong Number
     }
 
     LenhNhapKhoChiTiet {
-        string maLNK PK
-        string maVatTu FK
-        int soLuong
+        maLNK Text PK
+        maVatTu Text FK
+        soLuong Number
     }
 
     PhieuXuatKhoChiTiet {
-        string maPXK PK
-        string maVatTu FK
-        int soLuong
+        maPXK Text PK
+        maVatTu Text FK
+        soLuong Number
     }
 
-    Kho {
-        string maKho PK
-        string ten
+    
+    __Kho {
+        maKho Text PK
+        ten Text
     }
 
     TonKho {
-        string maKho PK
-        string maVatTu FK
-        int soLuong
+        maKho Text PK
+        maVatTu Text FK
+        soLuong Number
     }
  
     %% Relationships
-    NganSach |{--|| LoaiNganSach : "thuocLoai"
-    NganSach ||--|{ NganSach_DuAn : "duocPhanBo"
-    DuAn ||--|{ NganSach_DuAn : "coNganSach"
-    DuAn ||--o{ HangMuc : "baoGom"
-    PR o{--|| HangMuc : "thuocHangMuc"
-    PR ||--|| DiaChiGiaoHang : "coDiaChi"
-    PR ||--|| NhanVien : "duocTaoBoi"
-    PR ||--o| NhanVien : "duocDuyetBoi"
-    PR ||--|| BoPhan : "thuocBoPhan"
-    PRChiTiet o{--|| PR : "thuocPR"
-    PRChiTiet o{--|| VatTu : "yeuCau"
-    BOMChiTiet o{--|| VatTu : "suDung"
-    BOMChiTiet o{--|| BOM : "thuocBOM"
-    BOMChiTiet o{--|| HangMuc : "choHangMuc"
-    POChiTiet o{--|| PO : "thuocPO"
-    POChiTiet o{--|| "DoiTuong_KH&NCC"  : "tuNhaCungCap"
-    POChiTiet o{--|| "NganSach"  : "thuocNganSach"
-    PRChiTiet_POChiTiet o{--o{ "PRChiTiet"  : "thamChieu"
-    PRChiTiet_POChiTiet o{--o{ "POChiTiet"  : "thamChieu"
-    PO ||--|| NhanVien : "duocTaoBoi"
-    PR ||--|| NhanVien : "duocDuyetBoi"
-    PO ||--|| BoPhan : "thuocBoPhan"
-    VatTu |{--|| DonViTinh : "coDonVi"
-    VatTu o{--|| NhomHang : "thuocNhom"
-    VatTu o{--|| LoaiHinhSanPham : "thuocLoai"
-    VatTu ||--|{ YeuToVatTu : "coYeuTo"
-    VatTu ||--|| TaiKhoanKeToan : "taiKhoanKeToan"
-    VatTu_TinhChatVatTu o{--|| TinhChatVatTu : "coTinhChat"
-    VatTu_TinhChatVatTu o{--|| VatTu : "thuocVatTu"
-    NhomHang ||--|| TaiKhoanKeToan : "taiKhoanDoanhThu"
-    NhomHang ||--|| TaiKhoanKeToan : "taiKhoanChiPhi"
-    NhomHang ||--|| TaiKhoanKeToan : "taiKhoanGiaVon"
-    NhomHang ||--|| TaiKhoanKeToan : "taiKhoanTonKho"
-    TaiKhoan_ThueGTGT o{--|| TaiKhoanKeToan : "apDungCho"
-    TaiKhoan_ThueGTGT o{--|| ThueGTGT : "thueSuat"
-    DangKyTaiSan |{--|| TaiKhoanKeToan : "taiKhoanTaiSan"
-    DangKyTaiSan |{--|| BoPhan : "thuocBoPhan"
-    DangKyTaiSan |{--|| DonViTinh : "donViTinh"
-    DangKyTaiSan |{--|| BoPhan : "boPhanSuDung"
-    DuAn o{--|| "DoiTuong_KH&NCC"   : "khachHang"
-    TonKho o{--|| Kho : "taiKho"
-    TonKho o{--|| VatTu : "vatTuTon"
-    LenhNhapKho o{--|| PO : "tuPO"
-    LenhNhapKho o{--|| Kho : "nhapTai"
-    LenhXuatKho o{--|| Kho : "xuatTu"
-    PhieuNhapKho o{--|| Kho : "nhapTai"
-    PhieuXuatKho o{--|| Kho : "xuatTu"
-    PhieuXuatKho o{--|| LenhNhapKho : "theoLenh"
-    PhieuNhapKho o{--|| LenhNhapKho : "theoLenh"
-    LenhNhapKhoChiTiet |{--|| LenhNhapKho : "thuocLenh"
-    LenhNhapKhoChiTiet o{--|| VatTu : "vatTuNhap"
-    PhieuNhapKhoChiTiet |{--|| PhieuNhapKho : "thuocPhieu"
-    PhieuNhapKhoChiTiet o{--|| VatTu : "vatTuNhap"
-    LenhXuatKhoChiTiet |{--|| LenhXuatKho : "thuocLenh"
-    LenhXuatKhoChiTiet o{--|| VatTu : "vatTuXuat"
-    PhieuXuatKhoChiTiet |{--|| PhieuXuatKho : "thuocPhieu"
-    PhieuXuatKhoChiTiet o{--|| VatTu : "vatTuXuat"
+    LoaiNganSach ||--o{ NganSach : "loai"
+    NganSach ||--o{ NganSach_DuAn : "phanBo"
+    DuAn ||--o{ NganSach_DuAn : "duAn"
+    NganSach_DuAn o{--|| KhoanMucKeToan : "khoanMuc"
+    DuAn ||--o{ HangMuc : "hangMuc"
+    HangMuc ||--o{ PR : "pr"
+    PR |{--|| DiaChiGiaoHang : "diaChi"
+    PR |{--|| NhanVien : "tao"
+    PR |{--o| NhanVien : "duyet"
+    PR |{--|| BoPhan : "boPhan"
+    PR ||--o{ PRChiTiet : "chiTiet"
+    PRChiTiet o{--|| VatTu : "vatTu"
+    VatTu ||--|{ BOMChiTiet : "suDung"
+    BOM |{--|| BOMChiTiet : "bom"
+    HangMuc ||--|| BOMChiTiet : "hangMuc"
+    PO ||--o{ POChiTiet : "chiTiet"
+    POChiTiet o{--|| "DoiTuong_KH&NCC" : "ncc"
+    POChiTiet o{--|| NganSach : "nganSach"
+    POChiTiet o{--|| PR : "pr"
+    PO ||--|| NhanVien : "tao"
+    PO ||--|| BoPhan : "boPhan"
+    VatTu o{--|| DonViTinh : "dvt"
+    VatTu o{--|| NhomHang : "nhom"
+    VatTu o{--|| LoaiHinhSanPham : "loai"
+    VatTu ||--|{ YeuToVatTu : "yeuTo"
+    VatTu o{--|| TaiKhoanKeToan : "tk"
+    VatTu o{--o| PhanCapVatTu : "cap1"
+    VatTu o{--o| PhanCapVatTu : "cap2"
+    PhanCapVatTu o|--o| PhanCapVatTu : "nhomCha"
+    TinhChatVatTu ||--o{ VatTu_TinhChatVatTu : "tinhChat"
+    VatTu_TinhChatVatTu o{--|| VatTu : "vatTu"
+    NhomHang o{--|| TaiKhoanKeToan : "tkDT"
+    NhomHang o{--|| TaiKhoanKeToan : "tkCP"
+    NhomHang o{--|| TaiKhoanKeToan : "tkGV"
+    NhomHang o{--|| TaiKhoanKeToan : "tkTK"
+    TaiKhoanKeToan ||--o{ TaiKhoanKeToan_ThueGTGT : "tk"
+    ThueGTGT ||--o{ TaiKhoanKeToan_ThueGTGT : "thue"
+    DangKyTaiSan o{--|| TaiKhoanKeToan : "tk"
+    DangKyTaiSan |{--|| DonViTinh : "dvt"
+    DangKyTaiSan o{--|| BoPhan : "boPhan"
+    DangKyTaiSan o{--|| KhoanMucKeToan : "khoanMuc"
+    "DoiTuong_KH&NCC" ||--o{ DuAn : "kh"
+    __Kho ||--o{ TonKho : "ton"
+    __Kho ||--o{ LenhNhapKho : "nhap"
+    __Kho ||--o{ LenhXuatKho : "xuat"
+    TonKho o{--|| VatTu : "vatTu"
+    LenhNhapKho o{--|| PO : "po"
+    LenhNhapKho ||--o{ PhieuNhapKho : "phieu"
+    LenhXuatKho ||--o{ PhieuXuatKho : "phieu"
+    LenhNhapKho ||--|{ LenhNhapKhoChiTiet : "chiTiet"
+    PhieuNhapKho ||--|{ PhieuNhapKhoChiTiet : "chiTiet"
+    LenhXuatKho ||--|{ LenhXuatKhoChiTiet : "chiTiet"
+    PhieuXuatKho ||--|{ PhieuXuatKhoChiTiet : "chiTiet"
+    LenhNhapKhoChiTiet o{--|| VatTu : "vatTu"
+    PhieuNhapKhoChiTiet o{--|| VatTu : "vatTu"
+    LenhXuatKhoChiTiet o{--|| VatTu : "vatTu"
+    PhieuXuatKhoChiTiet o{--|| VatTu : "vatTu"
