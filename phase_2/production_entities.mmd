@@ -1,0 +1,231 @@
+---
+title: OVERVIEW
+config:
+  theme: neutral
+  layout: elk
+---
+erDiagram
+Direction LR
+    BOM {
+        Text alternative_bom PK
+        Number plant PK
+        Text zone FK
+        Text item PK
+    }
+    Workshop {
+        Text plant FK
+        Text work_center PK
+    }
+    Routing {
+        Text	plant	FK
+        Text	operation_activity_number	PK
+        Text	work_center	PK
+        Text	plan_workshop	FK
+    }
+    ProductionVersion {
+        Text plant FK
+        Text material_number_sap FK
+    }
+    PR {
+        Text no PK
+        Text unit_code FK
+        Text user_code FK
+        Text warehouse FK
+        Text location FK
+        Text zone FK
+    }
+    PO {
+        Text no PK
+        Text supplier FK
+        Text delivery_unit FK
+        Text receiving_unit FK
+        Text order_creator FK
+        Text purchase_contract FK
+        Text warehouse FK
+        Text department FK
+    }
+    LenhXuatKho {
+        Text no PK
+        Text unit FK
+        Text receiver FK
+    }
+    PhieuXuatKho {
+        Text receiver FK
+        Text location FK
+        Text zone_code FK
+        Text warehouse FK
+        Text construction_code FK
+        Text issue_code FK
+        Text create_staff FK
+        Text approver_staff FK
+        Text staff_code FK
+        Text no PK
+    }
+    LenhNhapKho {
+        Text no PK
+        Text create_staff FK
+        Text approver_staff FK
+        Text instructor FK
+        Text warehouse_clerk FK
+    }
+    PhieuNhapKho {
+        Text no PK
+        Text create_staff FK
+        Text delivery_staff FK
+        Text warehouse_clerk FK
+        Text chief_accountant FK
+        Text manager FK
+    }
+    LoaiHinhXuat {
+        Text id PK
+    }
+    CongDoan {
+        Text code PK
+    }
+    PhanLoaiCauKien {
+        Text code PK
+    }
+    Shipment {
+        Text shipment_id PK
+        Text project_id FK
+        Text warehouse FK
+    }
+    Package {
+        Number package_id PK
+        Text shipment_id FK
+        LOV container_type
+    }
+    MemType {
+        Number member_type_id PK
+    }
+    MemberCategory {
+        Number group FK
+        Text name PK
+    }
+    MemberGroup {
+        Text name PK
+    }
+    Member {
+        Text member_id PK
+        Text category FK
+        Text type FK
+    }
+    MemberLifeState {
+        Number state_code PK
+        Text state_name
+    }
+    Phase {
+        Text code PK
+        Text zone FK
+    }
+    Part {
+        Text member FK
+        Text guid PK
+        Text cutting_plan_user FK
+        Text cutting_user FK
+        Text cutting_workshop FK
+        Text delivery_user FK
+    }
+    CostCenter {
+        Text controlling_area FK
+        Text company_code FK
+        Text plant FK
+        Text cost_center PK
+        Text profit_center FK
+    }
+    ProfitCenter {
+        Text controlling_area FK
+        Text company_code FK
+        Text plant FK
+        Text profit_center FK
+    }
+    SKF {
+        Text skf PK
+    }
+    ActivityType {
+        Text activity_type PK
+    }
+    InternalOder {
+        Text order_type PK
+    }
+    Characteristic {
+        Number no
+        Text module
+        Text characteristic
+        Text description
+    }
+    Tax {
+        Text code PK
+        Text account_for_posting FK
+        Text company_code FK
+    }
+    PaymentTerms {
+        Number no
+        Text code PK
+    }
+    PaymentMethod {
+        Number index PK
+    }
+    PlanningLevel {
+        Text code PK
+    }
+    PlanningGroup {
+        Text code PK
+    }    
+    HouseBank {
+        Text c_code PK
+        Text account_id FK
+        Text bank_account_number
+    }
+    BankKey {
+        Text bank_code PK
+        Text region_code
+        Text bank_branch
+    }
+    COD {
+        Text account_code PK
+    }
+    DocumentType {
+        Text doc_type PK
+    }
+    CounterParty {
+        Text previous_code PK
+    }
+    Assets {
+        Text asset_code PK
+        Text basic_unit_code FK
+        Text unit_of_measure_code  FK
+        Text asset_account  FK
+        Text management_department  FK
+        Text item_code
+        Text debit_account  FK
+        Text credit_account  FK
+    }
+    FunctionModule {
+        Number category FK
+        Number module_id PK
+        Text name
+    }
+    User {
+        Text role FK
+        Text staff_code Fk
+        Text user_id PK
+    }
+    FunctionCategory {
+        Number category_id PK
+        Text category_name
+    }
+    Function {
+        Text function_description PK
+        Text function_id
+        Text function_module FK
+    }
+    Role {
+        Text role_id PK
+        Text role_name
+    }
+    Privileges {
+        Text role_id PK
+        Text function PK
+        Bool is_check
+    }

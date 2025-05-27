@@ -1,0 +1,503 @@
+---
+title: OVERVIEW
+config:
+  theme: neutral
+  layout: elk
+---
+erDiagram
+Direction LR
+    %% BOM {
+    %%     Text alternative_bom PK
+    %%     Number plant PK
+    %%     Text zone FK
+    %%     Text item PK
+    %% }
+    %% Workshop {
+    %%     Text plant FK
+    %%     Text work_center PK
+    %% }
+    %% Routing {
+    %%     Text	plant	FK
+    %%     Text	operation_activity_number	PK
+    %%     Text	work_center	PK
+    %%     Text	plan_workshop	FK
+    %% }
+    %% ProductionVersion {
+    %%     Text plant FK
+    %%     Text material_number_sap FK
+    %% }
+    %% PR {
+    %%     Text no PK
+    %%     Text unit_code FK
+    %%     Text user_code FK
+    %%     Text warehouse FK
+    %%     Text location FK
+    %%     Text zone FK
+    %% }
+    %% PO {
+    %%     Text no PK
+    %%     Text supplier FK
+    %%     Text delivery_unit FK
+    %%     Text receiving_unit FK
+    %%     Text order_creator FK
+    %%     Text purchase_contract FK
+    %%     Text warehouse FK
+    %%     Text department FK
+    %% }
+    %% LenhXuatKho {
+    %%     Text no PK
+    %%     Text unit FK
+    %%     Text receiver FK
+    %% }
+    %% PhieuXuatKho {
+    %%     Text receiver FK
+    %%     Text location FK
+    %%     Text zone_code FK
+    %%     Text warehouse FK
+    %%     Text construction_code FK
+    %%     Text issue_code FK
+    %%     Text create_staff FK
+    %%     Text approver_staff FK
+    %%     Text staff_code FK
+    %%     Text no PK
+    %% }
+    %% LenhNhapKho {
+    %%     Text no PK
+    %%     Text create_staff FK
+    %%     Text approver_staff FK
+    %%     Text instructor FK
+    %%     Text warehouse_clerk FK
+    %% }
+    %% PhieuNhapKho {
+    %%     Text no PK
+    %%     Text create_staff FK
+    %%     Text delivery_staff FK
+    %%     Text warehouse_clerk FK
+    %%     Text chief_accountant FK
+    %%     Text manager FK
+    %% }
+    %% LoaiHinhXuat {
+    %%     Text id PK
+    %% }
+    %% CongDoan {
+    %%     Text code PK
+    %% }
+    %% PhanLoaiCauKien {
+    %%     Text code PK
+    %% }
+    %% Shipment {
+    %%     Text shipment_id PK
+    %%     Text project_id FK
+    %%     Text warehouse FK
+    %% }
+    %% Package {
+    %%     Number package_id PK
+    %%     Text shipment_id FK
+    %%     LOV container_type
+    %% }
+    %% MemType {
+    %%     Number member_type_id PK
+    %% }
+    %% MemberCategory {
+    %%     Number group FK
+    %%     Text name PK
+    %% }
+    %% MemberGroup {
+    %%     Text name PK
+    %% }
+    %% Member {
+    %%     Text member_id PK
+    %%     Text category FK
+    %%     Text type FK
+    %% }
+    %% MemberLifeState {
+    %%     Number state_code PK
+    %%     Text state_name
+    %% }
+    %% Phase {
+    %%     Text code PK
+    %%     Text zone FK
+    %% }
+    %% Part {
+    %%     Text member FK
+    %%     Text guid PK
+    %%     Text cutting_plan_user FK
+    %%     Text cutting_user FK
+    %%     Text cutting_workshop FK
+    %%     Text delivery_user FK
+    %% }
+    %% CostCenter {
+    %%     Text controlling_area FK
+    %%     Text company_code FK
+    %%     Text plant FK
+    %%     Text cost_center PK
+    %%     Text profit_center FK
+    %% }
+    %% ProfitCenter {
+    %%     Text controlling_area FK
+    %%     Text company_code FK
+    %%     Text plant FK
+    %%     Text profit_center FK
+    %% }
+    %% SKF {
+    %%     Text skf PK
+    %% }
+    %% ActivityType {
+    %%     Text activity_type PK
+    %% }
+    %% InternalOder {
+    %%     Text order_type PK
+    %% }
+    %% Characteristic {
+    %%     Number no
+    %%     Text module
+    %%     Text characteristic
+    %%     Text description
+    %% }
+    %% Tax {
+    %%     Text code PK
+    %%     Text account_for_posting FK
+    %%     Text company_code FK
+    %% }
+    %% PaymentTerms {
+    %%     Number no
+    %%     Text code PK
+    %% }
+    %% PaymentMethod {
+    %%     Number index PK
+    %% }
+    %% PlanningLevel {
+    %%     Text code PK
+    %% }
+    %% PlanningGroup {
+    %%     Text code PK
+    %% }    
+    %% HouseBank {
+    %%     Text c_code PK
+    %%     Text account_id FK
+    %%     Text bank_account_number
+    %% }
+    %% BankKey {
+    %%     Text bank_code PK
+    %%     Text region_code
+    %%     Text bank_branch
+    %% }
+    %% COD {
+    %%     Text account_code PK
+    %% }
+    %% DocumentType {
+    %%     Text doc_type PK
+    %% }
+    %% CounterParty {
+    %%     Text previous_code PK
+    %% }
+    %% Assets {
+    %%     Text asset_code PK
+    %%     Text basic_unit_code FK
+    %%     Text unit_of_measure_code  FK
+    %%     Text asset_account  FK
+    %%     Text management_department  FK
+    %%     Text item_code
+    %%     Text debit_account  FK
+    %%     Text credit_account  FK
+    %% }
+    %% FunctionModule {
+    %%     Number category FK
+    %%     Number module_id PK
+    %%     Text name
+    %% }
+    %% User {
+    %%     Text role FK
+    %%     Text staff_code Fk
+    %%     Text user_id PK
+    %% }
+    %% FunctionCategory {
+    %%     Number category_id PK
+    %%     Text category_name
+    %% }
+    %% Function {
+    %%     Text function_description PK
+    %%     Text function_id
+    %%     Text function_module FK
+    %% }
+    %% Role {
+    %%     Text role_id PK
+    %%     Text role_name
+    %% }
+    %% Privileges {
+    %%     Text role_id PK
+    %%     Text function PK
+    %%     Bool is_check
+    %% }
+
+ 
+    NganSach {
+        maNganSach Text PK
+        ten Text
+    }
+
+    LoaiNganSach {
+        maLoaiNganSach Text PK
+        ten Text
+    }
+    
+    KhoanMucKeToan {
+        maKhoanMucKeToan Text PK
+        ten Text
+    }
+
+    NganSach_DuAn {
+        maDuAn Text FK
+        maNganSach Text FK
+        maKhoanMucKeToan Text FK
+        donVi Text
+        soLuong Number
+        donGia Number
+        maKhoanMucKeToan Text        
+    }
+
+    DuAn {
+        maDuAn Text PK
+        maKhachHang Text FK
+        ten Text
+        ngayBatDau date
+        ngayKetThuc date
+    }
+
+    HangMuc {
+        maHangMuc Text PK
+        maDuAn Text FK
+        maLoaiHinhSanPham Text FK
+        ten Text
+    }
+
+    PR {
+        maPR Text PK
+        maDiaChiGiaoHang Text FK
+        maHangMuc Text FK
+        maNhanVienDeNghi Text FK
+        maNhanVienPheDuyet Text FK
+        trangThai Text
+        ngayTao date
+        ngayDuyet date
+    }
+
+    PRChiTiet {
+        maVatTu Text FK
+        maPR Text FK
+        soLuong Number
+    }
+
+    PO {
+        maPO Text PK
+        maBoPhanLapDonHang Text FK
+        maNhanVienLapDonHang Text FK
+        maNhanVienPheDuyet Text FK
+        trangThai Text
+        ngayTao date
+        ngayDuyet date
+        ngayGiaoHangDuKien date
+    }
+
+    POChiTiet {
+        maPO Text PK
+        maPR Text FK
+        maNCC Text FK
+        maNganSach Text FK
+        soLuong Number
+        donGia Number
+    }
+
+
+    BOM {
+        maBOM Text PK
+        phienBan Number
+        ten Text
+    }    
+
+    BOMChiTiet {
+        maBOM Text PK
+        maHangMuc Text FK
+        maVatTu Text FK
+        soLuong Number
+        haoHut Number
+    }
+
+    VatTu {
+        maVatTu Text PK
+        maDonViTinh Text FK
+        maNhomHang Text FK
+        maTaiKhoanKeToan Text FK
+        maNhomVatLieu1 Text FK
+        maNhomVatLieu2 Text FK
+        ten Text        
+    }
+
+
+    LoaiHinhSanPham {
+        maLoaiHinhSanPham Text PK
+        ten Text
+    }
+
+    TaiKhoanKeToan {
+        maTaiKhoanKeToan Text PK
+        ten Text
+    }
+
+    ThueGTGT {
+        maThueGTGT Text PK
+        tenThue Text
+        loaiThue Text
+    }
+
+    TaiKhoanKeToan_ThueGTGT {
+        maTaiKhoanKeToan Text FK
+        maThueGTGT Text FK
+    }
+
+    DangKyTaiSan {
+        maDangKyTaiSan Text PK
+        maTaiKhoanNguyenGia Text FK
+        maTaiKhoanKH Text FK
+        maTaiKhoanHangBan Text FK
+        maDonViTinh Text FK
+        maBoPhan Text FK
+    }
+
+    BoPhan {
+        maBoPhan Text PK
+        ten Text
+    }
+
+    DonViTinh {
+        maDonViTinh Text PK
+        ten Text
+    }
+
+    "DoiTuong_KH&NCC" {
+        maDoiTuong Text PK
+        ten Text
+    }
+
+    DiaChiGiaoHang {
+        maDiaChiGiaoHang Text PK
+        diaChi Text
+    }
+
+    NhanVien {
+        maNhanVien Text PK
+        ten Text
+    }
+
+    LenhNhapKho {
+        maLenhNhapKho Text PK
+        maKho Text FK
+        maPO Text FK
+        ngayTao date
+        ngayDuyet date
+        trangThai Text
+    }
+
+    PhieuNhapKho {
+        maPhieuNhapKho Text PK
+        maLenhNhapKho TextFK        
+        maKho Text FK
+    }
+
+    LenhXuatKho {
+        maLenhNhapKho Text PK
+        maKho Text FK
+        ngayTao date
+        ngayDuyet date
+        trangThai Text
+    }
+
+    PhieuXuatKho {
+        maPhieuXuatKho Text PK
+        maLenhXuatKho Text FK
+        maKho Text FK
+    }
+
+    LenhXuatKhoChiTiet {
+        maLXK Text PK
+        maVatTu Text FK
+        soLuong Number
+    }
+
+    PhieuNhapKhoChiTiet {
+        maPNK Text PK
+        maVatTu Text FK
+        soLuong Number
+    }
+
+    LenhNhapKhoChiTiet {
+        maLNK Text PK
+        maVatTu Text FK
+        soLuong Number
+    }
+
+    PhieuXuatKhoChiTiet {
+        maPXK Text PK
+        maVatTu Text FK
+        soLuong Number
+    }
+
+    
+    __Kho {
+        maKho Text PK
+        ten Text
+    }
+
+    TonKho {
+        maKho Text PK
+        maVatTu Text FK
+        soLuong Number
+    }
+ 
+    %% Relationships
+    LoaiNganSach ||--o{ NganSach : "loai"
+    NganSach ||--o{ NganSach_DuAn : "phanBo"
+    DuAn ||--o{ NganSach_DuAn : "duAn"
+    NganSach_DuAn o{--|| KhoanMucKeToan : "khoanMuc"
+    DuAn ||--o{ HangMuc : "hangMuc"
+    HangMuc ||--o{ PR : "pr"
+    HangMuc |{--|| LoaiHinhSanPham : "loai"
+    PR |{--|| DiaChiGiaoHang : "diaChi"
+    PR |{--|| NhanVien : "tao"
+    PR |{--o| NhanVien : "duyet"
+    PR |{--|| BoPhan : "boPhan"
+    PR ||--o{ PRChiTiet : "chiTiet"
+    PRChiTiet o{--|| VatTu : "vatTu"
+    VatTu ||--|{ BOMChiTiet : "suDung"
+    BOM |{--|| BOMChiTiet : "bom"
+    HangMuc ||--|| BOMChiTiet : "hangMuc"
+    PO ||--o{ POChiTiet : "chiTiet"
+    POChiTiet o{--|| "DoiTuong_KH&NCC" : "ncc"
+    POChiTiet o{--|| NganSach : "nganSach"
+    POChiTiet o{--|| PR : "pr"
+    PO ||--|| NhanVien : "tao"
+    PO ||--|| BoPhan : "boPhan"
+    VatTu o{--|| DonViTinh : "dvt"
+    VatTu o{--|| TaiKhoanKeToan : "tk"
+    TaiKhoanKeToan ||--o{ TaiKhoanKeToan_ThueGTGT : "tk"
+    ThueGTGT ||--o{ TaiKhoanKeToan_ThueGTGT : "thue"
+    DangKyTaiSan o{--|| TaiKhoanKeToan : "tk"
+    DangKyTaiSan |{--|| DonViTinh : "dvt"
+    DangKyTaiSan o{--|| BoPhan : "boPhan"
+    DangKyTaiSan o{--|| KhoanMucKeToan : "khoanMuc"
+    "DoiTuong_KH&NCC" ||--o{ DuAn : "kh"
+    __Kho ||--o{ TonKho : "ton"
+    __Kho ||--o{ LenhNhapKho : "nhap"
+    __Kho ||--o{ LenhXuatKho : "xuat"
+    TonKho o{--|| VatTu : "vatTu"
+    LenhNhapKho o{--|| PO : "po"
+    LenhNhapKho ||--o{ PhieuNhapKho : "phieu"
+    LenhXuatKho ||--o{ PhieuXuatKho : "phieu"
+    LenhNhapKho ||--|{ LenhNhapKhoChiTiet : "chiTiet"
+    PhieuNhapKho ||--|{ PhieuNhapKhoChiTiet : "chiTiet"
+    LenhXuatKho ||--|{ LenhXuatKhoChiTiet : "chiTiet"
+    PhieuXuatKho ||--|{ PhieuXuatKhoChiTiet : "chiTiet"
+    LenhNhapKhoChiTiet o{--|| VatTu : "vatTu"
+    PhieuNhapKhoChiTiet o{--|| VatTu : "vatTu"
+    LenhXuatKhoChiTiet o{--|| VatTu : "vatTu"
+    PhieuXuatKhoChiTiet o{--|| VatTu : "vatTu"
