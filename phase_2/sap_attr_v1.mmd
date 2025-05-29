@@ -8,131 +8,281 @@ erDiagram
     direction lr
 
   %% --- Company Structure (FI/CO Foundation) ---
-  COMPANY_CODE
-  CONTROLLING_AREA
-  PLANT
-  SALES_ORGANIZATION
-  DISTRIBUTION_CHANNEL
-  DIVISION
-  PURCHASING_ORGANIZATION
-  PURCHASING_GROUP
+  CompanyCode {
+      Text companyCode PK
+      Text companyCodeName
+  }
+  
+  ControllingArea {
+      Text controllingAreaCode PK
+      Text controllingAreaName
+  }
+  Plant {
+      Text plantCode PK
+      Text plantName
+  }
+  SalesOrganization {
+      Text salesOrgCode PK
+      Text salesOrgName
+  }
+  DistributionChannel {
+      Text distChannelCode PK
+      Text distChannelName
+  }
+  Division {
+      Text divisionCode PK
+      Text divisionName
+  }
+  PurchasingOrganization {
+      Text purchOrgCode PK
+      Text purchOrgName
+  }
+  PurchasingGroup {
+      Text purchGroupCode PK
+      Text purchGroupName
+  }
 
-  COMPANY_CODE ||--o{ CONTROLLING_AREA : assigned_to
-  COMPANY_CODE ||--o{ PLANT : has
-  COMPANY_CODE ||--o{ SALES_ORGANIZATION : has
-  COMPANY_CODE ||--o{ PURCHASING_ORGANIZATION : has
+  CompanyCode }|--|| ControllingArea : assignedTo
+  CompanyCode ||--o{ Plant : has
+  CompanyCode ||--o{ SalesOrganization : has
+  CompanyCode ||--o{ PurchasingOrganization : has
 
-  PLANT ||--o{ STORAGE_LOCATION : has_locations
-  PLANT ||--o{ WORK_CENTER : has_centers
+  Plant ||--o{ StorageLocation : hasLocations
+  Plant ||--o{ WorkCenter : hasCenters
 
-  SALES_ORGANIZATION ||--o{ SALES_OFFICE : contains_offices
-  SALES_ORGANIZATION ||--o{ DISTRIBUTION_CHANNEL : uses
-  SALES_ORGANIZATION ||--o{ DIVISION : sells_via
+  SalesOrganization ||--o{ SalesOffice : containsOffices
+  SalesOrganization ||--o{ DistributionChannel : uses
+  SalesOrganization ||--o{ Division : sellsVia
 
-  PURCHASING_ORGANIZATION ||--o{ PURCHASING_GROUP : contains_groups
-  PURCHASING_ORGANIZATION ||--o{ PLANT : responsible_for
+  PurchasingOrganization ||--o{ PurchasingGroup : containsGroups
+  PurchasingOrganization ||--o{ Plant : responsibleFor
 
   %% --- Master Data - Business Partners ---
-  BUSINESS_PARTNER
-  CUSTOMER
-  SUPPLIER
+  BusinessPartner {
+      Text bpCode PK
+      Text bpCategory
+      Text bpName
+  }
+  Customer {
+      Text customerCode PK
+      Text customerName
+  }
+  Supplier {
+      Text supplierCode PK
+      Text supplierName
+  }
 
-  BUSINESS_PARTNER ||--|| CUSTOMER : is_role_of
-  BUSINESS_PARTNER ||--|| SUPPLIER : is_role_of
+  BusinessPartner ||--|| Customer : isRoleOf
+  BusinessPartner ||--|| Supplier : isRoleOf
 
-  CUSTOMER }o--|| SALES_ORGANIZATION : belongs_to
-  CUSTOMER }o--|| DISTRIBUTION_CHANNEL : via
-  CUSTOMER }o--|| DIVISION : in
-  CUSTOMER }o--|| PAYMENT_TERM : uses
-  CUSTOMER }o--|| PAYMENT_METHOD : uses
-  CUSTOMER }o--|| TAX_CODE : subject_to
-  CUSTOMER }o--|| PLANNING_GROUP : grouped_by
-  CUSTOMER }o--|| PLANNING_LEVEL : categorized_by
+  Customer }o--|| SalesOrganization : belongsTo
+  Customer }o--|| DistributionChannel : via
+  Customer }o--|| Division : in
+  Customer }o--|| PaymentTerm : uses
+  Customer }o--|| PaymentMethod : uses
+  Customer }o--|| TaxCode : subjectTo
+  Customer }o--|| PlanningGroup : groupedBy
+  Customer }o--|| PlanningLevel : categorizedBy
 
-  SUPPLIER }o--|| PURCHASING_ORGANIZATION : served_by
-  SUPPLIER }o--|| PAYMENT_TERM : uses
-  SUPPLIER }o--|| PAYMENT_METHOD : uses
-  SUPPLIER }o--|| TAX_CODE : subject_to
+  Supplier }o--|| PurchasingOrganization : servedBy
+  Supplier }o--|| PaymentTerm : uses
+  Supplier }o--|| PaymentMethod : uses
+  Supplier }o--|| TaxCode : subjectTo
 
-  PURCHASING_INFO_RECORD
-  PURCHASING_INFO_RECORD }o--|| MATERIAL : for
-  PURCHASING_INFO_RECORD }o--|| SUPPLIER : has
-  PURCHASING_INFO_RECORD }o--|| PURCHASING_ORGANIZATION : managed_by
-  PURCHASING_INFO_RECORD }o--|| PURCHASING_GROUP : handled_by
+  PurchasingInfoRecord {
+      Text materialCode FK
+      Text supplierCode FK
+      Text purchasingOrgCode FK
+      Text infoRecordKey PK
+  }
+  PurchasingInfoRecord }o--|| Material : for
+  PurchasingInfoRecord }o--|| Supplier : has
+  PurchasingInfoRecord }o--|| PurchasingOrganization : managedBy
 
   %% --- Master Data - Material ---
-  MATERIAL
-  MATERIAL }o--|| PLANT : managed_at
-  MATERIAL }o--|| STORAGE_LOCATION : stored_in
-  MATERIAL }o--|| PURCHASING_ORGANIZATION : procured_by
-  MATERIAL }o--|| SALES_ORGANIZATION : sold_by
-  MATERIAL }o--|| TAX_CODE : taxed_by
-  MATERIAL ||--o{ BILL_OF_MATERIAL : has_components
-  MATERIAL ||--o{ PRODUCTION_VERSION : has_versions
-  MATERIAL }o--|| ROUTING : uses_for_production
-  MATERIAL ||--o{ CHARACTERISTIC : has_attributes
+  MaterialType {
+    Text materialTypeCode PK
+    Text materialTypeName 
+  }
+  MaterialGroup {
+    Text materialGroupCode PK
+    Text materialGroupName 
+  }
+  Material {
+      Text materialCode PK
+      Text materialTypeCode FK
+      Text materialGroupCode FK
+      Text divisionCode FK
+      Text plantCode FK
+      Text storageLocationCode FK
+      Text purchasingOrgCode FK
+      Text salesOrgCode FK
+      Text taxCode FK
+  }
+  Material }o--|| MaterialType : belongsTo
+  Material }o--|| MaterialGroup : belongsTo
+  Material }o--|| Division : belongsTo
+  Material }o--|| Plant : managedAt
+  Material }o--|| StorageLocation : storedIn
+  Material }o--|| PurchasingOrganization : procuredBy
+  Material }o--|| SalesOrganization : soldBy
+  Material }o--|| TaxCode : taxedBy
+  Material ||--o{ ProductionVersion : hasVersions
+  Material }o--|| Routing : usesForProduction
+  Material ||--o{ Characteristic : hasAttributes
 
-  BILL_OF_MATERIAL ||--o{ MATERIAL : consists_of
+  Material ||--|{ MaterialProductionOrder: hasProdOrder
+  MaterialProductionOrder }|--|| ProductionOrder: hasComponents
 
-  PRODUCTION_VERSION ||--|| ROUTING : uses
-  PRODUCTION_VERSION ||--|| BILL_OF_MATERIAL : uses
+  Material ||--o{ BOM : hasComponents
 
-  ROUTING ||--o{ WORK_CENTER : utilizes
+  ProductionVersion ||--|| Routing : uses
+  ProductionVersion ||--|| BOM : uses
+
+  Routing ||--o{ WorkCenter : utilizes
+
+  Operation {
+    Text operationCode PK
+    Text operationDescription
+  }
+
+  Routing ||--|{ Operation: has
+
+  ProductionOrder {
+    Text productionOrderCode PK
+    Text productionOrderDescription
+  }
+
+  ProductionOrder }|--|| ProductionVersion : uses
+  ProductionOrder }|--|| WbsElement : assignedTo
 
   %% --- Financial & Controlling Master Data ---
-  CHART_OF_ACCOUNTS
-  GL_ACCOUNT
-  COST_ELEMENT
-  COST_CENTER
-  PROFIT_CENTER
-  INTERNAL_ORDER
-  PROJECT_DEFINITION
-  WBS_ELEMENT
-  OPERATING_CONCERN
+  ChartOfAccounts {
+      Text coaCode PK
+      Text coaName
+  }
+  GlAccount {
+      Text glAccountCode PK
+      Text glAccountDescription
+  }
+  CostElement {
+      Text costElementCode PK
+      Text costElementDescription
+  }
+  CostCenter {
+      Text costCenterCode PK
+      Text costCenterName
+  }
+  ProfitCenter {
+      Text profitCenterCode PK
+      Text profitCenterName
+  }
+  InternalOrder {
+      Text internalOrderCode PK
+      Text orderDescription
+  }
+  ProjectDefinition {
+      Text projectDefinitionId PK
+      Text projectName
+  }
+  WbsElement {
+      Text wbsElementId PK
+      Text wbsElementDescription
+  }
+  OperatingConcern {
+      Text operatingConcernCode PK
+      Text operatingConcernName
+  }
 
-  CHART_OF_ACCOUNTS ||--o{ GL_ACCOUNT : defines
-  GL_ACCOUNT ||--|| COMPANY_CODE : used_in
-  GL_ACCOUNT ||--o{ COST_ELEMENT : can_be
+  ChartOfAccounts ||--o{ GlAccount : defines
+  GlAccount ||--|| CompanyCode : usedIn
+  GlAccount ||--o{ CostElement : canBe
 
-  COST_CENTER ||--|| CONTROLLING_AREA : belongs_to
-  COST_CENTER ||--o{ ACTIVITY_TYPE : manages
-  COST_CENTER ||--o{ SKF : tracks
-  COST_CENTER ||--|| WORK_CENTER : mapped_to
-  COST_CENTER ||--o{ GL_ACCOUNT : posts_to
+  CostCenter }|--|| ControllingArea : belongsTo
+  CostCenter }|--|| CompanyCode : assignedTo
+  CostCenter }|--|| Plant : assignedTo
+  CostCenter }|--|| ProfitCenter : belongsTo
+  CostCenter ||--o{ ActivityType : manages
+  CostCenter ||--o{ Skf : tracks
+  CostCenter ||--|| WorkCenter : mappedTo
+  CostCenter ||--o{ GlAccount : postsTo
 
-  PROFIT_CENTER ||--|| CONTROLLING_AREA : belongs_to
-  PROFIT_CENTER ||--|| COMPANY_CODE : assigned_to
+  ProfitCenter }|--|| ControllingArea : belongsTo
+  ProfitCenter }|--|| CompanyCode : assignedTo
+  ProfitCenter }|--|| Plant : assignedTo
 
-  INTERNAL_ORDER ||--|| COST_CENTER : settles_to
-  INTERNAL_ORDER ||--|| WBS_ELEMENT : tracks_expenses_for
+  InternalOrder ||--|| CostCenter : settlesTo
+  InternalOrder ||--|| WbsElement : tracksExpensesFor
 
-  PROJECT_DEFINITION ||--o{ WBS_ELEMENT : comprises
-  MATERIAL }o--|| WBS_ELEMENT : can_be_assigned_to
+  ProjectDefinition ||--o{ WbsElement : comprises
+  Material }o--|| WbsElement : canBeAssignedTo
 
-  CONTROLLING_AREA ||--|| OPERATING_CONCERN : part_of
+  ControllingArea }|--|| OperatingConcern : partOf
 
   %% --- Bank & Payment Details ---
-  HOUSE_BANK
-  BANK_ACCOUNT
-  BANK_KEY
-  PAYMENT_TERM
-  PAYMENT_METHOD
+  HouseBank {
+      Text houseBankId PK
+      Text bankName
+  }
+  BankAccount {
+      Text bankAccountId PK
+      Text accountDescription
+  }
+  BankKey {
+      Text bankKey PK
+      Text bankDetails
+  }
+  PaymentTerm {
+      Text paymentTermCode PK
+      Text termDescription
+  }
+  PaymentMethod {
+      Text paymentMethodCode PK
+      Text methodDescription
+  }
 
-  HOUSE_BANK ||--o{ BANK_ACCOUNT : owns
-  BANK_ACCOUNT ||--|| BANK_KEY : identified_by
-  COMPANY_CODE ||--o{ HOUSE_BANK : has
+  HouseBank ||--o{ BankAccount : owns
+  BankAccount ||--|| BankKey : identifiedBy
+  CompanyCode ||--o{ HouseBank : has
 
   %% --- Other Common Master Data ---
-  TAX_CODE
-  DOCUMENT_TYPE
+  TaxCode {
+      Text taxCode PK
+      Text taxDescription
+  }
+  DocumentType {
+      Text docTypeCode PK
+      Text documentTypeDescription
+  }
 
-  GL_ACCOUNT ||--|| DOCUMENT_TYPE : can_be_posted_with
-  DOCUMENT_TYPE ||--o{ CHART_OF_ACCOUNTS : can_post_to
+  GlAccount ||--|| DocumentType : canBePostedWith
+  DocumentType ||--o{ ChartOfAccounts : canPostTo
 
-  CHARACTERISTIC
-  ACTIVITY_TYPE
-  SKF
-  PLANNING_GROUP
-  PLANNING_LEVEL
-  STORAGE_LOCATION
-  WORK_CENTER
+  Characteristic {
+      Text charName PK
+      Text description
+  }
+  ActivityType {
+      Text activityTypeCode PK
+      Text activityDescription
+  }
+  Skf {
+      Text skfCode PK
+      Text skfDescription
+  }
+  PlanningGroup {
+      Text groupCode PK
+      Text groupDescription
+  }
+  PlanningLevel {
+      Text levelCode PK
+      Text levelDescription
+  }
+  StorageLocation {
+      Text storageLocationCode PK
+      Text storageLocationName
+  }
+  WorkCenter {
+      Text workCenterCode PK
+      Text workCenterName
+  }
