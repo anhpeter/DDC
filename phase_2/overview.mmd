@@ -282,11 +282,6 @@ Direction LR
         ngayDuyet date
     }
 
-    PRChiTiet {
-        maVatTu Text FK
-        maPR Text FK
-        soLuong Number
-    }
 
     PO {
         maPO Text PK
@@ -299,14 +294,6 @@ Direction LR
         ngayGiaoHangDuKien date
     }
 
-    POChiTiet {
-        maPO Text PK
-        maPR Text FK
-        maNCC Text FK
-        maNganSach Text FK
-        soLuong Number
-        donGia Number
-    }
 
 
     BOM {
@@ -314,14 +301,6 @@ Direction LR
         phienBan Number
         ten Text
     }    
-
-    BOMChiTiet {
-        maBOM Text PK
-        maHangMuc Text FK
-        maVatTu Text FK
-        soLuong Number
-        haoHut Number
-    }
 
     VatTu {
         maVatTu Text PK
@@ -389,27 +368,10 @@ Direction LR
         ten Text
     }
 
-    LenhNhapKho {
-        maLenhNhapKho Text PK
-        maKho Text FK
-        maPO Text FK
-        ngayTao date
-        ngayDuyet date
-        trangThai Text
-    }
-
     PhieuNhapKho {
         maPhieuNhapKho Text PK
         maLenhNhapKho TextFK        
         maKho Text FK
-    }
-
-    LenhXuatKho {
-        maLenhNhapKho Text PK
-        maKho Text FK
-        ngayTao date
-        ngayDuyet date
-        trangThai Text
     }
 
     PhieuXuatKho {
@@ -418,31 +380,6 @@ Direction LR
         maKho Text FK
     }
 
-    LenhXuatKhoChiTiet {
-        maLXK Text PK
-        maVatTu Text FK
-        soLuong Number
-    }
-
-    PhieuNhapKhoChiTiet {
-        maPNK Text PK
-        maVatTu Text FK
-        soLuong Number
-    }
-
-    LenhNhapKhoChiTiet {
-        maLNK Text PK
-        maVatTu Text FK
-        soLuong Number
-    }
-
-    PhieuXuatKhoChiTiet {
-        maPXK Text PK
-        maVatTu Text FK
-        soLuong Number
-    }
-
-    
     __Kho {
         maKho Text PK
         ten Text
@@ -457,47 +394,29 @@ Direction LR
     %% Relationships
     LoaiNganSach ||--o{ NganSach : "loai"
     NganSach ||--o{ NganSach_DuAn : "phanBo"
-    DuAn ||--o{ NganSach_DuAn : "duAn"
+    NganSach_DuAn o{--|| DuAn  : "duAn"
     NganSach_DuAn o{--|| KhoanMucKeToan : "khoanMuc"
     DuAn ||--o{ HangMuc : "hangMuc"
+    BOM |{--|{ HangMuc : "qua chi tiet"
     HangMuc ||--o{ PR : "pr"
     HangMuc |{--|| LoaiHinhSanPham : "loai"
     PR |{--|| DiaChiGiaoHang : "diaChi"
     PR |{--|| NhanVien : "tao"
     PR |{--o| NhanVien : "duyet"
     PR |{--|| BoPhan : "boPhan"
-    PR ||--o{ PRChiTiet : "chiTiet"
-    PRChiTiet o{--|| VatTu : "vatTu"
-    VatTu ||--|{ BOMChiTiet : "suDung"
-    BOM |{--|| BOMChiTiet : "bom"
-    HangMuc ||--|| BOMChiTiet : "hangMuc"
-    PO ||--o{ POChiTiet : "chiTiet"
-    POChiTiet o{--|| "DoiTuong_KH&NCC" : "ncc"
-    POChiTiet o{--|| NganSach : "nganSach"
-    POChiTiet o{--|| PR : "pr"
     PO ||--|| NhanVien : "tao"
     PO ||--|| BoPhan : "boPhan"
     VatTu o{--|| DonViTinh : "dvt"
     VatTu o{--|| TaiKhoanKeToan : "tk"
     TaiKhoanKeToan ||--o{ TaiKhoanKeToan_ThueGTGT : "tk"
-    ThueGTGT ||--o{ TaiKhoanKeToan_ThueGTGT : "thue"
+    TaiKhoanKeToan_ThueGTGT o{--|| ThueGTGT  : "thue"
     DangKyTaiSan o{--|| TaiKhoanKeToan : "tk"
     DangKyTaiSan |{--|| DonViTinh : "dvt"
     DangKyTaiSan o{--|| BoPhan : "boPhan"
     DangKyTaiSan o{--|| KhoanMucKeToan : "khoanMuc"
     "DoiTuong_KH&NCC" ||--o{ DuAn : "kh"
     __Kho ||--o{ TonKho : "ton"
-    __Kho ||--o{ LenhNhapKho : "nhap"
-    __Kho ||--o{ LenhXuatKho : "xuat"
+    __Kho ||--o{ PhieuNhapKho : "nhap"
+    __Kho ||--o{ PhieuXuatKho : "xuat"
     TonKho o{--|| VatTu : "vatTu"
-    LenhNhapKho o{--|| PO : "po"
-    LenhNhapKho ||--o{ PhieuNhapKho : "phieu"
-    LenhXuatKho ||--o{ PhieuXuatKho : "phieu"
-    LenhNhapKho ||--|{ LenhNhapKhoChiTiet : "chiTiet"
-    PhieuNhapKho ||--|{ PhieuNhapKhoChiTiet : "chiTiet"
-    LenhXuatKho ||--|{ LenhXuatKhoChiTiet : "chiTiet"
-    PhieuXuatKho ||--|{ PhieuXuatKhoChiTiet : "chiTiet"
-    LenhNhapKhoChiTiet o{--|| VatTu : "vatTu"
-    PhieuNhapKhoChiTiet o{--|| VatTu : "vatTu"
-    LenhXuatKhoChiTiet o{--|| VatTu : "vatTu"
-    PhieuXuatKhoChiTiet o{--|| VatTu : "vatTu"
+    PhieuNhapKho o{--|| PO : "po"

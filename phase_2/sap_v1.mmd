@@ -1,0 +1,138 @@
+---
+title: OVERVIEW - SAP S/4HANA Core Entities
+config:
+  theme: neutral
+  layout: elk
+---
+erDiagram
+    direction lr
+
+  %% --- Company Structure (FI/CO Foundation) ---
+  COMPANY_CODE
+  CONTROLLING_AREA
+  PLANT
+  SALES_ORGANIZATION
+  DISTRIBUTION_CHANNEL
+  DIVISION
+  PURCHASING_ORGANIZATION
+  PURCHASING_GROUP
+
+  COMPANY_CODE ||--o{ CONTROLLING_AREA : assigned_to
+  COMPANY_CODE ||--o{ PLANT : has
+  COMPANY_CODE ||--o{ SALES_ORGANIZATION : has
+  COMPANY_CODE ||--o{ PURCHASING_ORGANIZATION : has
+
+  PLANT ||--o{ STORAGE_LOCATION : has_locations
+  PLANT ||--o{ WORK_CENTER : has_centers
+
+  SALES_ORGANIZATION ||--o{ SALES_OFFICE : contains_offices
+  SALES_ORGANIZATION ||--o{ DISTRIBUTION_CHANNEL : uses
+  SALES_ORGANIZATION ||--o{ DIVISION : sells_via
+
+  PURCHASING_ORGANIZATION ||--o{ PURCHASING_GROUP : contains_groups
+  PURCHASING_ORGANIZATION ||--o{ PLANT : responsible_for
+
+  %% --- Master Data - Business Partners ---
+  BUSINESS_PARTNER
+  CUSTOMER
+  SUPPLIER
+
+  BUSINESS_PARTNER ||--|| CUSTOMER : is_role_of
+  BUSINESS_PARTNER ||--|| SUPPLIER : is_role_of
+
+  CUSTOMER }o--|| SALES_ORGANIZATION : belongs_to
+  CUSTOMER }o--|| DISTRIBUTION_CHANNEL : via
+  CUSTOMER }o--|| DIVISION : in
+  CUSTOMER }o--|| PAYMENT_TERM : uses
+  CUSTOMER }o--|| PAYMENT_METHOD : uses
+  CUSTOMER }o--|| TAX_CODE : subject_to
+  CUSTOMER }o--|| PLANNING_GROUP : grouped_by
+  CUSTOMER }o--|| PLANNING_LEVEL : categorized_by
+
+  SUPPLIER }o--|| PURCHASING_ORGANIZATION : served_by
+  SUPPLIER }o--|| PAYMENT_TERM : uses
+  SUPPLIER }o--|| PAYMENT_METHOD : uses
+  SUPPLIER }o--|| TAX_CODE : subject_to
+
+  PURCHASING_INFO_RECORD
+  PURCHASING_INFO_RECORD }o--|| MATERIAL : for
+  PURCHASING_INFO_RECORD }o--|| SUPPLIER : has
+  PURCHASING_INFO_RECORD }o--|| PURCHASING_ORGANIZATION : managed_by
+  PURCHASING_INFO_RECORD }o--|| PURCHASING_GROUP : handled_by
+
+  %% --- Master Data - Material ---
+  MATERIAL
+  MATERIAL }o--|| PLANT : managed_at
+  MATERIAL }o--|| STORAGE_LOCATION : stored_in
+  MATERIAL }o--|| PURCHASING_ORGANIZATION : procured_by
+  MATERIAL }o--|| SALES_ORGANIZATION : sold_by
+  MATERIAL }o--|| TAX_CODE : taxed_by
+  MATERIAL ||--o{ BILL_OF_MATERIAL : has_components
+  MATERIAL ||--o{ PRODUCTION_VERSION : has_versions
+  MATERIAL }o--|| ROUTING : uses_for_production
+  MATERIAL ||--o{ CHARACTERISTIC : has_attributes
+
+  BILL_OF_MATERIAL ||--o{ MATERIAL : consists_of
+
+  PRODUCTION_VERSION ||--|| ROUTING : uses
+  PRODUCTION_VERSION ||--|| BILL_OF_MATERIAL : uses
+
+  ROUTING ||--o{ WORK_CENTER : utilizes
+
+  %% --- Financial & Controlling Master Data ---
+  CHART_OF_ACCOUNTS
+  GL_ACCOUNT
+  COST_ELEMENT
+  COST_CENTER
+  PROFIT_CENTER
+  INTERNAL_ORDER
+  PROJECT_DEFINITION
+  WBS_ELEMENT
+  OPERATING_CONCERN
+
+  CHART_OF_ACCOUNTS ||--o{ GL_ACCOUNT : defines
+  GL_ACCOUNT ||--|| COMPANY_CODE : used_in
+  GL_ACCOUNT ||--o{ COST_ELEMENT : can_be
+
+  COST_CENTER ||--|| CONTROLLING_AREA : belongs_to
+  COST_CENTER ||--o{ ACTIVITY_TYPE : manages
+  COST_CENTER ||--o{ SKF : tracks
+  COST_CENTER ||--|| WORK_CENTER : mapped_to
+  COST_CENTER ||--o{ GL_ACCOUNT : posts_to
+
+  PROFIT_CENTER ||--|| CONTROLLING_AREA : belongs_to
+  PROFIT_CENTER ||--|| COMPANY_CODE : assigned_to
+
+  INTERNAL_ORDER ||--|| COST_CENTER : settles_to
+  INTERNAL_ORDER ||--|| WBS_ELEMENT : tracks_expenses_for
+
+  PROJECT_DEFINITION ||--o{ WBS_ELEMENT : comprises
+  MATERIAL }o--|| WBS_ELEMENT : can_be_assigned_to
+
+  CONTROLLING_AREA ||--|| OPERATING_CONCERN : part_of
+
+  %% --- Bank & Payment Details ---
+  HOUSE_BANK
+  BANK_ACCOUNT
+  BANK_KEY
+  PAYMENT_TERM
+  PAYMENT_METHOD
+
+  HOUSE_BANK ||--o{ BANK_ACCOUNT : owns
+  BANK_ACCOUNT ||--|| BANK_KEY : identified_by
+  COMPANY_CODE ||--o{ HOUSE_BANK : has
+
+  %% --- Other Common Master Data ---
+  TAX_CODE
+  DOCUMENT_TYPE
+
+  GL_ACCOUNT ||--|| DOCUMENT_TYPE : can_be_posted_with
+  DOCUMENT_TYPE ||--o{ CHART_OF_ACCOUNTS : can_post_to
+
+  CHARACTERISTIC
+  ACTIVITY_TYPE
+  SKF
+  PLANNING_GROUP
+  PLANNING_LEVEL
+  STORAGE_LOCATION
+  WORK_CENTER
