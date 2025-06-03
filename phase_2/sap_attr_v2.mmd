@@ -116,14 +116,6 @@ erDiagram
   PurchasingInfoRecord }o--|| PurchasingOrganization : managedBy
 
   %% --- Master Data - Material ---
-  MaterialType {
-    Text materialTypeCode PK
-    Text materialTypeName 
-  }
-  MaterialGroup {
-    Text materialGroupCode PK
-    Text materialGroupName 
-  }
   Material {
       Text materialCode PK
       Text materialTypeCode FK
@@ -140,10 +132,8 @@ erDiagram
   Material }o--|| MaterialGroup : belongsTo
   Material }o--|| StorageLocation : storedIn
   Material }o--|| PurchasingOrganization : procuredBy
-  Material }o--|| TaxCode : taxedBy
   Material ||--o{ ProductionVersion : hasVersions
   Material }o--|| Routing : usesForProduction
-  Material ||--o{ Characteristic : hasAttributes
 
 
   Material ||--|{ MaterialProductionOrder: hasProdOrder
@@ -168,8 +158,22 @@ erDiagram
 
   ProductionOrder {
     Text productionOrderCode PK
+    Text CostCenterCode FK
+    Text ProfitCenterCode FK
     Text productionOrderDescription
   }
+
+  SalesOrder {
+    Text salesOrderCode PK
+    Text customerCode FK
+    Text companyCode FK
+    Text salesAreaCode FK
+    Date orderDate
+  }
+
+  SalesArea ||--|{ SalesOrder : in
+  Customer ||--|{ SalesOrder: belongsTo
+  CompanyCode ||--|{ SalesOrder: belongsTo
 
   SettlementRule {
     Text settlementRuleId PK
@@ -290,10 +294,6 @@ erDiagram
   GlAccount ||--|| DocumentType : canBePostedWith
   DocumentType ||--o{ ChartOfAccounts : canPostTo
 
-  Characteristic {
-      Text charName PK
-      Text description
-  }
   ActivityType {
       Text activityTypeCode PK
       Text activityDescription

@@ -16,22 +16,27 @@ erDiagram
   
   ControllingArea {
       Text controllingAreaCode PK
+      Text operatingConcernCode FK
       Text controllingAreaName
   }
   Plant {
       Text plantCode PK
+      Text companyCode FK
       Text plantName
   }
   SalesOrganization {
       Text salesOrgCode PK
+      Text companyCode FK
       Text salesOrgName
   }
   DistributionChannel {
       Text distChannelCode PK
+      Text salesOrgCode FK 
       Text distChannelName
   }
   Division {
       Text divisionCode PK
+      Text salesOrgCode FK 
       Text divisionName
   }
   SalesArea {
@@ -42,16 +47,19 @@ erDiagram
   }
   PurchasingOrganization {
       Text purchOrgCode PK
+      Text companyCode FK
       Text purchOrgName
   }
   PurchasingGroup {
       Text purchGroupCode PK
+      Text purchOrganizationCode FK
+      Text companyCode FK
       Text purchGroupName
   }
 
   Segment {
-      Text purchGroupCode PK
-      Text purchGroupName
+      Text segmentCode PK
+      Text segmentName
   }
 
   CompanyCode }|--|| ControllingArea : assignedTo
@@ -81,10 +89,24 @@ erDiagram
   }
   Customer {
       Text customerCode PK
+      Text bpCode FK            
+      Text salesOrgCode FK      
+      Text distChannelCode FK   
+      Text divisionCode FK      
+      Text paymentTermCode FK   
+      Text paymentMethodCode FK 
+      Text taxCode FK           
+      Text groupCode FK         
+      Text levelCode FK         
       Text customerName
   }
   Supplier {
       Text supplierCode PK
+      Text bpCode FK            
+      Text purchOrgCode FK      
+      Text paymentTermCode FK   
+      Text paymentMethodCode FK 
+      Text taxCode FK           
       Text supplierName
   }
 
@@ -116,14 +138,6 @@ erDiagram
   PurchasingInfoRecord }o--|| PurchasingOrganization : managedBy
 
   %% --- Master Data - Material ---
-  MaterialType {
-    Text materialTypeCode PK
-    Text materialTypeName 
-  }
-  MaterialGroup {
-    Text materialGroupCode PK
-    Text materialGroupName 
-  }
   Material {
       Text materialCode PK
       Text materialTypeCode FK
@@ -131,6 +145,7 @@ erDiagram
       Text storageLocationCode FK
       Text purchasingOrgCode FK
       Text taxCode FK
+      Text wbsElementId FK 
   }
   MaterialSalesData {
       Text materialCode FK
@@ -140,10 +155,8 @@ erDiagram
   Material }o--|| MaterialGroup : belongsTo
   Material }o--|| StorageLocation : storedIn
   Material }o--|| PurchasingOrganization : procuredBy
-  Material }o--|| TaxCode : taxedBy
   Material ||--o{ ProductionVersion : hasVersions
   Material }o--|| Routing : usesForProduction
-  Material ||--o{ Characteristic : hasAttributes
 
 
   Material ||--|{ MaterialProductionOrder: hasProdOrder
@@ -168,8 +181,22 @@ erDiagram
 
   ProductionOrder {
     Text productionOrderCode PK
+    Text CostCenterCode FK
+    Text ProfitCenterCode FK
     Text productionOrderDescription
   }
+
+  SalesOrder {
+    Text salesOrderCode PK
+    Text customerCode FK
+    Text companyCode FK
+    Text salesAreaCode FK
+    Date orderDate
+  }
+
+  SalesArea ||--|{ SalesOrder : in
+  Customer ||--|{ SalesOrder: belongsTo
+  CompanyCode ||--|{ SalesOrder: belongsTo
 
   SettlementRule {
     Text settlementRuleId PK
@@ -192,24 +219,37 @@ erDiagram
   }
   GlAccount {
       Text glAccountCode PK
+      Text coaCode FK             
+      Text companyCode FK         
       Text glAccountDescription
   }
   CostElement {
       Text costElementCode PK
+      Text glAccountCode FK      
       Text costElementDescription
   }
   CostCenter {
       Text costCenterCode PK
+      Text controllingAreaCode FK 
+      Text companyCode FK         
+      Text plantCode FK           
+      Text profitCenterCode FK    
       Text costCenterName
   }
   ProfitCenter {
       Text profitCenterCode PK
+      Text controllingAreaCode FK 
+      Text companyCode FK         
+      Text plantCode FK           
+      Text segmentCode FK         
       Text profitCenterName
   }
   ProfitCenter }|--|| Segment : belongsTo
   CostCenter }|--|| Segment : belongsTo
   InternalOrder {
       Text internalOrderCode PK
+      Text costCenterCode FK 
+      Text wbsElementId FK   
       Text orderDescription
   }
   ProjectDefinition {
@@ -218,6 +258,7 @@ erDiagram
   }
   WbsElement {
       Text wbsElementId PK
+      Text projectDefinitionId FK
       Text wbsElementDescription
   }
   OperatingConcern {
@@ -254,10 +295,13 @@ erDiagram
   %% --- Bank & Payment Details ---
   HouseBank {
       Text houseBankId PK
+      Text companyCode FK
       Text bankName
   }
   BankAccount {
       Text bankAccountId PK
+      Text houseBankId FK
+      Text bankKey FK    
       Text accountDescription
   }
   BankKey {
@@ -273,8 +317,8 @@ erDiagram
       Text methodDescription
   }
 
-  HouseBank ||--o{ BankAccount : owns
-  BankAccount ||--|| BankKey : identifiedBy
+  HouseBank ||--o{ BankAccount : bankAccount
+  BankAccount ||--|| BankKey : bank
   CompanyCode ||--o{ HouseBank : has
 
   %% --- Other Common Master Data ---
@@ -290,16 +334,13 @@ erDiagram
   GlAccount ||--|| DocumentType : canBePostedWith
   DocumentType ||--o{ ChartOfAccounts : canPostTo
 
-  Characteristic {
-      Text charName PK
-      Text description
-  }
   ActivityType {
       Text activityTypeCode PK
       Text activityDescription
   }
   Skf {
       Text skfCode PK
+      Text costCenter FK
       Text skfDescription
   }
   PlanningGroup {
@@ -312,9 +353,11 @@ erDiagram
   }
   StorageLocation {
       Text storageLocationCode PK
+      Text plantCode FK       
       Text storageLocationName
   }
   WorkCenter {
       Text workCenterCode PK
+      Text plantCode FK       
       Text workCenterName
   }

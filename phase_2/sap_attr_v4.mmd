@@ -1,0 +1,429 @@
+---
+title: OVERVIEW - SAP S/4HANA Core Entities
+config:
+  theme: neutral
+  layout: elk
+---
+erDiagram
+    direction lr
+
+    %% --- Company Structure (FI/CO Foundation) ---
+    CompanyCode {
+        Text companyCode PK
+        Text companyCodeName
+        Text controllingAreaCode FK
+    }
+
+    ControllingArea {
+        Text controllingAreaCode PK
+        Text operatingConcernCode FK
+        Text controllingAreaName
+    }
+
+    Plant {
+        Text plantCode PK
+        Text companyCode FK
+        Text plantName
+    }
+
+    SalesOrganization {
+        Text salesOrgCode PK
+        Text companyCode FK
+        Text salesOrgName
+    }
+
+    DistributionChannel {
+        Text distChannelCode PK
+        Text salesOrgCode FK 
+        Text distChannelName
+    }
+
+    Division {
+        Text divisionCode PK
+        Text salesOrgCode FK 
+        Text divisionName
+    }
+
+    SalesArea {
+        Text salesAreaCode PK
+        Text salesOrgCode FK
+        Text distributionChanelCode FK
+        Text divisionCode FK
+    }
+
+    PurchasingOrganization {
+        Text purchOrgCode PK
+        Text companyCode FK
+        Text purchOrgName
+    }
+
+    PurchasingGroup {
+        Text purchGroupCode PK
+        Text purchOrganizationCode FK
+        Text companyCode FK
+        Text purchGroupName
+    }
+
+    Segment {
+        Text segmentCode PK
+        Text segmentName
+    }
+
+    SalesOffice {
+        Text salesOfficeCode PK
+        Text salesOrgCode FK
+        Text salesOfficeName 
+    }
+
+    CompanyCode }|--|| ControllingArea : controllingArea
+    CompanyCode ||--o{ Plant : plants
+    CompanyCode ||--o{ SalesOrganization : salesOrganizations
+    CompanyCode ||--o{ PurchasingOrganization : purchasingOrganizations
+
+    Plant ||--o{ StorageLocation : storageLocations
+    Plant ||--o{ WorkCenter : workCenters
+
+    SalesOrganization ||--o{ SalesOffice : salesOffices
+    SalesOrganization ||--o{ DistributionChannel : distributionChannels
+    SalesOrganization ||--o{ Division : divisions
+    SalesOrganization ||--o{ SalesArea : salesAreas
+
+    DistributionChannel ||--o{ SalesArea : salesAreas
+    Division ||--o{ SalesArea : salesAreas
+
+    PurchasingOrganization ||--o{ PurchasingGroup : purchasingGroups
+    PurchasingOrganization ||--o{ Plant : responsiblePlants
+
+    %% --- Master Data - Business Partners ---
+    BusinessPartner {
+        Text bpCode PK
+        Text bpCategory
+        Text bpName
+    }
+
+    Customer {
+        Text customerCode PK
+        Text bpCode FK            
+        Text salesOrgCode FK      
+        Text distChannelCode FK   
+        Text divisionCode FK      
+        Text paymentTermCode FK   
+        Text paymentMethodCode FK 
+        Text taxCode FK           
+        Text groupCode FK         
+        Text levelCode FK         
+        Text customerName
+    }
+
+    Supplier {
+        Text supplierCode PK
+        Text bpCode FK            
+        Text purchOrgCode FK      
+        Text paymentTermCode FK   
+        Text paymentMethodCode FK 
+        Text taxCode FK           
+        Text supplierName
+    }
+
+    BusinessPartner ||--|| Customer : customer
+    BusinessPartner ||--|| Supplier : supplier
+
+    Customer }o--|| SalesOrganization : salesOrganization
+    Customer }o--|| DistributionChannel : distributionChannel
+    Customer }o--|| Division : division
+    Customer }o--|| PaymentTerm : paymentTerm
+    Customer }o--|| PaymentMethod : paymentMethod
+    Customer }o--|| TaxCode : tax
+    Customer }o--|| PlanningGroup : planningGroup
+    Customer }o--|| PlanningLevel : planningLevel
+
+    Supplier }o--|| PurchasingOrganization : purchasingOrganization
+    Supplier }o--|| PaymentTerm : paymentTerm
+    Supplier }o--|| PaymentMethod : paymentMethod
+    Supplier }o--|| TaxCode : tax
+
+    PurchasingInfoRecord {
+        Text materialCode FK
+        Text supplierCode FK
+        Text purchasingOrgCode FK
+        Text infoRecordKey PK
+    }
+
+    PurchasingInfoRecord }o--|| Material : material
+    PurchasingInfoRecord }o--|| Supplier : supplier
+    PurchasingInfoRecord }o--|| PurchasingOrganization : purchasingOrganization
+
+    %% --- Master Data - Material ---
+    Material {
+        Text materialCode PK
+        Text materialTypeCode FK
+        Text materialGroupCode FK
+        Text storageLocationCode FK
+        Text purchasingOrgCode FK
+        Text taxCode FK
+        Text wbsElementId FK 
+    }
+    MaterialType {
+        Text materialTypeCode PK
+        Text materialTypeName
+    }
+    MaterialGroup {
+        Text materialGroupCode PK
+        Text materialGroupName
+    }
+
+    MaterialSalesData {
+        Text materialCode FK
+        Text salesArea FK
+    }
+
+    ProductionVersion {
+        Text productionVersionCode PK
+        Text routingCode FK
+        Text bomCode FK
+    }
+
+    Routing {
+        Text routingCode PK
+        Text routingName
+    }
+
+    BOM {
+        Text bomCode PK
+        Text description
+    }
+
+    ProductionOrderComponent {
+        Text materialCode FK
+        Text productionOrderCode FK
+        Number qty
+    }
+
+    Material }o--|| MaterialType : materialType
+    Material }o--|| MaterialGroup : materialGroup
+    Material }o--|| StorageLocation : storageLocation
+    Material }o--|| PurchasingOrganization : purchasingOrganization
+    Material ||--o{ ProductionVersion : productionVersions
+    Material }o--|| Routing : routing
+
+    Material ||--|{ ProductionOrderComponent : productionOrders
+    ProductionOrderComponent }|--|| ProductionOrder : productionOrder
+
+    Material ||--|{ MaterialSalesData : salesData
+    MaterialSalesData }|--|| SalesArea : salesArea
+
+    Material ||--o{ BOM : bomComponents
+
+    ProductionVersion ||--|| Routing : routing
+    ProductionVersion ||--|| BOM : bom
+
+    Routing ||--o{ WorkCenter : workCenters
+
+    Operation {
+        Text operationCode PK
+        Text operationDescription
+    }
+
+    Routing ||--|{ Operation : operations
+
+    ProductionOrder {
+        Text productionOrderCode PK
+        Text CostCenterCode FK
+        Text ProfitCenterCode FK
+        Text productionOrderDescription
+    }
+
+    SalesOrder {
+        Text salesOrderCode PK
+        Text customerCode FK
+        Text companyCode FK
+        Text salesAreaCode FK
+        Date orderDate
+    }
+
+    SalesArea ||--|{ SalesOrder : salesOrders
+    Customer ||--|{ SalesOrder : salesOrders
+    CompanyCode ||--|{ SalesOrder : salesOrders
+
+    SettlementRule {
+        Text settlementRuleId PK
+        Text senderObjectType
+        Text senderObjectKey FK
+        Text receiverObjectType
+        Text receiverObjectKey FK
+        Text settlementType
+        Number percentage
+    }
+
+    ProductionOrder }|--|| ProductionVersion : productionVersion
+    ProductionOrder ||--|{ SettlementRule : settlementRules
+    WbsElement ||--|{ SettlementRule : receivedSettlementRules
+
+    %% --- Financial & Controlling Master Data ---
+    ChartOfAccounts {
+        Text coaCode PK
+        Text coaName
+    }
+
+    GlAccount {
+        Text glAccountCode PK
+        Text coaCode FK             
+        Text companyCode FK         
+        Text glAccountDescription
+    }
+
+    CostElement {
+        Text costElementCode PK
+        Text glAccountCode FK      
+        Text costElementDescription
+    }
+
+    CostCenter {
+        Text costCenterCode PK
+        Text controllingAreaCode FK 
+        Text companyCode FK         
+        Text plantCode FK           
+        Text profitCenterCode FK    
+        Text costCenterName
+    }
+
+    ProfitCenter {
+        Text profitCenterCode PK
+        Text controllingAreaCode FK 
+        Text companyCode FK         
+        Text plantCode FK           
+        Text segmentCode FK         
+        Text profitCenterName
+    }
+
+    ProfitCenter }|--|| Segment : segment
+    CostCenter }|--|| Segment : segment
+
+    InternalOrder {
+        Text internalOrderCode PK
+        Text costCenterCode FK 
+        Text wbsElementId FK   
+        Text orderDescription
+    }
+
+    Project {
+        Text projectId PK
+        Text projectName
+    }
+
+    WbsElement {
+        Text wbsElementId PK
+        Text projectId FK
+        Text wbsElementDescription
+    }
+
+    OperatingConcern {
+        Text operatingConcernCode PK
+        Text operatingConcernName
+    }
+
+    ChartOfAccounts ||--o{ GlAccount : glAccounts
+    GlAccount ||--|| CompanyCode : companyCode
+    GlAccount ||--o{ CostElement : costElements
+
+    CostCenter }|--|| ControllingArea : controllingArea
+    CostCenter }|--|| CompanyCode : companyCode
+    CostCenter }|--|| Plant : plant
+    CostCenter }|--|| ProfitCenter : profitCenter
+    CostCenter ||--o{ Skf : skfs
+    CostCenter ||--o{ GlAccount : glAccounts
+    CostCenter ||--|{ WorkCenter : workCenters
+    CostCenter ||--|{ ActivityType : activityTypes
+    WorkCenter ||--|{ ActivityType : activityTypes
+
+    ProfitCenter }|--|| ControllingArea : controllingArea
+    ProfitCenter }|--|| CompanyCode : companyCode
+    ProfitCenter }|--|| Plant : plant
+
+    InternalOrder ||--|| CostCenter : costCenter
+    InternalOrder ||--|| WbsElement : wbsElement
+
+    Project ||--o{ WbsElement : wbsElements
+    Material }o--|| WbsElement : wbsElement
+
+    ControllingArea }|--|| OperatingConcern : operatingConcern
+
+    %% --- Bank & Payment Details ---
+    HouseBank {
+        Text houseBankId PK
+        Text companyCode FK
+        Text bankName
+    }
+
+    BankAccount {
+        Text bankAccountId PK
+        Text houseBankId FK
+        Text bankKey FK    
+        Text accountDescription
+    }
+
+    BankKey {
+        Text bankKey PK
+        Text bankDetails
+    }
+
+    PaymentTerm {
+        Text paymentTermCode PK
+        Text termDescription
+    }
+
+    PaymentMethod {
+        Text paymentMethodCode PK
+        Text methodDescription
+    }
+
+    HouseBank ||--o{ BankAccount : bankAccounts
+    BankAccount ||--|| BankKey : bankKey
+    CompanyCode ||--o{ HouseBank : houseBanks
+
+    %% --- Other Common Master Data ---
+    TaxCode {
+        Text taxCode PK
+        Text taxDescription
+    }
+
+    DocumentType {
+        Text docTypeCode PK
+        Text documentTypeDescription
+    }
+
+    GlAccount ||--|| DocumentType : documentType
+    DocumentType ||--o{ ChartOfAccounts : chartOfAccounts
+
+    ActivityType {
+        Text activityTypeCode PK
+        Text activityDescription
+    }
+
+    Skf {
+        Text skfCode PK
+        Text costCenter FK
+        Text skfDescription
+    }
+
+    PlanningGroup {
+        Text groupCode PK
+        Text groupDescription
+    }
+
+    PlanningLevel {
+        Text levelCode PK
+        Text levelDescription
+    }
+
+    StorageLocation {
+        Text storageLocationCode PK
+        Text plantCode FK       
+        Text storageLocationName
+    }
+
+    WorkCenter {
+        Text workCenterCode PK
+        Text plantCode FK       
+        Text workCenterName
+    }
