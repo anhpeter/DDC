@@ -1,0 +1,181 @@
+---
+title: OVERVIEW - SAP S/4HANA Core Entities
+config:
+  theme: neutral
+  layout: elk
+---
+erDiagram
+direction lr
+
+    BudgetType ||--o{ Budget : "type"
+    Budget ||--o{ BudgetProject : "phanBo"
+    Project ||--o{ BudgetProject : "duAn"
+    BudgetProject o{--|| GlAccount : "khoanMuc"
+
+    CompanyCode }|--|| ControllingArea : controllingArea
+    CompanyCode ||--o{ Plant : plants
+    CompanyCode ||--o{ SalesOrganization : salesOrganizations
+    CompanyCode ||--o{ PurchasingOrganization : purchasingOrganizations
+
+    Plant ||--o{ StorageLocation : storageLocations
+    Plant ||--o{ WorkCenter : workCenters
+
+    SalesOrganization ||--o{ SalesOffice : salesOffices
+    SalesOrganization ||--o{ DistributionChannel : distributionChannels
+    SalesOrganization ||--o{ Division : divisions
+    SalesOrganization ||--o{ SalesArea : salesAreas
+
+    DistributionChannel ||--o{ SalesArea : salesAreas
+    Division ||--o{ SalesArea : salesAreas
+
+    PurchasingOrganization ||--o{ PurchasingGroup : purchasingGroups
+    PurchasingOrganization ||--o{ Plant : responsiblePlants
+
+    BusinessPartner ||--|| Customer : customer
+    BusinessPartner ||--|| Supplier : supplier
+
+    Customer }o--|| SalesOrganization : salesOrganization
+    Customer }o--|| DistributionChannel : distributionChannel
+    Customer }o--|| Division : division
+    Customer }o--|| PaymentTerm : paymentTerm
+    Customer }o--|| PaymentMethod : paymentMethod
+    Customer }o--|| TaxCode : tax
+    Customer }o--|| PlanningGroup : planningGroup
+    Customer }o--|| PlanningLevel : planningLevel
+    Customer }o--|| CustomerGroup : customerGroup
+
+    Supplier }o--|| PurchasingOrganization : purchasingOrganization
+    Supplier }o--|| PaymentTerm : paymentTerm
+    Supplier }o--|| PaymentMethod : paymentMethod
+    Supplier }o--|| TaxCode : tax
+    %% BUSINESS PARTNER
+
+
+    PurchasingInfoRecord }o--|| Material : material
+    PurchasingInfoRecord }o--|| Supplier : supplier
+    PurchasingInfoRecord }o--|| PurchasingOrganization : purchasingOrganization
+
+    %% Material 
+    Material }o--|| MaterialType : materialType
+    Material }o--|| MaterialGroup : materialGroup
+    Material ||--|| Material : parentMaterial
+    Material }o--|| StorageLocation : storageLocation
+    Material }o--|| PurchasingOrganization : purchasingOrganization
+    Material }o--|| Routing : routing
+    Material ||--o{ ProductionVersion : productionVersions
+    Material ||--|{ ProductionOrderComponent : productionOrders
+    Material ||--o{ BOM : bomComponents
+    Material ||--|{ MaterialSalesData : salesData
+    Material }o--|| WbsElement : wbsElement
+    MaterialSalesData }|--|| SalesArea : salesArea
+
+    Material }|--|| Unit: unit
+    %% Material 
+
+    %% Production Version 
+
+    ProductionOrderComponent }|--|| ProductionOrder : productionOrder
+
+
+
+    ProductionVersion ||--|| Routing : routing
+    ProductionVersion ||--|| BOM : bom
+
+    Routing ||--o{ WorkCenter : workCenters
+
+
+    Routing ||--|{ Operation : operations
+
+    ProductionOrder }|--|| ProductionVersion : productionVersion
+    ProductionOrder ||--|{ SettlementRule : settlementRules
+    WbsElement ||--|{ SettlementRule : receivedSettlementRules
+    %% Production Order
+
+    %% Sale
+    SalesArea ||--|{ SalesOrder : salesOrders
+    Customer ||--|{ SalesOrder : salesOrders
+    CompanyCode ||--|{ SalesOrder : salesOrders
+    %% Sale
+
+
+    %% Financial
+
+    GlAccount ||--|{ GlAccountTaxCode : tax
+    GlAccountTaxCode }|--|| TaxCode: account
+
+    ProfitCenter }|--|| Segment : segment
+    CostCenter }|--|| Segment : segment
+
+    %% Financial
+
+    ChartOfAccounts ||--o{ GlAccount : glAccounts
+    GlAccount ||--|| CompanyCode : companyCode
+    GlAccount ||--o{ CostElement : costElements
+
+    CostCenter }|--|| ControllingArea : controllingArea
+    CostCenter }|--|| CompanyCode : companyCode
+    CostCenter }|--|| Plant : plant
+    CostCenter }|--|| ProfitCenter : profitCenter
+    CostCenter ||--o{ Skf : skfs
+    CostCenter ||--o{ GlAccount : glAccounts
+    CostCenter ||--|{ WorkCenter : workCenters
+    CostCenter ||--|{ ActivityType : activityTypes
+    WorkCenter ||--|{ ActivityType : activityTypes
+
+    ProfitCenter }|--|| ControllingArea : controllingArea
+    ProfitCenter }|--|| CompanyCode : companyCode
+    ProfitCenter }|--|| Plant : plant
+
+    InternalOrder ||--|| CostCenter : costCenter
+    InternalOrder ||--|| WbsElement : wbsElement
+
+    Project ||--o{ WbsElement : wbsElements
+
+    ControllingArea }|--|| OperatingConcern : operatingConcern
+
+    %% --- Bank & Payment Details ---
+    HouseBank ||--o{ BankAccount : bankAccounts
+    BankAccount ||--|| BankKey : bankKey
+    CompanyCode ||--o{ HouseBank : houseBanks
+
+    %% --- Other Common Master Data ---
+ 
+
+    GlAccount ||--|| DocumentType : documentType
+    DocumentType ||--o{ ChartOfAccounts : chartOfAccounts
+
+ 
+
+    %% PR && PO
+
+    PR }|--|| _Employee: requestedEmployee
+    PR }|--|| _Employee: approvedEmployee
+    PO }|--|| _Employee: requestedEmployee
+    PO }|--|| _Employee: approvedEmployee
+    PR }|--|| _Department: requestedDepartment
+    PR ||--o{ PRDetails : "details"
+    PRDetails }o--|| Material : "Material"
+    PRDetails ||--|| WbsElement : "wbsElement"
+    PO ||--o{ PODetails : "detail"
+    PODetails }o--|| Supplier : "supplier"
+    PODetails }o--|| Budget : "budget"
+    PODetails }o--|| PR : "pr"
+    PODetails ||--|| WbsElement : "wbsElement"
+
+    %% KHO %%
+    StorageLocation ||--o{ Inventory : "stock"
+    StorageLocation ||--o{ InboundOrder : "inboundOrder"
+    StorageLocation ||--o{ OutboundOrder : "outboundOrder"
+    Inventory o{--|| Material : "material"
+    InboundOrder o{--|| PO : "po"
+    InboundOrder ||--o{ InboundDelivery : "receipt"
+    OutboundOrder ||--o{ OutboundDelivery : "delivery"
+    InboundOrder ||--|{ InboundOrderDetails : "details"
+    InboundDelivery ||--|{ InboundDeliveryDetails : "details"
+    OutboundOrder ||--|{ OutboundOrderDetails : "details"
+    OutboundDelivery ||--|{ OutboundDeliveryDetails : "details"
+    InboundOrderDetails o{--|| Material : "material"
+    InboundDeliveryDetails o{--|| Material : "material"
+    OutboundOrderDetails o{--|| Material : "material"
+    OutboundDeliveryDetails o{--|| Material : "material"
+    %% KHO %%

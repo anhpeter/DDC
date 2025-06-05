@@ -1,0 +1,304 @@
+---
+title: OVERVIEW - SAP S/4HANA Core Entities
+config:
+  theme: neutral
+  layout: elk
+---
+erDiagram
+    %% -------------------------------
+    %% 1. Project & Zone Domain
+    %% -------------------------------
+    Project }|--|| Customer        : "customer_id"
+    Zone }o--|| ZoneCategory      : "categories_type_code"
+    Zone }o--|| Company           : "company_id"
+    Zone }o--|| Project           : "project_id"
+    %%  Phase to Zone connection in another section
+ 
+    %% -------------------------------
+    %% 2. Resources & Tasks Domain
+    %% -------------------------------
+    Resource |o--o| Employee       : "employee_id"
+    Resource |o--o| Role           : "primary_role"
+    Resource |o--o| Resource       : "parent_resource_id"
+    %% Labor, Material, Equipment
+    Resource |o--o| ResourceType       : "resource_type"
+    Resource ||--o{ P6_User   : "time_approve_manager"
+    Resource ||--o{ UMeasure   : "unit_of_measure"
+    Resource ||--o{ Currency   : "currency_code"
+ 
+    Resource ||--o{ Plant : "factory_id"
+    Resource ||--o{ Workshop : "workshop_id"
+    Resource ||--o{ Workshop : "sub_division_id"
+    Resource ||--o{ Shift : "shift_code"
+ 
+    Task }|--|| Project            : "project_id"
+    Task }|--|| WBS                : "wbs_id"
+    Task }|--|| Workshop           : "workshop_id"
+    Task }|--|| Resource           : "primary_resource_id"
+ 
+    ResourceTask }|--|| Task        : "task_id"
+    ResourceTask }|--|| Resource    : "resource_id"
+    ResourceTask }|--|| ResourceType    : "resource_type"
+ 
+ 
+    RoleResource }|--|| Resource    : "resource_id"
+    RoleResource }|--|| Role        : "role_id"
+ 
+    %% -------------------------------
+    %% 3. Party, Customer, Vendor Domain
+    %% -------------------------------
+    Party }|--|| Region            : "region"
+    Party }|--|| Country           : "country"
+    Customer |o--|| Party          : "party_id"
+    Customer }|--|| Company        : "company_code"
+    Customer }|--|| CustomerGroup  : "customer_group_id"
+    Customer }|--|| Currency       : "currency"
+    Vendor |o--|| Party            : "party_id"
+ 
+    %% -------------------------------
+    %% 4. Manufacturing / Plant Domain (BOM, Routing, Workshop)
+    %% -------------------------------
+    BOM_Detail }|--|| BOM          : ""
+    BOM_Detail }|--|| Material     : "component"
+    BOM }|--|| Material     : "material_sap"
+    BOM }|--|| Workshop            : "plant"
+    Workshop }|--|| Factory        : "plant"
+    Factory }|--|| Plant        : "plant"
+    Routing }|--|| Plant         : "plant"
+    Routing }|--|| Material           : "material_number_sap"
+    RoutingDetail }|--|| Routing    : "routing_key"
+    RoutingDetail }|--|| Workshop   : "work_center"
+    StageMember }|--|| Factory     : "planWorkshop"
+    StageMember }|--|| Workshop     : "workshopCode"
+    StageMember }|--|| MemberGroup  : "group"
+ 
+    ProductionVersion ||--|| Routing: group_counter
+    ProductionVersion ||--|| BOM: alternative_bom
+    ProductionVersion ||--|{ ProductionOrder: "production_version_code"
+ 
+    ProductionOrder }|--|| Plant : "plant_code"
+    ProductionOrder }|--|| Material : "material_code"
+    ProductionOrder }|--|| SAP_User : "approved_by"
+    ProductionComponent }|--|| Material : "material_code"
+    ProductionComponent }|--|| ProductionOrder : "production_order_code"
+    ProductionComponent }|--|| Unit : "unit"
+    ProductionComponent }|--|| Plant : "plant"
+    ProductionComponent }|--|| StorageLocation : "storage_location"
+ 
+    %% -------------------------------
+    %% 5. Logistics Domain (Shipment/Package)
+    %% -------------------------------
+    Shipment }|--|| Project         : "project_id"
+    Shipment }|--|| Workshop        : "warehouse"
+    Package }|--|| Shipment         : "shipment_id"
+ 
+    %% -------------------------------
+    %% 6. Member/Stage/Part Domain
+    %% -------------------------------
+    Member }|--|| MemberCategory    : "category"
+    MemberCategoryStage }|--|| MemberCategory : "category"
+    MemberCategoryStage }|--|| Stage : "category"
+    Member }|--|| MemberType        : "type"
+    Member ||--|{ StageMember       : "member"
+    Stage }|--|| StageMember        : "stageCode"
+    Member }|--|| MemberLifeState   : "life_state"
+    Member }|--|| Phase             : "phase"
+    Member }|--|| Package           : "package"
+    Phase }|--|| Zone               : "zone"
+    Phase }|--|| MemType            : "member_type"
+    Part }|--|| Member              : "member"
+    %%    Part }|--|| User                : "cutting_plan_user"
+    %%    Part }|--|| User                : "cutting_user"
+    %%    Part }|--|| Workshop            : "cutting_workshop"
+    %%    Part }|--|| Workshop            : "cutting_plan_workshop"
+    %%    Part }|--|| User                : "delivery_user"
+    %%    Part }|--|| MemberType             : "type_id"
+    Member }|--|| ProductionOrder: "production_order_code"
+    %% -------------------------------
+    %% 7. Finance / Assets Domain
+    %% -------------------------------
+    Assets }|--|| Company           : "basic_unit_code"
+    Assets }|--|| ChartOfAccounts   : "asset_account"
+    Assets }|--|| ChartOfAccounts   : "debit_account"
+    Assets }|--|| ChartOfAccounts   : "credit_account"
+    Assets }|--|| Department        : "management_department"
+ 
+    %% -------------------------------
+    %% 8. User/Employee Domain
+    %% -------------------------------
+    User }|--|| Employee            : "staff_code"
+ 
+ 
+    %% ANH %%
+    BudgetType ||--o{ Budget : "type"
+    Budget ||--o{ BudgetProject : "phanBo"
+    Project ||--o{ BudgetProject : "duAn"
+    BudgetProject o{--|| GlAccount : "khoanMuc"
+
+    CompanyCode }|--|| ControllingArea : controllingArea
+    CompanyCode ||--o{ Plant : plants
+    CompanyCode ||--o{ SalesOrganization : salesOrganizations
+    CompanyCode ||--o{ PurchasingOrganization : purchasingOrganizations
+
+    Plant ||--o{ StorageLocation : storageLocations
+    Plant ||--o{ WorkCenter : workCenters
+
+    SalesOrganization ||--o{ SalesOffice : salesOffices
+    SalesOrganization ||--o{ DistributionChannel : distributionChannels
+    SalesOrganization ||--o{ Division : divisions
+    SalesOrganization ||--o{ SalesArea : salesAreas
+
+    DistributionChannel ||--o{ SalesArea : salesAreas
+    Division ||--o{ SalesArea : salesAreas
+
+    PurchasingOrganization ||--o{ PurchasingGroup : purchasingGroups
+    PurchasingOrganization ||--o{ Plant : responsiblePlants
+
+    BusinessPartner ||--|| Customer : customer
+    BusinessPartner ||--|| Supplier : supplier
+
+    Customer }o--|| SalesOrganization : salesOrganization
+    Customer }o--|| DistributionChannel : distributionChannel
+    Customer }o--|| Division : division
+    Customer }o--|| PaymentTerm : paymentTerm
+    Customer }o--|| PaymentMethod : paymentMethod
+    Customer }o--|| TaxCode : tax
+    Customer }o--|| PlanningGroup : planningGroup
+    Customer }o--|| PlanningLevel : planningLevel
+    Customer }o--|| CustomerGroup : customerGroup
+
+    Supplier }o--|| PurchasingOrganization : purchasingOrganization
+    Supplier }o--|| PaymentTerm : paymentTerm
+    Supplier }o--|| PaymentMethod : paymentMethod
+    Supplier }o--|| TaxCode : tax
+    %% BUSINESS PARTNER
+
+
+    PurchasingInfoRecord }o--|| Material : material
+    PurchasingInfoRecord }o--|| Supplier : supplier
+    PurchasingInfoRecord }o--|| PurchasingOrganization : purchasingOrganization
+
+    %% Material 
+    Material }o--|| MaterialType : materialType
+    Material }o--|| MaterialGroup : materialGroup
+    Material ||--|| Material : parentMaterial
+    Material }o--|| StorageLocation : storageLocation
+    Material }o--|| PurchasingOrganization : purchasingOrganization
+    Material }o--|| Routing : routing
+    Material ||--o{ ProductionVersion : productionVersions
+    Material ||--|{ ProductionOrderComponent : productionOrders
+    Material ||--o{ BOM : bomComponents
+    Material ||--|{ MaterialSalesData : salesData
+    Material }o--|| WbsElement : wbsElement
+    MaterialSalesData }|--|| SalesArea : salesArea
+
+    Material }|--|| Unit: unit
+    %% Material 
+
+    %% Production Version 
+
+    ProductionOrderComponent }|--|| ProductionOrder : productionOrder
+
+
+
+    ProductionVersion ||--|| Routing : routing
+    ProductionVersion ||--|| BOM : bom
+
+    Routing ||--o{ WorkCenter : workCenters
+
+
+    Routing ||--|{ Operation : operations
+
+    ProductionOrder }|--|| ProductionVersion : productionVersion
+    ProductionOrder ||--|{ SettlementRule : settlementRules
+    WbsElement ||--|{ SettlementRule : receivedSettlementRules
+    %% Production Order
+
+    %% Sale
+    SalesArea ||--|{ SalesOrder : salesOrders
+    Customer ||--|{ SalesOrder : salesOrders
+    CompanyCode ||--|{ SalesOrder : salesOrders
+    %% Sale
+
+
+    %% Financial
+
+    GlAccount ||--|{ GlAccountTaxCode : tax
+    GlAccountTaxCode }|--|| TaxCode: account
+
+    ProfitCenter }|--|| Segment : segment
+    CostCenter }|--|| Segment : segment
+
+    %% Financial
+
+    ChartOfAccounts ||--o{ GlAccount : glAccounts
+    GlAccount ||--|| CompanyCode : companyCode
+    GlAccount ||--o{ CostElement : costElements
+
+    CostCenter }|--|| ControllingArea : controllingArea
+    CostCenter }|--|| CompanyCode : companyCode
+    CostCenter }|--|| Plant : plant
+    CostCenter }|--|| ProfitCenter : profitCenter
+    CostCenter ||--o{ Skf : skfs
+    CostCenter ||--o{ GlAccount : glAccounts
+    CostCenter ||--|{ WorkCenter : workCenters
+    CostCenter ||--|{ ActivityType : activityTypes
+    WorkCenter ||--|{ ActivityType : activityTypes
+
+    ProfitCenter }|--|| ControllingArea : controllingArea
+    ProfitCenter }|--|| CompanyCode : companyCode
+    ProfitCenter }|--|| Plant : plant
+
+    InternalOrder ||--|| CostCenter : costCenter
+    InternalOrder ||--|| WbsElement : wbsElement
+
+    Project ||--o{ WbsElement : wbsElements
+
+    ControllingArea }|--|| OperatingConcern : operatingConcern
+
+    %% --- Bank & Payment Details ---
+    HouseBank ||--o{ BankAccount : bankAccounts
+    BankAccount ||--|| BankKey : bankKey
+    CompanyCode ||--o{ HouseBank : houseBanks
+
+    %% --- Other Common Master Data ---
+ 
+
+    GlAccount ||--|| DocumentType : documentType
+    DocumentType ||--o{ ChartOfAccounts : chartOfAccounts
+
+ 
+
+    %% PR && PO
+
+    PR }|--|| _Employee: requestedEmployee
+    PR }|--|| _Employee: approvedEmployee
+    PO }|--|| _Employee: requestedEmployee
+    PO }|--|| _Employee: approvedEmployee
+    PR }|--|| _Department: requestedDepartment
+    PR ||--o{ PRDetails : "details"
+    PRDetails }o--|| Material : "Material"
+    PRDetails ||--|| WbsElement : "wbsElement"
+    PO ||--o{ PODetails : "detail"
+    PODetails }o--|| Supplier : "supplier"
+    PODetails }o--|| Budget : "budget"
+    PODetails }o--|| PR : "pr"
+    PODetails ||--|| WbsElement : "wbsElement"
+
+    %% KHO %%
+    StorageLocation ||--o{ Inventory : "stock"
+    StorageLocation ||--o{ InboundOrder : "inboundOrder"
+    StorageLocation ||--o{ OutboundOrder : "outboundOrder"
+    Inventory o{--|| Material : "material"
+    InboundOrder o{--|| PO : "po"
+    InboundOrder ||--o{ InboundDelivery : "receipt"
+    OutboundOrder ||--o{ OutboundDelivery : "delivery"
+    InboundOrder ||--|{ InboundOrderDetails : "details"
+    InboundDelivery ||--|{ InboundDeliveryDetails : "details"
+    OutboundOrder ||--|{ OutboundOrderDetails : "details"
+    OutboundDelivery ||--|{ OutboundDeliveryDetails : "details"
+    InboundOrderDetails o{--|| Material : "material"
+    InboundDeliveryDetails o{--|| Material : "material"
+    OutboundOrderDetails o{--|| Material : "material"
+    OutboundDeliveryDetails o{--|| Material : "material"
+    %% KHO %%
