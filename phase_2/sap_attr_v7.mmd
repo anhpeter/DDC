@@ -5,26 +5,8 @@ config:
   layout: elk
 ---
 erDiagram
-    direction lr
-    CustomerGroup {
-        Text groupCode PK
-        Text groupName
-    }
-
-    MaterialElement {
-        Text materialElementCode PK
-        Text materialElementName
-    }
-
-    MaterialProperty {
-        Text materialPropertyCode PK
-        Text materialPropertyName
-    }
-    Material_MaterialProperty {
-        Text materialPropertyCode PK
-        Text materialPropertyName
-    }
-
+direction lr
+    
     Unit {
         Text unitCode PK
         Text unitName
@@ -35,40 +17,6 @@ erDiagram
         Text vendorName
     }
 
-    PR {
-        Text prCode PK
-        Text requestedBy
-    }
-
-    PO {
-        Text poNumber PK
-        Text supplierName
-    }
-
-    WarehouseOutboundOrder {
-        Text warehouseOutboundOrderCode PK
-        Text warehouseName
-    }
-
-    OutboundDeliveryNote {
-        Text outboundDeliveryNoteCode PK
-        Text issuedBy
-    }
-
-    WarehouseInboundOrder {
-        Text warehouseInboundOrderCode PK
-        Text warehouseName
-    }
-
-    InboundDeliveryNote {
-        Text inboundDeliveryNoteCode PK
-        Text receivedBy
-    }
-
-    ExportType {
-        Text exportTypeCode PK
-        Text exportTypeName
-    }
 
     Budget {
         Text budgetCode PK
@@ -182,7 +130,12 @@ erDiagram
     PurchasingOrganization ||--o{ PurchasingGroup : purchasingGroups
     PurchasingOrganization ||--o{ Plant : responsiblePlants
 
-    %% --- Master Data - Business Partners ---
+    %% BUSINESS PARTNER
+    CustomerGroup {
+        Text groupCode PK
+        Text groupName
+    }
+
     BusinessPartner {
         Text bpCode PK
         Text bpCategory
@@ -224,12 +177,13 @@ erDiagram
     Customer }o--|| TaxCode : tax
     Customer }o--|| PlanningGroup : planningGroup
     Customer }o--|| PlanningLevel : planningLevel
-    Customer }o--|| CustomerGroup : group
+    Customer }o--|| CustomerGroup : customerGroup
 
     Supplier }o--|| PurchasingOrganization : purchasingOrganization
     Supplier }o--|| PaymentTerm : paymentTerm
     Supplier }o--|| PaymentMethod : paymentMethod
     Supplier }o--|| TaxCode : tax
+    %% BUSINESS PARTNER
 
     PurchasingInfoRecord {
         Text materialCode FK
@@ -242,16 +196,17 @@ erDiagram
     PurchasingInfoRecord }o--|| Supplier : supplier
     PurchasingInfoRecord }o--|| PurchasingOrganization : purchasingOrganization
 
-    %% --- Master Data - Material ---
+    %% Material 
     Material {
         Text materialCode PK
         Text materialTypeCode FK
         Text materialGroupCode FK
+        Text parentMaterialCode FK
         Text storageLocationCode FK
         Text purchasingOrgCode FK
         Text taxCode FK
+        Text unitCode FK
         Text wbsElementId FK 
-        Text unit FK
     }
     MaterialType {
         Text materialTypeCode PK
@@ -261,12 +216,28 @@ erDiagram
         Text materialGroupCode PK
         Text materialGroupName
     }
-
     MaterialSalesData {
         Text materialCode FK
         Text salesArea FK
     }
 
+    Material }o--|| MaterialType : materialType
+    Material }o--|| MaterialGroup : materialGroup
+    Material ||--|| Material : parentMaterial
+    Material }o--|| StorageLocation : storageLocation
+    Material }o--|| PurchasingOrganization : purchasingOrganization
+    Material }o--|| Routing : routing
+    Material ||--o{ ProductionVersion : productionVersions
+    Material ||--|{ ProductionOrderComponent : productionOrders
+    Material ||--o{ BOM : bomComponents
+    Material ||--|{ MaterialSalesData : salesData
+    Material }o--|| WbsElement : wbsElement
+    MaterialSalesData }|--|| SalesArea : salesArea
+
+    Material }|--|| Unit: unit
+    %% Material 
+
+    %% Production Version 
     ProductionVersion {
         Text productionVersionCode PK
         Text routingCode FK
@@ -289,24 +260,9 @@ erDiagram
         Number qty
     }
 
-    Material }o--|| MaterialType : materialType
-    Material }o--|| MaterialGroup : materialGroup
-    Material }o--|| StorageLocation : storageLocation
-    Material }o--|| PurchasingOrganization : purchasingOrganization
-    Material ||--o{ ProductionVersion : productionVersions
-    Material }o--|| Routing : routing
-    Material ||--|{ MaterialElement : materialElement
-    Material ||--|{ Material_MaterialProperty: property
-    Material }|--|| Unit: unit
-    Material_MaterialProperty }|--|| MaterialProperty: material
-
-    Material ||--|{ ProductionOrderComponent : productionOrders
     ProductionOrderComponent }|--|| ProductionOrder : productionOrder
 
-    Material ||--|{ MaterialSalesData : salesData
-    MaterialSalesData }|--|| SalesArea : salesArea
 
-    Material ||--o{ BOM : bomComponents
 
     ProductionVersion ||--|| Routing : routing
     ProductionVersion ||--|| BOM : bom
@@ -327,18 +283,6 @@ erDiagram
         Text productionOrderDescription
     }
 
-    SalesOrder {
-        Text salesOrderCode PK
-        Text customerCode FK
-        Text companyCode FK
-        Text salesAreaCode FK
-        Date orderDate
-    }
-
-    SalesArea ||--|{ SalesOrder : salesOrders
-    Customer ||--|{ SalesOrder : salesOrders
-    CompanyCode ||--|{ SalesOrder : salesOrders
-
     SettlementRule {
         Text settlementRuleId PK
         Text senderObjectType
@@ -352,8 +296,23 @@ erDiagram
     ProductionOrder }|--|| ProductionVersion : productionVersion
     ProductionOrder ||--|{ SettlementRule : settlementRules
     WbsElement ||--|{ SettlementRule : receivedSettlementRules
+    %% Production Order
 
-    %% --- Financial & Controlling Master Data ---
+    %% Sale
+    SalesOrder {
+        Text salesOrderCode PK
+        Text customerCode FK
+        Text companyCode FK
+        Text salesAreaCode FK
+        Date orderDate
+    }
+    SalesArea ||--|{ SalesOrder : salesOrders
+    Customer ||--|{ SalesOrder : salesOrders
+    CompanyCode ||--|{ SalesOrder : salesOrders
+    %% Sale
+
+
+    %% Financial
     ChartOfAccounts {
         Text coaCode PK
         Text coaName
@@ -407,6 +366,7 @@ erDiagram
         Text wbsElementId FK   
         Text orderDescription
     }
+    %% Financial
 
     Project {
         Text projectId PK
@@ -446,7 +406,6 @@ erDiagram
     InternalOrder ||--|| WbsElement : wbsElement
 
     Project ||--o{ WbsElement : wbsElements
-    Material }o--|| WbsElement : wbsElement
 
     ControllingArea }|--|| OperatingConcern : operatingConcern
 
@@ -518,12 +477,6 @@ erDiagram
         Text levelDescription
     }
 
-    StorageLocation {
-        Text storageLocationCode PK
-        Text plantCode FK       
-        Text storageLocationName
-    }
-
     WorkCenter {
         Text workCenterCode PK
         Text plantCode FK       
@@ -534,3 +487,120 @@ erDiagram
         Text departmentCode PK
         Text departmentName
     }
+
+    _Employee{
+        Text departmentCode PK
+        Text departmentName
+    }
+
+    %% PR && PO
+    PR {
+        Text prCode PK
+        Text requestedBy FK
+        Text approvedBy FK
+        Text requestedDepartment FK
+    }
+    PRDetails {
+        Text maVatTu FK
+        Text maPR FK
+        Number soLuong
+        Text wbsElement FK
+
+    }
+    PO {
+        Text poNumber PK
+        Text supplierName
+        Text requestedBy FK
+        Text approvedBy FK
+    }
+    PODetails {
+        maPO Text PK
+        maPR Text FK
+        maNCC Text FK
+        maNganSach Text FK
+        soLuong Number
+        donGia Number
+    }
+
+    PR }|--|| _Employee: requestedEmployee
+    PR }|--|| _Employee: approvedEmployee
+    PO }|--|| _Employee: requestedEmployee
+    PO }|--|| _Employee: approvedEmployee
+    PR }|--|| _Department: requestedDepartment
+    PR ||--o{ PRDetails : "details"
+    PRDetails }o--|| Material : "Material"
+    PRDetails ||--|| WbsElement : "wbsElement"
+    PO ||--o{ PODetails : "detail"
+    PODetails }o--|| Supplier : "supplier"
+    PODetails }o--|| Budget : "budget"
+    PODetails }o--|| PR : "pr"
+    PODetails ||--|| WbsElement : "wbsElement"
+
+    %% KHO %%
+    StorageLocation {
+        Text storageLocationCode PK
+        Text plantCode FK       
+        Text storageLocationName
+    }
+
+
+    OutboundOrder {
+        Text outboundOrderCode PK
+        Text warehouseName
+    }
+
+    OutboundDelivery {
+        Text outboundDeliveryCode PK
+        Text issuedBy
+    }
+
+    InboundOrder {
+        Text inboundOrderCode PK
+        Text warehouseName
+    }
+
+    InboundDelivery {
+        Text inboundDeliveryCode PK
+        Text receivedBy
+    }
+
+    OutboundOrderDetails {
+        maLXK Text PK
+        maVatTu Text FK
+        soLuong Number
+    }
+
+    InboundDeliveryDetails {
+        maPNK Text PK
+        maVatTu Text FK
+        soLuong Number
+    }
+
+    InboundOrderDetails {
+        maLNK Text PK
+        maVatTu Text FK
+        soLuong Number
+    }
+
+    OutboundDeliveryDetails {
+        maPXK Text PK
+        maVatTu Text FK
+        soLuong Number
+    }
+
+    StorageLocation ||--o{ Inventory : "stock"
+    StorageLocation ||--o{ InboundOrder : "inboundOrder"
+    StorageLocation ||--o{ OutboundOrder : "outboundOrder"
+    Inventory o{--|| Material : "material"
+    InboundOrder o{--|| PO : "po"
+    InboundOrder ||--o{ InboundDelivery : "receipt"
+    OutboundOrder ||--o{ OutboundDelivery : "delivery"
+    InboundOrder ||--|{ InboundOrderDetails : "details"
+    InboundDelivery ||--|{ InboundDeliveryDetails : "details"
+    OutboundOrder ||--|{ OutboundOrderDetails : "details"
+    OutboundDelivery ||--|{ OutboundDeliveryDetails : "details"
+    InboundOrderDetails o{--|| Material : "material"
+    InboundDeliveryDetails o{--|| Material : "material"
+    OutboundOrderDetails o{--|| Material : "material"
+    OutboundDeliveryDetails o{--|| Material : "material"
+    %% KHO %%
