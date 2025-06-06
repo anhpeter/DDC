@@ -22,7 +22,7 @@ erDiagram
     Resource |o--o| Resource       : "parent_resource_id"
     %% Labor, Material, Equipment
     Resource |o--o| ResourceType       : "resource_type"
-    Resource ||--o{ P6_User   : "time_approve_manager"
+    Resource ||--o{ User   : "time_approve_manager"
     Resource ||--o{ UMeasure   : "unit_of_measure"
     Resource ||--o{ Currency   : "currency_code"
  
@@ -51,7 +51,6 @@ erDiagram
     Party }|--|| Country           : "country"
     Customer |o--|| Party          : "party_id"
     Customer }|--|| Company        : "company_code"
-    Customer }|--|| CustomerGroup  : "customer_group_id"
     Customer }|--|| Currency       : "currency"
     Vendor |o--|| Party            : "party_id"
  
@@ -135,10 +134,10 @@ erDiagram
     Project ||--o{ BudgetProject : "duAn"
     BudgetProject o{--|| GlAccount : "khoanMuc"
 
-    CompanyCode }|--|| ControllingArea : controllingArea
-    CompanyCode ||--o{ Plant : plants
-    CompanyCode ||--o{ SalesOrganization : salesOrganizations
-    CompanyCode ||--o{ PurchasingOrganization : purchasingOrganizations
+    Company }|--|| ControllingArea : controllingArea
+    Company ||--o{ Plant : plants
+    Company ||--o{ SalesOrganization : salesOrganizations
+    Company ||--o{ PurchasingOrganization : purchasingOrganizations
 
     Plant ||--o{ StorageLocation : storageLocations
     Plant ||--o{ WorkCenter : workCenters
@@ -154,9 +153,6 @@ erDiagram
     PurchasingOrganization ||--o{ PurchasingGroup : purchasingGroups
     PurchasingOrganization ||--o{ Plant : responsiblePlants
 
-    BusinessPartner ||--|| Customer : customer
-    BusinessPartner ||--|| Supplier : supplier
-
     Customer }o--|| SalesOrganization : salesOrganization
     Customer }o--|| DistributionChannel : distributionChannel
     Customer }o--|| Division : division
@@ -165,17 +161,17 @@ erDiagram
     Customer }o--|| TaxCode : tax
     Customer }o--|| PlanningGroup : planningGroup
     Customer }o--|| PlanningLevel : planningLevel
-    Customer }o--|| CustomerGroup : customerGroup
+    Customer }o--o| CustomerGroup : customerGroup
 
-    Supplier }o--|| PurchasingOrganization : purchasingOrganization
-    Supplier }o--|| PaymentTerm : paymentTerm
-    Supplier }o--|| PaymentMethod : paymentMethod
-    Supplier }o--|| TaxCode : tax
+    Vendor }o--|| PurchasingOrganization : purchasingOrganization
+    Vendor }o--|| PaymentTerm : paymentTerm
+    Vendor }o--|| PaymentMethod : paymentMethod
+    Vendor }o--|| TaxCode : tax
     %% BUSINESS PARTNER
 
 
     PurchasingInfoRecord }o--|| Material : material
-    PurchasingInfoRecord }o--|| Supplier : supplier
+    PurchasingInfoRecord }o--|| Vendor : supplier
     PurchasingInfoRecord }o--|| PurchasingOrganization : purchasingOrganization
 
     %% Material 
@@ -189,7 +185,7 @@ erDiagram
     Material ||--|{ ProductionOrderComponent : productionOrders
     Material ||--o{ BOM : bomComponents
     Material ||--|{ MaterialSalesData : salesData
-    Material }o--|| WbsElement : wbsElement
+    Material }o--|| WBS : wbsElement
     MaterialSalesData }|--|| SalesArea : salesArea
 
     Material }|--|| Unit: unit
@@ -211,13 +207,13 @@ erDiagram
 
     ProductionOrder }|--|| ProductionVersion : productionVersion
     ProductionOrder ||--|{ SettlementRule : settlementRules
-    WbsElement ||--|{ SettlementRule : receivedSettlementRules
+    WBS ||--|{ SettlementRule : receivedSettlementRules
     %% Production Order
 
     %% Sale
     SalesArea ||--|{ SalesOrder : salesOrders
     Customer ||--|{ SalesOrder : salesOrders
-    CompanyCode ||--|{ SalesOrder : salesOrders
+    Company ||--|{ SalesOrder : salesOrders
     %% Sale
 
 
@@ -232,11 +228,11 @@ erDiagram
     %% Financial
 
     ChartOfAccounts ||--o{ GlAccount : glAccounts
-    GlAccount ||--|| CompanyCode : companyCode
+    GlAccount ||--|| Company : companyCode
     GlAccount ||--o{ CostElement : costElements
 
     CostCenter }|--|| ControllingArea : controllingArea
-    CostCenter }|--|| CompanyCode : companyCode
+    CostCenter }|--|| Company : companyCode
     CostCenter }|--|| Plant : plant
     CostCenter }|--|| ProfitCenter : profitCenter
     CostCenter ||--o{ Skf : skfs
@@ -246,20 +242,20 @@ erDiagram
     WorkCenter ||--|{ ActivityType : activityTypes
 
     ProfitCenter }|--|| ControllingArea : controllingArea
-    ProfitCenter }|--|| CompanyCode : companyCode
+    ProfitCenter }|--|| Company : companyCode
     ProfitCenter }|--|| Plant : plant
 
     InternalOrder ||--|| CostCenter : costCenter
-    InternalOrder ||--|| WbsElement : wbsElement
+    InternalOrder ||--|| WBS : wbsElement
 
-    Project ||--o{ WbsElement : wbsElements
+    Project ||--o{ WBS : wbsElements
 
     ControllingArea }|--|| OperatingConcern : operatingConcern
 
     %% --- Bank & Payment Details ---
     HouseBank ||--o{ BankAccount : bankAccounts
     BankAccount ||--|| BankKey : bankKey
-    CompanyCode ||--o{ HouseBank : houseBanks
+    Company ||--o{ HouseBank : houseBanks
 
     %% --- Other Common Master Data ---
  
@@ -278,12 +274,12 @@ erDiagram
     PR }|--|| _Department: requestedDepartment
     PR ||--o{ PRDetails : "details"
     PRDetails }o--|| Material : "Material"
-    PRDetails ||--|| WbsElement : "wbsElement"
+    PRDetails ||--|| WBS : "wbsElement"
     PO ||--o{ PODetails : "detail"
-    PODetails }o--|| Supplier : "supplier"
+    PODetails }o--|| Vendor : "supplier"
     PODetails }o--|| Budget : "budget"
     PODetails }o--|| PR : "pr"
-    PODetails ||--|| WbsElement : "wbsElement"
+    PODetails ||--|| WBS : "wbsElement"
 
     %% KHO %%
     StorageLocation ||--o{ Inventory : "stock"
