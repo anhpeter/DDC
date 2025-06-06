@@ -6,12 +6,13 @@ config:
 ---
 erDiagram
 direction lr
-
     BudgetType ||--o{ Budget : "type"
     Budget ||--o{ BudgetProject : "phanBo"
     Project ||--o{ BudgetProject : "duAn"
     BudgetProject o{--|| GlAccount : "khoanMuc"
 
+
+    %% --- Company Structure (FI/CO Foundation) ---
     CompanyCode }|--|| ControllingArea : controllingArea
     CompanyCode ||--o{ Plant : plants
     CompanyCode ||--o{ SalesOrganization : salesOrganizations
@@ -31,6 +32,7 @@ direction lr
     PurchasingOrganization ||--o{ PurchasingGroup : purchasingGroups
     PurchasingOrganization ||--o{ Plant : responsiblePlants
 
+    %% BUSINESS PARTNER
     BusinessPartner ||--|| Customer : customer
     BusinessPartner ||--|| Supplier : supplier
 
@@ -50,12 +52,12 @@ direction lr
     Supplier }o--|| TaxCode : tax
     %% BUSINESS PARTNER
 
-
     PurchasingInfoRecord }o--|| Material : material
     PurchasingInfoRecord }o--|| Supplier : supplier
     PurchasingInfoRecord }o--|| PurchasingOrganization : purchasingOrganization
 
     %% Material 
+
     Material }o--|| MaterialType : materialType
     Material }o--|| MaterialGroup : materialGroup
     Material ||--|| Material : parentMaterial
@@ -73,7 +75,6 @@ direction lr
     %% Material 
 
     %% Production Version 
-
     ProductionOrderComponent }|--|| ProductionOrder : productionOrder
 
 
@@ -83,8 +84,8 @@ direction lr
 
     Routing ||--o{ WorkCenter : workCenters
 
-
     Routing ||--|{ Operation : operations
+
 
     ProductionOrder }|--|| ProductionVersion : productionVersion
     ProductionOrder ||--|{ SettlementRule : settlementRules
@@ -99,7 +100,6 @@ direction lr
 
 
     %% Financial
-
     GlAccount ||--|{ GlAccountTaxCode : tax
     GlAccountTaxCode }|--|| TaxCode: account
 
@@ -139,15 +139,10 @@ direction lr
     CompanyCode ||--o{ HouseBank : houseBanks
 
     %% --- Other Common Master Data ---
- 
-
     GlAccount ||--|| DocumentType : documentType
     DocumentType ||--o{ ChartOfAccounts : chartOfAccounts
 
- 
-
     %% PR && PO
-
     PR }|--|| _Employee: requestedEmployee
     PR }|--|| _Employee: approvedEmployee
     PO }|--|| _Employee: requestedEmployee
