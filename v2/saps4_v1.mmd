@@ -1,0 +1,63 @@
+---
+title: OVERVIEW - SAP S/4HANA Core Entities
+config:
+  layout: elk
+---
+erDiagram
+    direction lr
+
+    %% ORGANIZE %%
+    OperatingConcern ||--|| ControllingArea : "controllingArea"
+    ControllingArea ||--|{ CompanyCode : "companyCode"
+    CompanyCode ||--|{ Plant : "plant"
+    Plant ||--|{ StorageLocation : "StorageLocation"
+    Plant ||--|{ ShippingPoint : "shippingPoint"
+
+    CompanyCode ||--|{ SalesOrg: "salesOrg"
+    SalesOrg ||--|{ DistributionChannel: "distributionChannel"
+    DistributionChannel ||--|{ Division: "division"
+    SalesOrg ||--|{ SalesArea: "saleOrg"
+    DistributionChannel ||--|{ SalesArea: "channel"
+    Division ||--|{ SalesArea: "division"
+
+
+    %% MATERIAL %%
+    Material }|--|| MaterialType: "type"
+    Material }|--|| MaterialGroup: "group"
+    Material }|--|| Industry: "industry"
+    Material }|--|| Source: "source"
+    Material }|--|| UOM: "baseUnit"
+    Material }|--|| UOM: "weightUnit"
+    Material }|--|| UOM: "columnUnit"
+
+    Plant ||--|{ MaterialPlant: "plant"
+    MaterialPlant ||--|{ Material: "material"
+
+    StorageLocation ||--|{ BridgeMaterialStorageLocation: "storageLocation"
+    Plant ||--|{ BridgeMaterialStorageLocation: "plant"
+    BridgeMaterialStorageLocation }|--|| Material: "material"
+
+    SalesArea ||--|{ BridgeMaterialSalesArea: "salesArea"
+    BridgeMaterialSalesArea }|--|| Material: "material"
+
+    _Class ||--|{ Characteristic: "characteristic"
+    Material ||--|{ BridgeMaterialBatch: "batch"
+    Plant ||--|{ BrideMaterialBatch: "plant"
+    BridgeMaterialBatch ||--|| _Class: "class"
+    BridgeMaterialBatch ||--|{ BridgeBatchCharacteristicValue: "value"
+    Characteristic ||--|{ BridgeBatchCharacteristicValue: "value"
+    Characteristic ||--|{ CharacteristicGroup: "group"
+
+    CompanyCode ||--|{ BridgeCompanyCodePurchasingOrg: "companyCode"
+    BridgeCompanyCodePurchasingOrg ||--|{ PurchasingOrg: "purchasingOrg"
+
+    Plant ||--|{ BridgePurchasingOrgPlant: "plant"
+    PurchasingOrg ||--|{ BridgePurchasingOrgPlant: "org"
+
+    PurchasingOrg ||--|{ PurchasingInfoRecord: "org"
+    Material ||--|{ PurchasingInfoRecord: "material"
+    BridgeBPVendor ||--|{ PurchasingInfoRecord: "vendor"
+    Plant o|--|{ PurchasingInfoRecord: "plant"
+
+    BridgeBPVendor ||--|{ BridgeVendorPurchasingOrg: "vendor"
+    BridgeVendorPurchasingOrg ||--|{ PurchasingOrg: "org"

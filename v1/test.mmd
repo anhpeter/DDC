@@ -1,4 +1,4 @@
-   ---
+---
 title: OVERVIEW - SAP S/4HANA Core Entities
 config:
   theme: neutral
@@ -229,27 +229,20 @@ direction lr
     %% -------------------------------
     BOM_Detail }|--|| BOM          : ""
     BOM_Detail }|--|| Material     : "component"
-    BOM }|--|| Material     : "material_sap"
     BOM }|--|| Workshop            : "plant"
     Workshop }|--|| Factory        : "plant"
     Factory }|--|| Plant        : "plant"
     Routing }|--|| Plant         : "plant"
-    Routing }|--|| Material           : "material_number_sap"
     RoutingDetail }|--|| Routing    : "routing_key"
     RoutingDetail }|--|| Workshop   : "work_center"
     StageMember }|--|| Factory     : "planWorkshop"
     StageMember }|--|| Workshop     : "workshopCode"
     StageMember }|--|| MemberGroup  : "group"
  
-    ProductionVersion ||--|| Routing: group_counter
-    ProductionVersion ||--|| BOM: alternative_bom
-    ProductionVersion ||--|{ ProductionOrder: "production_version_code"
  
     ProductionOrder }|--|| Plant : "plant_code"
     ProductionOrder }|--|| Material : "material_code"
     ProductionOrder }|--|| SAP_User : "approved_by"
-    ProductionOrderComponent }|--|| Material : "material_code"
-    ProductionOrderComponent }|--|| ProductionOrder : "production_order_code"
     ProductionOrderComponent }|--|| Unit : "unit"
     ProductionOrderComponent }|--|| Plant : "plant"
     ProductionOrderComponent }|--|| StorageLocation : "storage_location"

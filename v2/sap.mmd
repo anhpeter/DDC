@@ -1,0 +1,13 @@
+
+---
+title: OVERVIEW - SAP S/4HANA Core Entities
+config:
+  theme: neutral
+  layout: elk
+---
+erDiagram
+    direction tb
+    OperatingConcern ||--|| ControllingArea : "controllingArea"
+    ControllingArea ||--|{ CompanyCode : "companyCode"
+    CompanyCode ||--|{ Plant : "plant"
+    Plant ||--|{ StorageLocation : "StorageLocation"
