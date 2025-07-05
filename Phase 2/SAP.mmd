@@ -1,5 +1,5 @@
 ---
-title: OVERVIEW - SAP S/4HANA Core Entities
+title: SAP S/4HANA Master Entities
 config:
   layout: elk
 ---
@@ -111,7 +111,7 @@ erDiagram
     CompanyCode ||--|{ BridgeCompanyCodeGlAccount: "companyCode"
     BridgeCompanyCodeGlAccount ||--|{ GlAccount: "glAccount"
     CompanyCode ||--|{ InternalOrder: "companyCode"
-    ControllingArea ||--|{ InternalOrder: "controllingArea"
+    ControllingArea ||--|{ InternalOrder: "internalOrder"
     CostCenter |o--|{ InternalOrder: "internalOrder"
 
     %% BOM

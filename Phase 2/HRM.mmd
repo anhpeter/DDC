@@ -1,146 +1,333 @@
 ---
-title: OVERVIEW - SAP S/4HANA Core Entities
+title: HRM Master Entities
 config:
   layout: elk
 ---
 erDiagram
-    direction lr
+Direction LR
+    %% ==== ENTITY CHÍNH ====
+    NhanVien ||--|| ThongTinLienLac : lienLac
+    NhanVien ||--|{ QuyetDinhNhanSu : quyetDinh
+    NhanVien ||--o| TaiKhoan : taiKhoan
+    NhanVien ||--|{ TrinhDo : trinhDo
+    NhanVien ||--o| Thue : quyetToan
+    NhanVien ||--o| BaoHiem : baoHiem
+    NhanVien ||--o{ ChamCong : chamCong
+    NhanVien ||--o{ HopDong : "hopDong"
+    NhanVien ||--o{ Luong : "luong"
+    NhanVien ||--o| DanhMucNhomMau : "nhomMau"
 
-    %% ORGANIZE %%
-    OperatingConcern ||--|| ControllingArea : "controllingArea"
-    ControllingArea ||--|{ CompanyCode : "companyCode"
-    CompanyCode ||--|{ Plant : "plant"
-    Plant ||--|{ StorageLocation : "StorageLocation"
-    Plant ||--|{ ShippingPoint : "shippingPoint"
+    Luong o{--|| DanhMucDoiTuongOT : "doiTuongOT"
 
-    CompanyCode ||--|{ SalesOrg: "salesOrg"
-    SalesOrg ||--|{ DistributionChannel: "distributionChannel"
-    DistributionChannel ||--|{ Division: "division"
-    SalesOrg ||--|{ SalesArea: "salesArea"
-    DistributionChannel ||--|{ SalesArea: "salesArea"
-    Division ||--|{ SalesArea: "salesArea"
+    ThongTinLienLac ||--|| DiaChi : diaChiThuongTru
+    ThongTinLienLac ||--|| DiaChi : diaChiHienTai
+    ThongTinLienLac ||--|| DanhMucTinhThanh : nguyenQuan
+    ThongTinLienLac ||--|| DanhMucTinhThanh : noiSinh
+    ThongTinLienLac ||--|| DanhMucTinhThanh : noiCapCCCD
+
+ 
+    %% ==== LIÊN KẾT DANH MỤC ====
+    NhanVien }o--o| DanhMucGioiTinh : gioiTinh
+    NhanVien }o--o| DanhMucHonNhan : honNhan
+    NhanVien }o--|| DanhMucQuocTich : quocTich
+    NhanVien }o--|| DanhMucTrangThaiLaoDong : trangThai
+
+    DiaChi ||--|| DanhMucPhuongXa: phuongXa
+    TaiKhoan |o--|| DanhMucNganHang : nganHang
+    DanhMucCaLamViec }o--|| DanhMucNhomCa : nhomCa
+
+    QuyetDinhNhanSu }o--o| DanhMucPhanLoaiChiPhi: chiPhiCap1
+    QuyetDinhNhanSu }o--o| DanhMucPhanLoaiChiPhi: chiPhiCap2
+
+    NhanVien_NgoaiNgu }o--|| DanhMucNgoaiNgu : thuoc
+    NhanVien_NgoaiNgu }o--|| NhanVien : thuoc
+ 
+    QuyetDinhNhanSu }o--|| DanhMucPhongBan : phongBan
+    QuyetDinhNhanSu }o--|| DanhMucViTri : viTri
+    QuyetDinhNhanSu }o--|| DanhMucCapBac : capBac
+    QuyetDinhNhanSu }o--o| DanhMucLoaiNhanVien : thuocLoai
+    QuyetDinhNhanSu }o--|| DanhMucChucDanh : chucDanh
+    QuyetDinhNhanSu }o--|o NhanVien: quanLyTrucTiep
+ 
+    TrinhDo }o--o| DanhMucTrinhDo : trinhDo
+    TrinhDo }o--o| DanhMucTruongHoc : truong
+    TrinhDo }o--o| DanhMucNganhHoc : nganhHoc
+    TrinhDo }o--o| DanhMucChuyenNganh : chuyenNganh
+ 
+    BaoHiem }o--|| DanhMucNoiKCB : kham
+ 
+    ChamCong }|--|| DanhMucCaLamViec : caLamViec
+    ChamCong }|--|| DanhMucMayChamCong : mayChamCong
+    ChamCong }|--|| DanhMucDoiTuongChamCong : doiTuongChamCong
+
+    HopDong ||--|| DanhMucLoaiHopDong : "loaiHD"
+
+    DanhMucTinhThanh ||--o{ DanhMucQuanHuyen : "quanHuyen"
+    DanhMucQuanHuyen ||--o{ DanhMucPhuongXa : "phuongXa"
+ 
+    %% ==== THỰC THỂ CHÍNH ====
+    NhanVien {
+        maNhanVien Text PK
+        maGioiTinh Text FK
+        maHonNhan Text FK
+        maQuocTich Text FK
+        maTrangThaiLaoDong Text FK
+        hoTen Text
+        tenThuongGoi Text
+        ngaySinh date
+        ngayBatDauLam date
+        ngayChinhThuc date
+        ngayTinhThamNien date
+        soNgayTruThamNien Number
+    }
+ 
+    ThongTinLienLac {
+        maNhanVien Text FK
+        diaChiHienTai Text FK
+        diaChiThuongTru Text FK
+        nguyenQuan Text FK
+        noiSinh Text FK
+        noiCapCCD Text FK
+        nhomMau Text FK
+        soCCCD Text
+        ngayCapCCCD date
+        dienThoai Text
+        emailCongTy Text
+        emailCaNhan Text
+        lienHeKhanCap Text
+        sdtLienHeKhanCap Text
+    }
+ 
+    QuyetDinhNhanSu {
+        maNhanVien Text FK
+        maPhongBan Text FK
+        maViTri Text FK
+        maCapBac Text FK
+        maNhanVienQuanLyTrucTiep Text FK        
+        loaiNhanVien Text FK
+        chucDanh Text FK
+        chiPhiCap1 Text FK
+        chiPhiCap2 Text FK
+        soQuyetDinh Text
+        ngayQuyetDinh date
+    }
+ 
+    TaiKhoan {
+        maNhanVien Text PK, FK        
+        maNganHang Text FK
+        taiKhoanNganHang Text
+        chiNhanh Text
+        maSoThue Text
+    }
+ 
+    TrinhDo {
+        maNhanVien Text FK
+        maNganhHoc Text FK
+        maChuyenNganh Text FK
+        maTrinhDoHocVan Text FK
+        maTruongHoc Text FK
+    }
+
+    NhanVien_NgoaiNgu {
+        maNhanVien Text FK
+        maNgoaiNgu Text FK
+        trinhDo Text
+    }
+ 
+    Thue {
+        maNhanVien Text PK, FK
+        uyQuyen boolean
+        khongTinhGiamTru boolean
+    }
+ 
+    BaoHiem {
+        maNhanVien Text PK, FK
+        maNoiKCB Text FK
+        ngayNghiViec date
+        soSoBHXH Text
+        maBHXH Text
+        theBHYT Text
+        ngayCapTheBHYT date
+        ngayHetHanBHYT date
+    }
+
+    Luong {
+        maLuong Text PK
+        maNhanVien Text FK
+        maDoiTuongOT Text FK
+        luongCoBan decimal
+        phuCap decimal
+        heSoLuong decimal
+        ngayHieuLuc date
+    }
+
+    DiaChi {
+        maDiaChi Text PK
+        maPhuongXa Text FK
+        soDuong Text
+    }
+ 
+    HopDong {
+        maHopDong Text PK
+        maNhanVien Text FK
+        maLoaiHopDong Text FK
+        soHopDong Text
+        ngayBatDau date
+        ngayKetThuc date
+    }
+    
+    ChamCong {
+        maNhanVien Text FK
+        maDoiTuongChamCong Text FK
+        maCaLamViec Text FK
+        ngayChamCong date
+    }
+    %% ==== DANH MỤC ====
+    DanhMucTinhThanh {
+        maTinhThanh Text PK
+
+    }
+
+    DanhMucTrangThaiLaoDong {
+        maTrangThaiLaoDong Text PK
+        ten Text
+    }
+
+    DanhMucLoaiHopDong {
+        maLoaiHopDong Text PK
+        ten Text
+    }
+
+    DanhMucGioiTinh {
+        maGioiTinh Text PK
+        ten Text
+    }
+ 
+    DanhMucHonNhan {
+        maHonNhan Text PK
+        ten Text
+    }
+ 
+    DanhMucQuocTich {
+        maQuocTich Text PK
+        ten Text
+    }
+ 
+    DanhMucPhongBan {
+        maPhongBan Text PK
+        ten Text
+    }
+ 
+    DanhMucViTri {
+        maViTri Text PK
+        ten Text
+    }
+ 
+    DanhMucCapBac {
+        maCapBac Text PK
+        ten Text
+    }
+    
+    DanhMucChucDanh {
+        Text maChucDanh PK
+        Text ten
+    }
+ 
+    DanhMucTrinhDo {
+        maTrinhDo Text PK
+        ten Text
+    }
+ 
+    DanhMucTruongHoc {
+        maTruongHoc Text PK
+        ten Text
+    }
+ 
+    DanhMucNganhHoc {
+        maNganhHoc Text PK
+        ten Text
+    }
+ 
+    DanhMucChuyenNganh {
+        maChuyenNganh Text PK
+        ten Text
+    }
+ 
+    DanhMucNgoaiNgu {
+        maNgoaiNgu Text PK
+        ten Text
+    }
+ 
+    DanhMucNoiKCB {
+        maNoiKCB Text PK
+        ten Text
+    }
+ 
+    DanhMucNhomCa {
+        maNhomCa Text PK
+        ten Text
+    }
 
 
-    %% MATERIAL %%
-    MaterialType ||--|{ Material : "type"
-    MaterialGroup ||--|{ Material: "material"
-    %% Material }|--|| Industry: "industry"
-    %% Material }|--|| Source: "source"
-    Material }|--|| UOM : "baseUnit"
-    Material }|--|| UOM : "weightUnit"
-    Material }|--|| UOM : "columnUnit"
+    DanhMucTinhThanh {
+        Text maTinhThanh PK
+        Text ten
+        Text ghiChu
+    }
 
-    Plant ||--|{ MaterialPlant: "plant"
-    MaterialPlant ||--|{ Material: "material"
+    DanhMucQuanHuyen {
+        Text maQuanHuyen PK
+        Text maTinhThanh FK
+        Text ten
+    }
 
-    StorageLocation ||--|{ BridgeMaterialStorageLocation: "storageLocation"
-    Plant ||--|{ BridgeMaterialStorageLocation: "plant"
-    BridgeMaterialStorageLocation }|--|| Material: "material"
+    DanhMucPhuongXa {
+        Text maPhuongXa PK
+        Text maQuanHuyen FK
+        Text ten
+    }
 
-    SalesArea ||--|{ BridgeMaterialSalesArea: "salesArea"
-    BridgeMaterialSalesArea }|--|| Material: "material"
+    DanhMucPhanLoaiChiPhi {
+        Text maLoaiChiPhi PK
+        Text ten
+    }
 
-    _Class ||--|{ Characteristic: "characteristic"
-    Material ||--|{ BridgeMaterialBatch: "batch"
-    Plant ||--|{ BridgeMaterialBatch: "plant"
-    BridgeMaterialBatch ||--|| _Class: "class"
-    BridgeMaterialBatch ||--|{ BridgeBatchCharacteristicValue: "value"
-    Characteristic ||--|{ BridgeBatchCharacteristicValue: "value"
-    CharacteristicGroup ||--|{ Characteristic : "characteristic"
+    DanhMucNganHang {
+        Text maNganHang PK
+        Text ten
+        Text tenVietTat
+    }
 
-    CompanyCode ||--|{ BridgeCompanyCodePurchasingOrg: "companyCode"
-    BridgeCompanyCodePurchasingOrg ||--|{ PurchasingOrg: "purchasingOrg"
+    DanhMucCaLamViec {
+        Text maCa PK
+        Text tenCa
+        time gioBatDau
+        time gioKetThuc
+    }
 
-    Plant ||--|{ BridgePurchasingOrgPlant: "plant"
-    PurchasingOrg ||--|{ BridgePurchasingOrgPlant: "org"
+    DanhMucMayChamCong {
+        Text maMay PK
+        Text ten
+        Text diaChiIP
+        Text viTri
+    }
 
-    %% PURCHASING INFO RECORD %%
-    PurchasingOrg ||--|{ PurchasingInfoRecord: "pir"
-    Material ||--|{ PurchasingInfoRecord: "pir"
-    Vendor ||--|{ PurchasingInfoRecord: "pir"
-    Plant |o--|{ PurchasingInfoRecord: "pir"
+    DanhMucDoiTuongChamCong {
+        Text maDoiTuong PK
+        Text ten
+    }
 
-    Vendor ||--|{ VendorPurchasingOrg: "vendor"
-    VendorPurchasingOrg ||--|{ PurchasingOrg: "org"
+    DanhMucDoiTuongOT {
+        Text maDoiTuongOT PK
+        Text ten
+    }
 
-    %% BP %%
-    BusinessPartner ||--|| Customer: "customer"
-    BusinessPartner ||--|| Vendor: "vendor"
-    CompanyCode ||--|{ BridgeCompanyCodeCustomer: "companyCode"
-    BridgeCompanyCodeCustomer ||--|{ Customer: "customer"
-    CompanyCode ||--|{ BridgeCompanyCodeVendor: "companyCode"
-    BridgeCompanyCodeVendor ||--|{ Vendor: "vendor"
-    Customer ||--|{ BridgeCustomerSalesArea: "customer"
-    BridgeCustomerSalesArea }|--|| SalesArea: "salesArea"
+    DanhMucLoaiNhanVien {
+        Text maLoaiNhanVien PK
+        Text ten
+    }
 
-    Customer ||--|{ BridgeCustomerAccountBank: "customer"
-    BridgeCustomerAccountBank ||--|| AccountBank: "bank"
-    AccountBank ||--|| BankKey: "key"
-
-    %% PROFIT CENTER & COST CENTER 
-    CompanyCode ||--|{ ProfitCenter: "profitCenter"
-    CompanyCode ||--|{ CostCenter: "costCenter"
-    Segment ||--|{ ProfitCenter: "profitCenter"
-    ProfitCenter ||--|{ CostCenter: "costCenter"
-    CostCenter ||--|{ Employee: "employee"
-
-
-    %% ACTIVITY TYPE
-    CostCenter ||--|{ WorkCenter: "workCenter"
-    CostCenter ||--|{ ActivityType: "costCenter"
-    WorkCenter ||--|{ ActivityType: "workCenter"
-    UOM ||--|{ ActivityType : "unit"
-
-
-    %% ACCOUNTING
-    COA ||--|{ GlAccount : "glAccount"
-    GlAccountGroup ||--|{ GlAccount : "glAccount"
-    CompanyCode ||--|{ BridgeCompanyCodeGlAccount: "companyCode"
-    BridgeCompanyCodeGlAccount ||--|{ GlAccount: "glAccount"
-    CompanyCode ||--|{ InternalOrder: "companyCode"
-    ControllingArea ||--|{ InternalOrder: "controllingArea"
-    CostCenter |o--|{ InternalOrder: "costCenter"
-
-    %% BOM
-    Routing ||--|{ WorkCenter : "workCenter"
-    Material ||--|{ ProductionVersion: "productionVersion"
-    ProductionVersion ||--|| Routing: "routing"
-    ProductionVersion ||--|| BOM: "bom"
-    BOM ||--|{ BOMItems: "items"
-    Material ||--|{ BOMItems : "component"
-
-    %% Project & WBS
-    ControllingArea ||--|{ ProjectDefinition: "project"
-    CompanyCode ||--|{ ProjectDefinition: "project"
-    ProjectDefinition ||--|{ WBS: "wbs"
-    WBS ||--|| WBS: "hierarchy"
-    CostCenter |o--|{ WBS: "wbs"
-
-    Plant }o--|| ValuationArea: "plant"
-    CompanyCode |o--|| ValuationArea: "companyCode"
-
-    GlAccount ||--|{ ValuationClass: "glAccount"
-    MaterialType ||--|{ ValuationClass: "materialType"
-
-    Material ||--|{ MaterialValuation: "material"
-    MaterialValuation }|--|| ValuationArea: "valuationArea"
-
-    GlAccount ||--|{ BridgeGlAccountValuationClass: "glAccount"
-    BridgeGlAccountValuationClass }|--|| ValuationClass: "valuationClass"
-
-    MaterialType ||--|{ BridgeMaterialTypeValuationClass: "materialType"
-    BridgeMaterialTypeValuationClass }|--|| ValuationClass: "valuationClass"
-
-    BusinessPartner ||--|| Employee: "employee"
-
-    %% TAX & PAYMENT 
-    Country ||--|{ TaxCode: "taxCode"
-    Country ||--|{ WithholdingTaxType: "taxType"
-    TaxCode ||--|{ WithholdingTaxCode: "taxCode"
-    WithholdingTaxType ||--|{ WithholdingTaxCode: "taxType"
-    WithholdingTaxType ||--|{ BridgeCompanyCodeVendor: "taxType"
-    WithholdingTaxCode ||--|{ BridgeCompanyCodeVendor: "taxCode"
-    PaymentTerms ||--|{ BridgeCompanyCodeVendor: "paymentTerms"
-    PaymentMethods ||--|{ BridgeCompanyCodeVendor: "paymentMethods"
-    TaxCode ||--|{ BridgeCustomerSalesArea: "taxCode"
-
+    DanhMucNhomMau {
+        Text maNhomMau PK
+        Text ten
+    }
