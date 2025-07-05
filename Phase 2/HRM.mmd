@@ -131,15 +131,16 @@ erDiagram
     MaterialType ||--|{ BridgeMaterialTypeValuationClass: "materialType"
     BridgeMaterialTypeValuationClass }|--|| ValuationClass: "valuationClass"
 
-    %% BusinessPartner ||--|| Employee: "employee"
+    BusinessPartner ||--|| Employee: "employee"
 
     %% TAX & PAYMENT 
-    %% Country ||--|{ TaxCode: "taxCode"
-    %% Country ||--|{ WithholdingTaxType: "taxType"
-    %% TaxCode ||--|{ WithholdingTaxCode: "taxCode"
-    %% WithholdingTaxType ||--|{ WithholdingTaxCode: "taxType"
-    %% WithholdingTaxType ||--|{ BridgeCompanyCodeVendor: "taxType"
-    %% WithholdingTaxCode ||--|{ BridgeCompanyCodeVendor: "taxCode"
-    %% PaymentTerms ||--|{ BridgeCompanyCodeVendor: "paymentTerms"
-    %% PaymentMethods ||--|{ BridgeCompanyCodeVendor: "paymentMethods"
+    Country ||--|{ TaxCode: "taxCode"
+    Country ||--|{ WithholdingTaxType: "taxType"
+    TaxCode ||--|{ WithholdingTaxCode: "taxCode"
+    WithholdingTaxType ||--|{ WithholdingTaxCode: "taxType"
+    WithholdingTaxType ||--|{ BridgeCompanyCodeVendor: "taxType"
+    WithholdingTaxCode ||--|{ BridgeCompanyCodeVendor: "taxCode"
+    PaymentTerms ||--|{ BridgeCompanyCodeVendor: "paymentTerms"
+    PaymentMethods ||--|{ BridgeCompanyCodeVendor: "paymentMethods"
+    TaxCode ||--|{ BridgeCustomerSalesArea: "taxCode"
 

@@ -13,24 +13,24 @@ erDiagram
     Plant ||--|{ StorageLocation : "StorageLocation"
     Plant ||--|{ ShippingPoint : "shippingPoint"
 
-    CompanyCode ||--|{ SalesOrg: "salesOrg"
-    SalesOrg ||--|{ DistributionChannel: "distributionChannel"
-    DistributionChannel ||--|{ Division: "division"
+    %% SAP DE XUAT COMPANY <=> SALE ORG
+    CompanyCode ||--|| SalesOrg: "salesOrg" 
     SalesOrg ||--|{ SalesArea: "salesArea"
-    DistributionChannel ||--|{ SalesArea: "salesArea"
-    Division ||--|{ SalesArea: "salesArea"
+    DistributionChannel ||--|{ SalesArea: "channel"
+    Division ||--|{ SalesArea: "division"
 
 
     %% MATERIAL %%
     MaterialType ||--|{ Material : "type"
     MaterialGroup ||--|{ Material: "material"
-    %% Material }|--|| Industry: "industry"
-    %% Material }|--|| Source: "source"
-    Material }|--|| UOM : "baseUnit"
-    Material }|--|| UOM : "weightUnit"
-    Material }|--|| UOM : "columnUnit"
+    UOM ||--|{ Material: "baseUnit"
+    UOM ||--|{ Material: "weightUnit"
+    UOM ||--|{ Material: "volumeUnit"
+    Material ||--|{ BridgeMaterialUnit : "alternativeUnit"
+    BridgeMaterialUnit }|--||  UOM: "material"
 
     Plant ||--|{ MaterialPlant: "plant"
+    PurchasingGroup ||--|{ MaterialPlant: "purchasingGroup"
     MaterialPlant ||--|{ Material: "material"
 
     StorageLocation ||--|{ BridgeMaterialStorageLocation: "storageLocation"
@@ -39,6 +39,16 @@ erDiagram
 
     SalesArea ||--|{ BridgeMaterialSalesArea: "salesArea"
     BridgeMaterialSalesArea }|--|| Material: "material"
+
+    %% TAX
+    TaxCategory ||--|{ BridgeMaterialTax: "category"
+    TaxClassification ||--|{ BridgeMaterialTax: "classification"
+    BridgeMaterialTax ||--|{ BridgeMaterialSalesArea: "salesArea"
+    AccountAssignmentGroup ||--|{ BridgeMaterialSalesArea: "materialSalesArea"
+    AccountAssignmentGroup ||--|{ BridgeCustomerSalesArea: "customerSalesArea"
+    BridgeAccountAssignmentGroupGlAccount }|--|| AccountAssignmentGroup: "materialAAG"
+    BridgeAccountAssignmentGroupGlAccount }|--|| AccountAssignmentGroup: "customerAAG"
+    GlAccount ||--|{ BridgeAccountAssignmentGroupGlAccount: ""
 
     _Class ||--|{ Characteristic: "characteristic"
     Material ||--|{ BridgeMaterialBatch: "batch"
@@ -55,10 +65,11 @@ erDiagram
     PurchasingOrg ||--|{ BridgePurchasingOrgPlant: "org"
 
     %% PURCHASING INFO RECORD %%
-    PurchasingOrg ||--|{ PurchasingInfoRecord: "pir"
-    Material ||--|{ PurchasingInfoRecord: "pir"
-    Vendor ||--|{ PurchasingInfoRecord: "pir"
-    Plant |o--|{ PurchasingInfoRecord: "pir"
+    PurchasingOrg ||--|{ PurchasingInfoRecord: "purchasingOrg"
+    PurchasingGroup ||--|{ PurchasingInfoRecord: "purchasingGroup"
+    Material ||--|{ PurchasingInfoRecord: "material"
+    Vendor ||--|{ PurchasingInfoRecord: "vendor"
+    Plant |o--|{ PurchasingInfoRecord: "plant"
 
     Vendor ||--|{ VendorPurchasingOrg: "vendor"
     VendorPurchasingOrg ||--|{ PurchasingOrg: "org"
@@ -78,15 +89,17 @@ erDiagram
     AccountBank ||--|| BankKey: "key"
 
     %% PROFIT CENTER & COST CENTER 
-    CompanyCode ||--|{ ProfitCenter: "profitCenter"
     CompanyCode ||--|{ CostCenter: "costCenter"
+    CostCenterGroup ||--|{ CostCenter: "group"
     Segment ||--|{ ProfitCenter: "profitCenter"
     ProfitCenter ||--|{ CostCenter: "costCenter"
-    CostCenter ||--|{ Employee: "employee"
+    CostCenter ||--|{ BridgeCostCenterEmployee: "costCenter"
+    BridgeCostCenterEmployee }|--|| Employee: "employee"
 
 
     %% ACTIVITY TYPE
-    CostCenter ||--|{ WorkCenter: "workCenter"
+    CostCenter ||--|{ BridgeCostCenterWorkCenter: "costCenter"
+    BridgeCostCenterWorkCenter }|--|| WorkCenter: "workCenter"
     CostCenter ||--|{ ActivityType: "costCenter"
     WorkCenter ||--|{ ActivityType: "workCenter"
     UOM ||--|{ ActivityType : "unit"
@@ -99,7 +112,7 @@ erDiagram
     BridgeCompanyCodeGlAccount ||--|{ GlAccount: "glAccount"
     CompanyCode ||--|{ InternalOrder: "companyCode"
     ControllingArea ||--|{ InternalOrder: "controllingArea"
-    CostCenter |o--|{ InternalOrder: "costCenter"
+    CostCenter |o--|{ InternalOrder: "internalOrder"
 
     %% BOM
     Routing ||--|{ WorkCenter : "workCenter"
@@ -142,4 +155,15 @@ erDiagram
     WithholdingTaxCode ||--|{ BridgeCompanyCodeVendor: "taxCode"
     PaymentTerms ||--|{ BridgeCompanyCodeVendor: "paymentTerms"
     PaymentMethods ||--|{ BridgeCompanyCodeVendor: "paymentMethods"
+    TaxCode ||--|{ BridgeCustomerSalesArea: "taxCode"
+    PaymentTerms ||--|{ BridgeCustomerSalesArea: "paymentTerms"
+    PaymentMethods ||--|{ BridgeCustomerSalesArea: "paymentMethods"
+
+    %% SKF
+    CostCenter ||--|{ BridgeCostCenterSKF: "costCenter"
+    BridgeCostCenterSKF }|--|| SKF: "skf"
+    InternalOrder ||--|{ BridgeInternalOrderSKF: "internalOrder"
+    BridgeInternalOrderSKF }|--|| SKF: "skf"
+    WBS ||--|{ BridgeWBSSKF: "wbs"
+    BridgeWBSSKF }|--|| SKF: "skf"
 
