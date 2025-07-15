@@ -16,9 +16,9 @@ erDiagram
     CompanyCode ||--|{ SalesOrg: "salesOrg"
     SalesOrg ||--|{ DistributionChannel: "distributionChannel"
     DistributionChannel ||--|{ Division: "division"
-    SalesOrg ||--|{ SalesArea: "saleOrg"
-    DistributionChannel ||--|{ SalesArea: "channel"
-    Division ||--|{ SalesArea: "division"
+    SalesOrg ||--|{ BridgeSalesArea: "saleOrg"
+    DistributionChannel ||--|{ BridgeSalesArea: "channel"
+    Division ||--|{ BridgeSalesArea: "division"
 
 
     %% MATERIAL %%
@@ -37,7 +37,7 @@ erDiagram
     Plant ||--|{ BridgeMaterialStorageLocation: "plant"
     BridgeMaterialStorageLocation }|--|| Material: "material"
 
-    SalesArea ||--|{ BridgeMaterialSalesArea: "salesArea"
+    BridgeSalesArea ||--|{ BridgeMaterialSalesArea: "salesArea"
     BridgeMaterialSalesArea }|--|| Material: "material"
 
     _Class ||--|{ Characteristic: "characteristic"
@@ -70,7 +70,7 @@ erDiagram
     BridgeCompanyCodeCustomer ||--|{ Customer: "customer"
     CompanyCode ||--|{ BridgeCompanyCodeVendor: "companyCode"
     BridgeCompanyCodeVendor ||--|{ Vendor: "vendor"
-    Customer }|--|| SalesArea: "salesArea"
+    Customer }|--|| BridgeSalesArea: "salesArea"
 
     Customer ||--|{ BridgeCustomerAccountBank: "customer"
     BridgeCustomerAccountBank ||--|| AccountBank: "bank"
@@ -98,7 +98,7 @@ erDiagram
     BridgeCompanyCodeGlAcocunt ||--|{ GlAccount: "glAccount"
     CompanyCode ||--|{ InternalOrder: ""
     ControllingArea ||--|{ InternalOrder: ""
-    ProfitCenter o|--o{ InternalOrder: ""
+    ProfitCenter o|--|{ InternalOrder: ""
 
 
     %% WorkCenter }|--|| Routing: "workCenter"
