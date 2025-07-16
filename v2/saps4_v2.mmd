@@ -38,10 +38,22 @@ erDiagram
     BRG_MaterialAlternativeUnit }|--|| UOM: "alternativeUnit"
 
     %% ===== MATERIAL PLANT =====
-    Plant ||--|{ MaterialPlant: "plant"
-    MaterialPlant }|--|| Material: "material"
+    Plant ||--|{ MaterialPlantAssignment: "plant"
+    MaterialPlantAssignment }|--|| Material: "material"
     Plant ||--|{ MRPController : "plant"  
-    PurchasingGroup ||--|{ MaterialPlant: "purchasingGroup"
+
+    %% MaterialPlantPurchasingData ||--|| MaterialPlantAssignment: "materialPlant"
+    %% MaterialPlantMRPData ||--|| MaterialPlantAssignment: "materialPlant"
+    %% MaterialPlantSlocData ||--|| MaterialPlantAssignment: "materialPlant"
+    %% StorageLocation |o--o{ MaterialPlantSlocData: "storageLocation"
+
+    MaterialPlantAssignment ||--o| MaterialPlantPurchasingData : "materialPlant"
+    MaterialPlantAssignment ||--o| MaterialPlantMRPData: "materialPlant"
+    MaterialPlantAssignment ||--o| MaterialPlantSlocData: "materialPlant"
+    MaterialPlantAssignment ||--o| MaterialAccountingData: "materialPlant"
+    ValuationClass ||--|{ MaterialAccountingData: "valuationClass"
+    MaterialPlantSlocData }o--o{  StorageLocation: "storageLocation"
+    StorageLocation }|--|| UOM: "unitOfIssue"
 
     %% ===== MATERIAL STORAGE =====
     StorageLocation ||--|{ BRG_MaterialStorageLocation: "storageLocation"
@@ -49,8 +61,9 @@ erDiagram
     BRG_MaterialStorageLocation }|--|| Material: "material"
 
     %% ===== MATERIAL SALES =====
-    SalesArea ||--|{ BRG_MaterialSalesArea: "salesArea"
-    BRG_MaterialSalesArea }|--|| Material: "material"
+    SalesArea ||--|{ MaterialSalesData: "salesArea"
+    MaterialSalesData }|--|| Material: "material"
+    MaterialSalesData }|--|| UOM: "salesUnit"
 
     %% ===== CUSTOMER MATERIAL INFO =====
     CustomerHierarchy ||--|{ Customer : "customer"
@@ -58,8 +71,8 @@ erDiagram
     %% ===== TAX CONFIGURATION =====
     TaxCategory ||--|{ BRG_MaterialTax: "taxCategory"
     TaxClassification ||--|{ BRG_MaterialTax: "taxClassification"
-    BRG_MaterialTax ||--|{ BRG_MaterialSalesArea: "materialSalesArea"
-    AccountAssignmentGroup ||--|{ BRG_MaterialSalesArea: "materialAAG"
+    BRG_MaterialTax ||--|{ MaterialSalesData: "materialSalesArea"
+    AccountAssignmentGroup ||--|{ MaterialSalesData: "materialAAG"
     AccountAssignmentGroup ||--|{ BRG_CustomerSalesArea: "customerAAG"
     BRG_AccountAssignmentGroupGlAccount }|--|| AccountAssignmentGroup: "materialAAG"
     BRG_AccountAssignmentGroupGlAccount }|--|| AccountAssignmentGroup: "customerAAG"
@@ -67,7 +80,11 @@ erDiagram
 
     %% ===== MATERIAL CLASSIFICATION =====
     ClassificationClass ||--|{ Characteristic: "classificationClass"
-    Material ||--|{ BRG_MaterialBatch: "materialBatch"
+    Material ||--o{ BRG_MaterialBatch: "materialBatch"
+    Material ||--o{ BRG_MaterialClassification: "materialBatch"
+    BRG_MaterialClassification }|--|| ClassificationClass: "classification"
+    BRG_MaterialClassification ||--|{ BRG_MaterialCharacteristicValue: "materialClassValue"
+    BRG_MaterialCharacteristicValue }|--|| Characteristic: "characteristic"
     Plant ||--|{ BRG_MaterialBatch: "plant"
     BRG_MaterialBatch ||--|| ClassificationClass: "batchClass"
     BRG_MaterialBatch ||--|{ BRG_BatchCharacteristicValue: "batchValue"
@@ -166,11 +183,7 @@ erDiagram
     CostCenter |o--|{ WBS: "defaultCostCenter"
 
     %% ===== VALUATION =====
-    Plant }o--|| ValuationArea: "valuationPlant"
-    CompanyCode |o--|| ValuationArea: "valuationCompanyCode"
     MaterialType ||--|{ ValuationClass: "materialType"
-    Material ||--|{ MaterialValuation: "material"
-    MaterialValuation }|--|| ValuationArea: "valuationArea"
     GlAccount ||--|{ BRG_GlAccountValuationClass: "glAccount"
     BRG_GlAccountValuationClass }|--|| ValuationClass: "valuationClass"
     MaterialType ||--|{ BRG_MaterialTypeValuationClass: "materialType"
