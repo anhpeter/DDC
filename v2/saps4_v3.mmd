@@ -7,51 +7,56 @@ erDiagram
     direction lr
 
     %% ===== ORGANIZATIONAL STRUCTURE =====
-    OperatingConcern ||--|| ControllingArea : "controllingArea"
-    ControllingArea ||--|{ CompanyCode : "companyCode"
-    CompanyCode ||--|{ Plant : "plant"
-    Plant ||--|{ StorageLocation : "storageLocation"
-    Plant ||--|{ ShippingPoint : "shippingPoint"
+    OperatingConcern ||--|| ControllingArea : "controllingArea_XXX"
+    ControllingArea ||--|{ CompanyCode : "companyCode_XXX"
+    CompanyCode ||--|{ Plant : "plant_XXX"
+    Plant ||--|{ StorageLocation : "storageLocation_XXX"
 
     %% ===== FI CONFIGURATION =====
-    Currency ||--|{ CompanyCode : "localCurrency"
-    Currency ||--|{ BridgeCurrencyExchangeRateType : "fromCurrency"
-    Currency ||--|{ ExchangeRateType : "fromCurrency"
-    FiscalYearVariant ||--|{ CompanyCode : "fiscalVariant"
-    PostingPeriodVariant ||--|{ CompanyCode : "periodVariant"
-    HouseBank ||--|{ CompanyCode : "houseBank"
-    HouseBank ||--|{ BankKey : "bankKey"
+    Currency ||--|{ CompanyCode : "localCurrency_XXX"
+    Currency ||--|{ ExchangeRate : "fromCurrency_XXX"
+    Currency ||--|{ ExchangeRate : "toCurrency_XXX"
+    ExchangeRate }|--|| ExchangeRateType : "exchangeRate_XXX"
+    FiscalYearVariant ||--|{ CompanyCode : "fiscalVariant_XXX"
+    PostingPeriodVariant ||--|{ CompanyCode : "periodVariant_XXX"
+    HouseBank }|--|| CompanyCode : "houseBank_XXX"
+    HouseBank }|--|| BankKey : "bankKey_XXX"
 
     %% ===== SALES ORGANIZATION =====
-    CompanyCode ||--|| SalesOrg: "salesOrg" 
-    SalesOrg ||--|{ SalesArea: "salesArea"
-    DistributionChannel ||--|{ SalesArea: "channel"
-    Division ||--|{ SalesArea: "division"
+    CompanyCode ||--|| SalesOrg: "salesOrg_XXX" 
+    SalesOrg ||--|{ SalesArea: "salesArea_XXX"
+    DistributionChannel ||--|{ SalesArea: "channel_XXX"
+    Division ||--|{ SalesArea: "division_XXX"
 
     %% ===== MATERIAL MASTER =====
-    MaterialType ||--|{ Material : "materialType"
-    MaterialGroup ||--|{ Material: "materialGroup"
-    Material }|--|| UOM: "baseUnit"
-    Material }|--|| UOM: "weightUnit"
-    Material }|--|| UOM: "volumeUnit"
-    Material ||--|{ BRG_MaterialAlternativeUnit : "material"
-    BRG_MaterialAlternativeUnit }|--|| UOM: "alternativeUnit"
+    MaterialType ||--|{ Material : "materialType_XXX"
+    MaterialGroup ||--|{ Material: "materialGroup_XXX"
+    Material }|--|| UOM: "baseUnit_XXX"
+    Material }|--|| UOM: "weightUnit_XXX"
+    Material }|--|| UOM: "volumeUnit_XXX"
+    Material ||--|{ BRG_MaterialAlternativeUnit : "material_XXX"
+    BRG_MaterialAlternativeUnit }|--|| UOM: "alternativeUnit_XXX"
 
     %% ===== MATERIAL PLANT =====
-    Plant ||--|{ MaterialPlantAssignment: "plant"
-    MaterialPlantAssignment }|--|| Material: "material"
-    Plant ||--|{ MRPController : "plant"  
+    Plant ||--|{ MaterialPlantAssignment: "plant_XXX"
+    MaterialPlantAssignment }|--|| Material: "material_XXX"
+    MaterialPlantMRPData }|--|| MRPController : "mrpController_XXX"  
 
     %% MaterialPlantPurchasingData ||--|| MaterialPlantAssignment: "materialPlant"
     %% MaterialPlantMRPData ||--|| MaterialPlantAssignment: "materialPlant"
     %% MaterialPlantSlocData ||--|| MaterialPlantAssignment: "materialPlant"
     %% StorageLocation |o--o{ MaterialPlantSlocData: "storageLocation"
 
-    MaterialPlantAssignment ||--o| MaterialPlantPurchasingData : "materialPlant"
-    MaterialPlantAssignment ||--o| MaterialPlantMRPData: "materialPlant"
+    MaterialPlantPurchasingData }|--|| UOM: "orderUnit_XXX"
+    MaterialPlantPurchasingData }|--|| PurchasingGroup: "purchasingGroup_XXX"
+    MaterialPlantPurchasingData }|--|| PurchasingGroup: "group_XXX"
+    MaterialPlantPurchasingData }|--|| Country: "country_XXX"
+
+    MaterialPlantAssignment ||--o| MaterialPlantPurchasingData : "materialPlant_XXX"
+    MaterialPlantAssignment ||--o| MaterialPlantMRPData: "materialPlant_XXX"
     MaterialPlantAssignment ||--o| MaterialPlantSlocData: "materialPlant"
-    MaterialPlantAssignment ||--o| MaterialAccountingData: "materialPlant"
-    ValuationClass ||--|{ MaterialAccountingData: "valuationClass"
+    MaterialPlantAssignment ||--o| MaterialAccountingData: "materialPlant_XXX"
+    ValuationClass ||--|{ MaterialAccountingData: "valuationClass_XXX"
     MaterialPlantSlocData }o--o{  StorageLocation: "storageLocation"
     StorageLocation }|--|| UOM: "unitOfIssue"
 
@@ -61,16 +66,16 @@ erDiagram
     BRG_MaterialStorageLocation }|--|| Material: "material"
 
     %% ===== MATERIAL SALES =====
-    SalesArea ||--|{ MaterialSalesData: "salesArea"
-    MaterialSalesData }|--|| Material: "material"
-    MaterialSalesData }|--|| UOM: "salesUnit"
+    SalesArea ||--|{ MaterialSalesData: "salesArea_XXX"
+    MaterialSalesData }|--|| Material: "material_XXX"
+    MaterialSalesData }|--|| UOM: "salesUnit_XXX"
 
     %% ===== CUSTOMER MATERIAL INFO =====
     CustomerHierarchy ||--|{ Customer : "customer"
 
     %% ===== TAX CONFIGURATION =====
-    TaxClassification ||--|| MaterialSalesData: "materialSalesArea"
-    AccountAssignmentGroup ||--|{ MaterialSalesData: "materialAAG"
+    TaxClassification ||--|| MaterialSalesData: "materialSalesArea_XXX"
+    AccountAssignmentGroup ||--|{ MaterialSalesData: "materialAAG_XXX"
     AccountAssignmentGroup ||--|{ BRG_CustomerSalesArea: "customerAAG"
     BRG_AccountAssignmentGroupGlAccount }|--|| AccountAssignmentGroup: "materialAAG"
     BRG_AccountAssignmentGroupGlAccount }|--|| AccountAssignmentGroup: "customerAAG"
