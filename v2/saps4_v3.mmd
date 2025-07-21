@@ -56,30 +56,23 @@ erDiagram
     MaterialPlantAssignment ||--o| MaterialPlantMRPData: "materialPlant_XXX"
     MaterialPlantAssignment ||--o| MaterialPlantSlocData: "materialPlant"
     MaterialPlantAssignment ||--o| MaterialAccountingData: "materialPlant_XXX"
+    MaterialPlantAssignment ||--o| MaterialPlantSlocData: "materialPlant_XXX"
+    MaterialPlantSlocData }o--||  StorageLocation: "storageLocation_XXX"
+    MaterialPlantSlocData }o--||  UOM: "issueUnit_XXX"
     ValuationClass ||--|{ MaterialAccountingData: "valuationClass_XXX"
-    MaterialPlantSlocData }o--o{  StorageLocation: "storageLocation"
-    StorageLocation }|--|| UOM: "unitOfIssue"
-
-    %% ===== MATERIAL STORAGE =====
-    StorageLocation ||--|{ BRG_MaterialStorageLocation: "storageLocation"
-    Plant ||--|{ BRG_MaterialStorageLocation: "plant"
-    BRG_MaterialStorageLocation }|--|| Material: "material"
 
     %% ===== MATERIAL SALES =====
     SalesArea ||--|{ MaterialSalesData: "salesArea_XXX"
     MaterialSalesData }|--|| Material: "material_XXX"
     MaterialSalesData }|--|| UOM: "salesUnit_XXX"
 
-    %% ===== CUSTOMER MATERIAL INFO =====
-    CustomerHierarchy ||--|{ Customer : "customer"
-
     %% ===== TAX CONFIGURATION =====
     TaxClassification ||--|| MaterialSalesData: "materialSalesArea_XXX"
-    AccountAssignmentGroup ||--|{ MaterialSalesData: "materialAAG_XXX"
-    AccountAssignmentGroup ||--|{ BRG_CustomerSalesArea: "customerAAG"
-    BRG_AccountAssignmentGroupGlAccount }|--|| AccountAssignmentGroup: "materialAAG"
-    BRG_AccountAssignmentGroupGlAccount }|--|| AccountAssignmentGroup: "customerAAG"
-    GlAccount ||--|{ BRG_AccountAssignmentGroupGlAccount: "glAccount"
+    AccountAssignmentGroup ||--|{ MaterialSalesData: "materialAAG_XXX_XXX"
+    AccountAssignmentGroup ||--|{ BRG_CustomerSalesArea: "customerAAG_XXX"
+    BRG_AccountAssignmentGroupGlAccount }|--|| AccountAssignmentGroup: "materialAAG_XXX"
+    BRG_AccountAssignmentGroupGlAccount }|--|| AccountAssignmentGroup: "customerAAG_XXX"
+    GlAccount ||--|{ BRG_AccountAssignmentGroupGlAccount: "glAccount_XXX"
 
     %% ===== MATERIAL CLASSIFICATION =====
     ClassificationClass ||--|{ Characteristic: "classificationClass"
