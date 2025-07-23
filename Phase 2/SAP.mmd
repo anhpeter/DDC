@@ -1,0 +1,169 @@
+---
+title: SAP S/4HANA Master Entities
+config:
+  layout: elk
+---
+erDiagram
+    direction lr
+
+    %% ORGANIZE %%
+    OperatingConcern ||--|| ControllingArea : "controllingArea"
+    ControllingArea ||--|{ CompanyCode : "companyCode"
+    CompanyCode ||--|{ Plant : "plant"
+    Plant ||--|{ StorageLocation : "StorageLocation"
+    Plant ||--|{ ShippingPoint : "shippingPoint"
+
+    %% SAP DE XUAT COMPANY <=> SALE ORG
+    CompanyCode ||--|| SalesOrg: "salesOrg" 
+    SalesOrg ||--|{ SalesArea: "salesArea"
+    DistributionChannel ||--|{ SalesArea: "channel"
+    Division ||--|{ SalesArea: "division"
+
+
+    %% MATERIAL %%
+    MaterialType ||--|{ Material : "type"
+    MaterialGroup ||--|{ Material: "material"
+    UOM ||--|{ Material: "baseUnit"
+    UOM ||--|{ Material: "weightUnit"
+    UOM ||--|{ Material: "volumeUnit"
+    Material ||--|{ BridgeMaterialUnit : "alternativeUnit"
+    BridgeMaterialUnit }|--||  UOM: "material"
+
+    Plant ||--|{ MaterialPlant: "plant"
+    PurchasingGroup ||--|{ MaterialPlant: "purchasingGroup"
+    MaterialPlant ||--|{ Material: "material"
+
+    StorageLocation ||--|{ BridgeMaterialStorageLocation: "storageLocation"
+    Plant ||--|{ BridgeMaterialStorageLocation: "plant"
+    BridgeMaterialStorageLocation }|--|| Material: "material"
+
+    SalesArea ||--|{ BridgeMaterialSalesArea: "salesArea"
+    BridgeMaterialSalesArea }|--|| Material: "material"
+
+    %% TAX
+    TaxCategory ||--|{ BridgeMaterialTax: "category"
+    TaxClassification ||--|{ BridgeMaterialTax: "classification"
+    BridgeMaterialTax ||--|{ BridgeMaterialSalesArea: "salesArea"
+    AccountAssignmentGroup ||--|{ BridgeMaterialSalesArea: "materialSalesArea"
+    AccountAssignmentGroup ||--|{ BridgeCustomerSalesArea: "customerSalesArea"
+    BridgeAccountAssignmentGroupGlAccount }|--|| AccountAssignmentGroup: "materialAAG"
+    BridgeAccountAssignmentGroupGlAccount }|--|| AccountAssignmentGroup: "customerAAG"
+    GlAccount ||--|{ BridgeAccountAssignmentGroupGlAccount: ""
+
+    _Class ||--|{ Characteristic: "characteristic"
+    Material ||--|{ BridgeMaterialBatch: "batch"
+    Plant ||--|{ BridgeMaterialBatch: "plant"
+    BridgeMaterialBatch ||--|| _Class: "class"
+    BridgeMaterialBatch ||--|{ BridgeBatchCharacteristicValue: "value"
+    Characteristic ||--|{ BridgeBatchCharacteristicValue: "value"
+    CharacteristicGroup ||--|{ Characteristic : "characteristic"
+
+    CompanyCode ||--|{ BridgeCompanyCodePurchasingOrg: "companyCode"
+    BridgeCompanyCodePurchasingOrg ||--|{ PurchasingOrg: "purchasingOrg"
+
+    Plant ||--|{ BridgePurchasingOrgPlant: "plant"
+    PurchasingOrg ||--|{ BridgePurchasingOrgPlant: "org"
+
+    %% PURCHASING INFO RECORD %%
+    PurchasingOrg ||--|{ PurchasingInfoRecord: "purchasingOrg"
+    PurchasingGroup ||--|{ PurchasingInfoRecord: "purchasingGroup"
+    Material ||--|{ PurchasingInfoRecord: "material"
+    Vendor ||--|{ PurchasingInfoRecord: "vendor"
+    Plant |o--|{ PurchasingInfoRecord: "plant"
+
+    Vendor ||--|{ VendorPurchasingOrg: "vendor"
+    VendorPurchasingOrg ||--|{ PurchasingOrg: "org"
+
+    %% BP %%
+    BusinessPartner ||--|| Customer: "customer"
+    BusinessPartner ||--|| Vendor: "vendor"
+    CompanyCode ||--|{ BridgeCompanyCodeCustomer: "companyCode"
+    BridgeCompanyCodeCustomer ||--|{ Customer: "customer"
+    CompanyCode ||--|{ BridgeCompanyCodeVendor: "companyCode"
+    BridgeCompanyCodeVendor ||--|{ Vendor: "vendor"
+    Customer ||--|{ BridgeCustomerSalesArea: "customer"
+    BridgeCustomerSalesArea }|--|| SalesArea: "salesArea"
+
+    Customer ||--|{ BridgeCustomerAccountBank: "customer"
+    BridgeCustomerAccountBank ||--|| AccountBank: "bank"
+    AccountBank ||--|| BankKey: "key"
+
+    %% PROFIT CENTER & COST CENTER 
+    CompanyCode ||--|{ CostCenter: "costCenter"
+    CostCenterGroup ||--|{ CostCenter: "group"
+    Segment ||--|{ ProfitCenter: "profitCenter"
+    ProfitCenter ||--|{ CostCenter: "costCenter"
+    CostCenter ||--|{ BridgeCostCenterEmployee: "costCenter"
+    BridgeCostCenterEmployee }|--|| Employee: "employee"
+
+
+    %% ACTIVITY TYPE
+    CostCenter ||--|{ BridgeCostCenterWorkCenter: "costCenter"
+    BridgeCostCenterWorkCenter }|--|| WorkCenter: "workCenter"
+    CostCenter ||--|{ ActivityType: "costCenter"
+    WorkCenter ||--|{ ActivityType: "workCenter"
+    UOM ||--|{ ActivityType : "unit"
+
+
+    %% ACCOUNTING
+    COA ||--|{ GlAccount : "glAccount"
+    GlAccountGroup ||--|{ GlAccount : "glAccount"
+    CompanyCode ||--|{ BridgeCompanyCodeGlAccount: "companyCode"
+    BridgeCompanyCodeGlAccount ||--|{ GlAccount: "glAccount"
+    CompanyCode ||--|{ InternalOrder: "companyCode"
+    ControllingArea ||--|{ InternalOrder: "internalOrder"
+    CostCenter |o--|{ InternalOrder: "internalOrder"
+
+    %% BOM
+    Routing ||--|{ WorkCenter : "workCenter"
+    Material ||--|{ ProductionVersion: "productionVersion"
+    ProductionVersion ||--|| Routing: "routing"
+    ProductionVersion ||--|| BOM: "bom"
+    BOM ||--|{ BOMItems: "items"
+    Material ||--|{ BOMItems : "component"
+
+    %% Project & WBS
+    ControllingArea ||--|{ ProjectDefinition: "project"
+    CompanyCode ||--|{ ProjectDefinition: "project"
+    ProjectDefinition ||--|{ WBS: "wbs"
+    WBS ||--|| WBS: "hierarchy"
+    CostCenter |o--|{ WBS: "wbs"
+
+    Plant }o--|| ValuationArea: "plant"
+    CompanyCode |o--|| ValuationArea: "companyCode"
+
+    GlAccount ||--|{ ValuationClass: "glAccount"
+    MaterialType ||--|{ ValuationClass: "materialType"
+
+    Material ||--|{ MaterialValuation: "material"
+    MaterialValuation }|--|| ValuationArea: "valuationArea"
+
+    GlAccount ||--|{ BridgeGlAccountValuationClass: "glAccount"
+    BridgeGlAccountValuationClass }|--|| ValuationClass: "valuationClass"
+
+    MaterialType ||--|{ BridgeMaterialTypeValuationClass: "materialType"
+    BridgeMaterialTypeValuationClass }|--|| ValuationClass: "valuationClass"
+
+    BusinessPartner ||--|| Employee: "employee"
+
+    %% TAX & PAYMENT 
+    Country ||--|{ TaxCode: "taxCode"
+    Country ||--|{ WithholdingTaxType: "taxType"
+    TaxCode ||--|{ WithholdingTaxCode: "taxCode"
+    WithholdingTaxType ||--|{ WithholdingTaxCode: "taxType"
+    WithholdingTaxType ||--|{ BridgeCompanyCodeVendor: "taxType"
+    WithholdingTaxCode ||--|{ BridgeCompanyCodeVendor: "taxCode"
+    PaymentTerms ||--|{ BridgeCompanyCodeVendor: "paymentTerms"
+    PaymentMethods ||--|{ BridgeCompanyCodeVendor: "paymentMethods"
+    TaxCode ||--|{ BridgeCustomerSalesArea: "taxCode"
+    PaymentTerms ||--|{ BridgeCustomerSalesArea: "paymentTerms"
+    PaymentMethods ||--|{ BridgeCustomerSalesArea: "paymentMethods"
+
+    %% SKF
+    CostCenter ||--|{ BridgeCostCenterSKF: "costCenter"
+    BridgeCostCenterSKF }|--|| SKF: "skf"
+    InternalOrder ||--|{ BridgeInternalOrderSKF: "internalOrder"
+    BridgeInternalOrderSKF }|--|| SKF: "skf"
+    WBS ||--|{ BridgeWBSSKF: "wbs"
+    BridgeWBSSKF }|--|| SKF: "skf"
+

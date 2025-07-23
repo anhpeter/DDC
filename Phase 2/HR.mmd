@@ -1,0 +1,66 @@
+---
+title: HRM Master Entities
+config:
+  layout: elk
+---
+erDiagram
+Direction LR
+    %% ==== ENTITY CHÍNH ====
+    NhanVien ||--|| ThongTinLienLac : lienLac
+    NhanVien ||--|{ QuyetDinhNhanSu : quyetDinh
+    NhanVien ||--o| TaiKhoan : taiKhoan
+    NhanVien ||--|{ TrinhDo : trinhDo
+    NhanVien ||--o| Thue : quyetToan
+    NhanVien ||--o| BaoHiem : baoHiem
+    NhanVien ||--o{ ChamCong : chamCong
+    NhanVien ||--o{ HopDong : "hopDong"
+    NhanVien ||--o{ Luong : "luong"
+    NhanVien ||--o| DanhMucNhomMau : "nhomMau"
+
+    Luong }o--|| DanhMucDoiTuongOT : "doiTuongOT"
+
+    ThongTinLienLac ||--|| DiaChi : diaChiThuongTru
+    ThongTinLienLac ||--|| DiaChi : diaChiHienTai
+    ThongTinLienLac ||--|| DanhMucTinhThanh : nguyenQuan
+    ThongTinLienLac ||--|| DanhMucTinhThanh : noiSinh
+    ThongTinLienLac ||--|| DanhMucTinhThanh : noiCapCCCD
+
+ 
+    %% ==== LIÊN KẾT DANH MỤC ====
+    NhanVien }o--o| DanhMucGioiTinh : gioiTinh
+    NhanVien }o--o| DanhMucHonNhan : honNhan
+    NhanVien }o--|| DanhMucQuocTich : quocTich
+    NhanVien }o--|| DanhMucTrangThaiLaoDong : trangThai
+
+    DiaChi ||--|| DanhMucPhuongXa: phuongXa
+    TaiKhoan |o--|| DanhMucNganHang : nganHang
+    DanhMucCaLamViec }o--|| DanhMucNhomCa : nhomCa
+
+    QuyetDinhNhanSu }o--o| DanhMucPhanLoaiChiPhi: chiPhiCap1
+    QuyetDinhNhanSu }o--o| DanhMucPhanLoaiChiPhi: chiPhiCap2
+
+    NhanVien_NgoaiNgu }o--|| DanhMucNgoaiNgu : thuoc
+    NhanVien ||--o{ NhanVien_NgoaiNgu  : thuoc
+ 
+    QuyetDinhNhanSu }o--|| DanhMucPhongBan : phongBan
+    QuyetDinhNhanSu }o--|| DanhMucViTri : viTri
+    QuyetDinhNhanSu }o--|| DanhMucCapBac : capBac
+    QuyetDinhNhanSu }o--o| DanhMucLoaiNhanVien : thuocLoai
+    QuyetDinhNhanSu }o--|| DanhMucChucDanh : chucDanh
+    NhanVien }o--o| QuyetDinhNhanSu: quanLyTrucTiep
+ 
+    TrinhDo }o--o| DanhMucTrinhDo : trinhDo
+    TrinhDo }o--o| DanhMucTruongHoc : truong
+    TrinhDo }o--o| DanhMucNganhHoc : nganhHoc
+    TrinhDo }o--o| DanhMucChuyenNganh : chuyenNganh
+ 
+    BaoHiem }o--|| DanhMucNoiKCB : kham
+ 
+    ChamCong }|--|| DanhMucCaLamViec : caLamViec
+    ChamCong }|--|| DanhMucMayChamCong : mayChamCong
+    ChamCong }|--|| DanhMucDoiTuongChamCong : doiTuongChamCong
+
+    HopDong ||--|| DanhMucLoaiHopDong : "loaiHD"
+
+    DanhMucTinhThanh ||--o{ DanhMucQuanHuyen : "quanHuyen"
+    DanhMucQuanHuyen ||--o{ DanhMucPhuongXa : "phuongXa"
