@@ -9,6 +9,7 @@ erDiagram
     %% ===== ORGANIZATIONAL STRUCTURE =====
     OperatingConcern ||--|| ControllingArea : "controllingArea_XXX"
     ControllingArea ||--|{ CompanyCode : "companyCode_XXX"
+    Country ||--|{ Plant : "plant_XXX"
     CompanyCode ||--|{ Plant : "plant_XXX"
     Plant ||--|{ StorageLocation : "storageLocation_XXX"
 
