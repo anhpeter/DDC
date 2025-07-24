@@ -34,6 +34,7 @@ erDiagram
         sales_office_id BigInteger FK
         sales_group_id BigInteger FK
         currency_id BigInteger FK
+        account_assignment_group_id BigInteger FK
         delivery_plant BigInteger FK
         customer_group_1 BigInteger FK
         customer_group_2 BigInteger FK
@@ -72,8 +73,9 @@ erDiagram
     
     business_partner_bank_account {
         business_partner_bank_account_id BigInteger PK
-        business_partner_id BigInteger PK
+        business_partner_id BigInteger FK
         bank_key_id BigInteger FK
+        country_id BigInteger FK
     }
 
     %% BUSINESS PARTNER ENHANCED
@@ -105,6 +107,7 @@ erDiagram
     customer_sales_data }|--|| sales_group : "salesGroup"
     customer_sales_data }|--|| plant : "plant"
     customer_sales_data }|--|| sales_area : "salesArea"
+    customer_sales_data }|--|| account_assignment_group : "accountAssignmentGroup"
     customer_sales_data }|--|| customer_group : "customerGroup1"
     customer_sales_data }|--|| customer_group : "customerGroup2"
 
