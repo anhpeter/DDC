@@ -43,27 +43,27 @@ erDiagram
     characteristic {
         characteristic_id BigInteger PK
     }
-    brg_material_classification {
+    material_classification {
         material_classification_id BigInteger PK
         material_id BigInteger FK   
         classification_id BigInteger FK   
     }
-    brg_material_batch {
+    material_batch {
         material_batch_id BigInteger PK
         material_id BigInteger FK   
         batch_number BigInteger
     }
-    brg_class_characteristic {
+    class_characteristic {
         class_characteristic BigInteger PK
         classification_class_id BigInteger FK   
         characteristic_id BigInteger FK   
     }
-    brg_characteristic_value {
+    characteristic_value {
         material_batch_id BigInteger FK
         material_classification_id BigInteger FK
         characteristic_id BigInteger FK
     }
-    brg_material_alternative_unit {
+    material_alternative_unit {
         material_alternative_unit_id BigInteger PK
         material_id BigInteger FK
         unit_id BigInteger FK
@@ -130,6 +130,7 @@ erDiagram
         source_list_id BigInteger FK
     }
     employee {
+        human_resource erd
     }
     
 
@@ -139,8 +140,8 @@ erDiagram
     material }|--|| uom: "baseUnit"
     material }|--|| uom: "weightUnit"
     material }|--|| uom: "volumeUnit"
-    material ||--|{ brg_material_alternative_unit : "material"
-    brg_material_alternative_unit }|--|| uom: "alternativeUnit"
+    material ||--|{ material_alternative_unit : "material"
+    material_alternative_unit }|--|| uom: "alternativeUnit"
     
     %% MATERIAL PLANT
     plant ||--|{ material_plant_assignment: "plant"
@@ -166,18 +167,18 @@ erDiagram
     material_sales_data ||--|{ material_tax_assignment: "tax"
     
     %% MATERIAL CLASSIFICATION
-    classification_class ||--|{ brg_class_characteristic: "class"
-    characteristic ||--|{ brg_class_characteristic: "characteristic"
-    material ||--o{ brg_material_batch: "materialBatch"
-    material ||--o{ brg_material_classification: "materialBatch"
-    brg_material_classification }|--|| classification_class: "classification"
-    brg_material_batch ||--|| classification_class: "batchClass"
-    brg_material_classification ||--|{ brg_characteristic_value: "classificationValue"
-    brg_material_batch ||--|{ brg_characteristic_value: "value"
-    characteristic ||--|{ brg_characteristic_value: "characteristic"
+    classification_class ||--|{ class_characteristic: "class"
+    characteristic ||--|{ class_characteristic: "characteristic"
+    material ||--o{ material_batch: "materialBatch"
+    material ||--o{ material_classification: "materialBatch"
+    material_classification }|--|| classification_class: "classification"
+    material_batch ||--|| classification_class: "batchClass"
+    material_classification ||--|{ characteristic_value: "classificationValue"
+    material_batch ||--|{ characteristic_value: "value"
+    characteristic ||--|{ characteristic_value: "characteristic"
     
     %% PURCHASING INFO RECORD
-    purchasing_org ||--|{ purchasing_info_record: "purchasingOrg"
+    purchasing_info_record }|--|| purchasing_org : "purchasingOrg"
     purchasing_group ||--|{ purchasing_info_record: "purchasingGroup"
     material ||--|{ purchasing_info_record: "material"
     vendor ||--|{ purchasing_info_record: "vendor"
