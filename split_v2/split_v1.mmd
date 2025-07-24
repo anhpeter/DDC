@@ -91,8 +91,8 @@ erDiagram
     direction lr
     
     %% MATERIAL MASTER
-    MaterialType ||--|{ Material: "materialType_XXX"
-    MaterialGroup ||--|{ Material: "materialGroup_XXX"
+    Material }|--|| MaterialType : "materialType_XXX"
+    Material }|--|| MaterialGroup : "materialGroup_XXX"
     Material }|--|| UOM: "baseUnit_XXX"
     Material }|--|| UOM: "weightUnit_XXX"
     Material }|--|| UOM: "volumeUnit_XXX"
@@ -101,16 +101,16 @@ erDiagram
     
     %% MATERIAL PLANT
     Plant ||--|{ MaterialPlantAssignment: "plant_XXX"
-    MaterialPlantAssignment }|--|| Material: "material_XXX"
-    MaterialPlantMRPData }|--|| MRPController : "mrpController_XXX"
-    MaterialPlantPurchasingData }|--|| UOM: "orderUnit_XXX"
-    MaterialPlantPurchasingData }|--|| PurchasingGroup: "purchasingGroup_XXX"
-    MaterialPlantPurchasingData }|--|| Country: "country_XXX"
+    Material ||--|{ MaterialPlantAssignment : "material_XXX"
+    MRPController ||--|{ MaterialPlantMRPData  : "mrpController_XXX"
     
     MaterialPlantAssignment ||--o| MaterialPlantPurchasingData : "materialPlant_XXX"
     MaterialPlantAssignment ||--o| MaterialPlantMRPData: "materialPlant_XXX"
     MaterialPlantAssignment ||--o| MaterialPlantSlocData: "materialPlant_XXX"
     MaterialPlantAssignment ||--o| MaterialAccountingData: "materialPlant_XXX"
+
+    MaterialPlantPurchasingData }|--|| UOM: "orderUnit_XXX"
+    MaterialPlantPurchasingData }|--|| PurchasingGroup: "purchasingGroup_XXX"
     
     MaterialPlantSlocData }o--||  StorageLocation: "storageLocation_XXX"
     MaterialPlantSlocData }o--||  UOM: "issueUnit_XXX"
@@ -118,7 +118,7 @@ erDiagram
     
     %% MATERIAL SALES
     SalesArea ||--|{ MaterialSalesData: "salesArea_XXX"
-    MaterialSalesData }|--|| Material: "material_XXX"
+    Material ||--|{ MaterialSalesData : "material_XXX"
     MaterialSalesData }|--|| UOM: "salesUnit_XXX"
     
     %% MATERIAL CLASSIFICATION
@@ -150,15 +150,6 @@ erDiagram
     %% VALUATION
     MaterialType ||--|{ BRG_ValuationClassMaterialType: "_XXX"
     BRG_ValuationClassMaterialType }|--|| ValuationClass: "_XXX"
-    
-    %% BOM & ROUTING
-    Routing ||--|{ WorkCenter : "workCenter"
-    Material ||--|{ ProductionVersion: "material"
-    ProductionVersion ||--|| Routing: "routing"
-    ProductionVersion ||--|| BOM: "bom"
-    BOM ||--|{ BOMItems: "bom"
-    Material ||--|{ BOMItems : "componentMaterial"
-    BOMItems }|--|| UOM: "componentUnit"
 ```
 
 ## 3. BUSINESS PARTNER

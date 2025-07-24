@@ -1,0 +1,84 @@
+---
+title: sap_s4hana_master_entities (s4hana_compliant)
+config:
+  layout: elk
+---
+erDiagram
+    direction lr
+
+    operating_concern {
+        operating_concern_id BigInteger PK
+        country_id BigInteger FK
+    }
+    controlling_area {
+        controlling_area_id BigInteger PK
+        currency_id BigInteger FK
+        fiscal_variant_id BigInteger FK        
+    }
+    company_code {
+        company_code_id BigInteger PK
+        controlling_area_id BigInteger FK
+        country_id BigInteger FK
+        currency_id BigInteger FK
+        fiscal_variant_id BigInteger FK        
+        posting_period_variant_id BigInteger FK        
+    }
+    fiscal_year_variant {
+        fiscal_year_variant BigInteger PK
+    }
+    posting_period_variant {
+        posting_period_variant BigInteger PK
+    }
+    plant {
+        plant_id BigInteger PK
+        company_code_id BigInteger FK
+        country_id BigInteger FK
+    }
+    storage_location {
+        storage_location_id BigInteger PK
+        plant_id BigInteger FK
+    }
+    sales_org {
+        sales_org_id BigInteger PK
+        company_code_id BigInteger FK
+    }
+    distribution_channel {
+        distribution_channel_id BigInteger PK
+    }
+    division {
+        division_id BigInteger PK
+    }
+    sales_area {
+        sales_org_id BigInteger FK
+        distribution_channel_id BigInteger FK
+        division_id BigInteger FK
+    }
+    purchasing_org {
+        purchasing_org_id BigInteger PK
+        company_code_id BigInteger FK
+    }
+    purchasing_group {
+        purchasing_group_id BigInteger PK
+        purchasing_org_id BigInteger FK
+    }
+
+    %% ORGANIZATIONAL STRUCTURE
+    operating_concern ||--|| controlling_area : "controllingArea"
+    controlling_area ||--|{ company_code : "companyCode"
+    company_code ||--|{ plant : "plant"
+    plant ||--|{ storage_location : "storageLocation"
+    
+    %% SALES ORGANIZATION
+    company_code ||--|| sales_org: "salesOrg"
+    sales_org ||--|{ sales_area: "salesArea"
+    distribution_channel ||--|{ sales_area: "channel"
+    division ||--|{ sales_area: "division"
+    
+    %% PURCHASING ORGANIZATION
+    company_code ||--|| purchasing_org: "purchasingOrg"
+    purchasing_org ||--|{ purchasing_group: "purchasingGroup"
+    
+    %% FI CONFIGURATION (Organization related)
+    fiscal_year_variant ||--|{ controlling_area : "fiscalVariant"
+    fiscal_year_variant ||--|{ company_code : "fiscalVariant"
+    posting_period_variant ||--|{ company_code : "periodVariant"
