@@ -1,5 +1,5 @@
 ---
-title: sap_s4hana_master_entities (s4hana_compliant)
+title: Material
 config:
   layout: elk
 ---
@@ -13,8 +13,6 @@ erDiagram
     vendor {
     }
     storage_location {
-    }
-    purchasing_org {
     }
     purchasing_group {
     }
@@ -110,7 +108,6 @@ erDiagram
         purchasing_info_record_id BigInteger PK
         material_id BigInteger FK
         vendor_id BigInteger FK
-        purchasing_org_id BigInteger FK
         plant_id BigInteger FK
         price_unit_id BigInteger FK
         order_unit_id BigInteger FK
@@ -178,7 +175,6 @@ erDiagram
     characteristic ||--|{ characteristic_value: "characteristic"
     
     %% PURCHASING INFO RECORD
-    purchasing_info_record }|--|| purchasing_org : "purchasingOrg"
     purchasing_group ||--|{ purchasing_info_record: "purchasingGroup"
     material ||--|{ purchasing_info_record: "material"
     vendor ||--|{ purchasing_info_record: "vendor"
