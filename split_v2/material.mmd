@@ -116,16 +116,6 @@ erDiagram
     unit {
         unit_id BigInteger PK
     }
-    source_list {
-        source_list_id BigInteger PK
-        material_id BigInteger FK
-        plant_id BigInteger FK
-        vendor_id BigInteger FK
-    }
-    quota_arrangement {
-        quota_arrangement_id BigInteger PK
-        source_list_id BigInteger FK
-    }
     employee {
         human_resource erd
     }
@@ -167,7 +157,7 @@ erDiagram
     classification_class ||--|{ class_characteristic: "class"
     characteristic ||--|{ class_characteristic: "characteristic"
     material ||--o{ material_batch: "materialBatch"
-    material ||--o{ material_classification: "materialBatch"
+    material ||--o{ material_classification: "materialClassification"
     material_classification }|--|| classification_class: "classification"
     material_batch ||--|| classification_class: "batchClass"
     material_classification ||--|{ characteristic_value: "classificationValue"
@@ -181,10 +171,4 @@ erDiagram
     plant |o--|{ purchasing_info_record: "plant"
     purchasing_info_record }|--|| unit : "priceUnit"
     purchasing_info_record }|--|| unit : "orderUnit"
-    
-    %% SOURCE LIST & QUOTA
-    material ||--|{ source_list : "material"
-    plant ||--|{ source_list : "plant"
-    vendor ||--|{ source_list : "vendor"
-    source_list ||--|{ quota_arrangement : "sourceList"
     
