@@ -4,19 +4,12 @@ config:
   layout: elk
 ---
 erDiagram
-    direction lr company_code {
+    direction lr 
+    company_code {
         company_code_id BigInteger PK
         coa_id BigInteger FK
         country_id BigInteger FK
         currency_id BigInteger FK
-        fiscal_variant_id BigInteger FK        
-        posting_period_variant_id BigInteger FK        
-    }
-    fiscal_year_variant {
-        fiscal_year_variant BigInteger PK
-    }
-    posting_period_variant {
-        posting_period_variant BigInteger PK
     }
     plant {
         plant_id BigInteger PK
@@ -31,6 +24,10 @@ erDiagram
         sales_org_id BigInteger PK
         company_code_id BigInteger FK
     }
+    sales_office {
+        sales_office_id BigInteger PK
+        sales_org_id BigInteger FK
+    }
     distribution_channel {
         distribution_channel_id BigInteger PK
     }
@@ -38,9 +35,9 @@ erDiagram
         division_id BigInteger PK
     }
     sales_area {
-        sales_org_id BigInteger FK
-        distribution_channel_id BigInteger FK
-        division_id BigInteger FK
+        sales_org_id BigInteger FK, PK
+        distribution_channel_id BigInteger FK, PK
+        division_id BigInteger FK, PK
     }
     purchasing_org {
         purchasing_org_id BigInteger PK
@@ -51,31 +48,28 @@ erDiagram
         purchasing_org_id BigInteger FK
     }
 
-    company_code ||--|{ project : "company_code"
-    project ||--|{ wbs : "project"
-    wbs ||--|{ wbs : "parentWBS"
+    company_code ||--o{ project : "company_code"
+    project ||--o{ wbs : "project"
+    wbs |o--o{ wbs : "parentWBS"
 
     %% ORGANIZATIONAL STRUCTURE
-    company_code ||--|{ plant : "companyCode"
-    plant ||--|{ storage_location : "plant"
+    company_code ||--o{ plant : "companyCode"
+    plant ||--o{ storage_location : "plant"
 
     %% PROFIT CENTER COST CENTER
-    company_code }|--|| coa: "coa"
-    company_code ||--|{ cost_center: "companyCode"
-    company_code ||--|{ profit_center: "companyCode"
-    profit_center ||--|{ cost_center: "profitCenter"
-    cost_center ||--|{ work_center: "costCenter"
+    company_code }o--|| coa: "coa"
+    company_code ||--o{ cost_center: "companyCode"
+    company_code ||--o{ profit_center: "companyCode"
+    profit_center ||--o{ cost_center: "profitCenter"
+    cost_center ||--o{ work_center: "costCenter"
     
     %% SALES ORGANIZATION
-    company_code ||--|| sales_org: "companyCode"
-    sales_org ||--|{ sales_area: "salesOrg"
-    distribution_channel ||--|{ sales_area: "distributionChannel"
-    division ||--|{ sales_area: "division"
+    company_code ||--o| sales_org: "companyCode"
+    sales_org ||--o{ sales_area: "salesOrg"
+    sales_org ||--o{ sales_office: "salesOrg"
+    distribution_channel ||--o{ sales_area: "distributionChannel"
+    division ||--o{ sales_area: "division"
     
     %% PURCHASING ORGANIZATION
-    company_code ||--|| purchasing_org: "companyCode"
-    purchasing_org ||--|{ purchasing_group: "purchasingOrg"
-    
-    %% FI CONFIGURATION (Organization related)
-    fiscal_year_variant ||--|{ company_code : "fiscalVariant"
-    posting_period_variant ||--|{ company_code : "postingPeriodVariant"
+    company_code ||--o| purchasing_org: "companyCode"
+    purchasing_org ||--o{ purchasing_group: "purchasingOrg"

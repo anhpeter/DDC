@@ -16,13 +16,15 @@ Direction LR
         manager_id BigInteger FK
         graduation_school_id BigInteger FK
         blood_group_id BigInteger FK
-    }
-    employee_contact {
-        employee_id BigInteger PK,FK
+        employee_id BigInteger FK
         current_address_ward_id BigInteger FK
         permanent_address_ward_id BigInteger FK
         hometown_id BigInteger FK
         place_of_birth_id BigInteger FK
+        bank_id BigInteger FK
+        medical_registration BigInteger FK
+        lanugage_1_id BigInteger FK
+        language_2_id BigInteger FK
     }
     employee_decision {
         employee_id BigInteger PK,FK
@@ -44,19 +46,8 @@ Direction LR
         language_1_id BigInteger FK
         language_2_id BigInteger FK
     }
-    employee_account {
-        employee_id BigInteger PK,FK
-        bank_id BigInteger FK
-    }
-    employee_tax {
-        employee_id BigInteger PK,FK
-    }
-    employee_social_ensurance {
-        employee_id BigInteger PK,FK
-        medical_registration BigInteger FK
-    }
     employee_workshift {
-        employee_id BigInteger PK,FK
+        employee_id BigInteger FK
         workshift_id BigInteger FK
         attendance_machine_id BigInteger FK
         workshift_group_id BigInteger FK
@@ -64,11 +55,11 @@ Direction LR
         overtime_type_id BigInteger FK
     }
     employee_attendance_machine {
-        employee_id BigInteger PK,FK
+        employee_id BigInteger FK
         attendance_machine_id BigInteger FK
     }
     employee_work_location {
-        employee_id BigInteger PK,FK
+        employee_id BigInteger FK
         work_location_id BigInteger FK
     }
     expense_type {
@@ -154,33 +145,29 @@ Direction LR
     }
 
         %% ==== ENTITY CHÍNH ====
-    employee ||--|| employee_contact : contact
     employee ||--|{ employee_decision : decision
-    employee ||--o| employee_account : account
     employee ||--|{ employee_education : education
-    employee ||--o| employee_tax : tax
-    employee ||--o| employee_social_ensurance : socialInsurance
     employee ||--o{ employee_attendance_machine : attendanceMachine
     employee ||--o{ employee_work_location : workLocationLink
     employee ||--o| blood_group : bloodGroup
 
     employee_work_location }|--|| work_location: workLocation
 
-    employee_contact ||--|| ward : currentAddressWard
-    employee_contact ||--|| ward : permanentAddressWard
-    employee_contact ||--|| province_city : hometown
-    employee_contact ||--|| province_city : placeOfBirth
+    employee ||--|| ward : currentAddressWard
+    employee ||--|| ward : permanentAddressWard
+    employee ||--|| province_city : hometown
+    employee ||--|| province_city : placeOfBirth
 
     %% ==== LIÊN KẾT DANH MỤC ====
     employee }o--o| gender : gender
     employee }o--o| marital_status : maritalStatus
     employee }o--|| nationality : nationality
     employee }o--|| labor_status : laborStatus
-    employee ||--|| language  : language1
-    employee ||--|| language  : language2
+    employee ||--o| language  : language1
+    employee ||--o| language  : language2
     employee ||--|| school  : graduationSchool
 
-    employee_account |o--|| bank : bank
+    employee |o--|| bank : bank
     workshift }o--|| workshift_group : workshiftGroup
 
     employee_decision }o--o| expense_type: costCategoryLevel1
@@ -198,7 +185,7 @@ Direction LR
     employee_education }o--o| major : majorField
     employee_education }o--o| specialization : specialization
 
-    employee_social_ensurance }o--|| medical_facility : medicalRegistration
+    employee }o--|| medical_facility : medicalRegistration
 
     employee_attendance_machine }|--|| attendance_machine : attendanceMachine
     employee ||--|{ employee_workshift: workshiftLink
