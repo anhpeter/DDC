@@ -6,17 +6,6 @@ config:
 erDiagram
     direction lr
 
-    plant {
-    }
-    sales_area {
-    }
-    vendor {
-    }
-    storage_location {
-    }
-    purchasing_group {
-    }
-
     material {
         material_id BigInteger PK
         material_type_id BigInteger FK   
@@ -99,6 +88,9 @@ erDiagram
     }
     material_sales_data {
         material_sales_data_id BigInteger PK
+        sales_org_id BigInteger FK
+        distribution_channel_id BigInteger FK
+        division_id BigInteger FK
         material_id BigInteger FK
         sales_unit_id BigInteger FK
         account_assignment_group_id BigInteger FK
@@ -145,7 +137,8 @@ erDiagram
     material_plant_assignment ||--o| material_storage_location_data: "materialPlant"
     material_plant_assignment ||--o| material_accounting_data: "materialPlant"
     material_accounting_data }o--|| valuation_class: "valueationClass"
-    valuation_class |o--|| gl_account: "gl_account"
+    material_type ||--|| valuation_class: "valuationClass"
+    valuation_class |o--|| gl_account: "glAccount"
 
     material_purchasing_data }o--|| unit: "orderUnit"
     material_purchasing_data }o--|| purchasing_group: "purchasingGroup"
@@ -155,7 +148,9 @@ erDiagram
     material_storage_location_data }o--||  unit: "issueUnit"
     
     %% MATERIAL SALES
-    sales_area ||--|{ material_sales_data: "salesArea"
+    sales_org ||--o{ material_sales_data: "salesOrg"
+    distribution_channel ||--o{ material_sales_data: "distributionChannel"
+    division ||--o{ material_sales_data: "division"
     material ||--|{ material_sales_data : "material"
     material_sales_data }o--|| unit: "salesUnit"
     material_sales_data ||--o{ material_tax_assignment: "tax"

@@ -7,28 +7,25 @@ erDiagram
 Direction LR
     employee {
         employee_id BigInteger PK
-        corporation_id Varchar 
         gender_id BigInteger FK
         marital_status_id BigInteger FK
         labor_status_id BigInteger FK
         nationality_id BigInteger FK
-        department_id BigInteger FK
         manager_id BigInteger FK
         graduation_school_id BigInteger FK
         blood_group_id BigInteger FK
-        employee_id BigInteger FK
         current_address_ward_id BigInteger FK
         permanent_address_ward_id BigInteger FK
         hometown_id BigInteger FK
         place_of_birth_id BigInteger FK
         bank_id BigInteger FK
         medical_registration BigInteger FK
-        lanugage_1_id BigInteger FK
+        language_1_id BigInteger FK
         language_2_id BigInteger FK
+        orporation_id Varchar 
     }
     employee_decision {
         employee_id BigInteger PK,FK
-        decision_no Integer
         department_id Integer FK
         employee_type Integer FK
         job_position Integer FK
@@ -36,6 +33,7 @@ Direction LR
         rank_id Integer FK
         cost_category_level_1 Integer FK
         cost_category_level_2 Integer FK
+        decision_no Varchar
     }
     employee_education {
         employee_id BigInteger PK,FK
@@ -90,7 +88,7 @@ Direction LR
         nationality_id BigInteger PK
     }
     marital_status {
-        marial_status_id BigInteger PK
+        marital_status_id BigInteger PK
     }
     bank{
         bank_id BigInteger PK
@@ -105,7 +103,7 @@ Direction LR
         specialization_id BigInteger PK
     }
     school{
-        schiol_id BigInteger PK
+        school_id BigInteger PK
     }
     education_level{
         education_level_id BigInteger PK
@@ -178,7 +176,7 @@ Direction LR
     employee_decision }o--|| rank : rank
     employee_decision }o--o| employee_type : employeeType
     employee_decision }o--|| job_title : jobTitle
-    employee }o--o| employee_decision: manager
+    employee }o--o| employee: manager
 
     employee_education }o--o|  education_level: educationLevel
     employee_education }o--o| school : school

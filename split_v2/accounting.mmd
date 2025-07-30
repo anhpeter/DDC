@@ -17,11 +17,13 @@ erDiagram
         coa_id BigInteger FK
         account_group_id BigInteger FK
     }
-    gl_account_assignment {
+    gl_account_company_code_assignment {
+        gl_account_company_code_assignment_id BigInteger PK
         gl_account_id BigInteger FK
         company_code_id BigInteger FK
         currency_id BigInteger FK
         reconciliation_account_id BigInteger FK
+        planning_level BigInteger FK
     }
     cost_center {
         cost_center_id BigInteger PK
@@ -30,12 +32,10 @@ erDiagram
     }
     profit_center {
         profit_center_id BigInteger PK
-        controlling_area_id BigInteger FK
         plant_id BigInteger FK
     }
     internal_order {
         internal_order_id BigInteger PK
-        controlling_area_id BigInteger FK
         cost_center_id BigInteger FK
     }
     activity_type {
@@ -61,7 +61,7 @@ erDiagram
 
     }
     house_bank {
-        house_bank_id BigInteger FK
+        house_bank_id BigInteger PK
         company_code_id BigInteger FK
         bank_key_id BigInteger FK
     }
@@ -98,35 +98,36 @@ erDiagram
 
 
     %% CONTROLLING AREA
-    controlling_area ||--|{ cost_center : "controllingArea"
-    company_code ||--|{ cost_center : "companyCode"
-    company_code ||--|{ counterparty : "companyCode"
-    profit_center ||--|{ cost_center : "profitCenter"
+    company_code ||--o{ cost_center : "companyCode"
+    company_code ||--o{ counterparty : "companyCode"
+    profit_center ||--o{ cost_center : "profitCenter"
 
     %% ACTIVITY TYPE
-    unit  ||--|{ activity_type  : "activityUnit"
+    activity_type }o--|| unit  : "activityUnit"
 
     %% GL ACCOUNT
-    gl_account_group ||--|{  gl_account: "glAccountGroup"
-    coa ||--|{  gl_account: "coa"
-    gl_account ||--|{ gl_account_assignment : "glAccount"
-    company_code ||--|{ gl_account_assignment : "companyCode"
+    gl_account_group ||--o{  gl_account: "glAccountGroup"
+    coa }|--|{  gl_account: "coa"
+    gl_account ||--|{ gl_account_company_code_assignment : "glAccount"
+    company_code ||--|{ gl_account_company_code_assignment : "companyCode"
+    planning_level |o--o{ gl_account_company_code_assignment: "planningLevel"
     gl_account |o--|{ activity_type : "primaryCostElement"
     gl_account |o--|{ activity_type : "secondaryCostElement"
 
     %% INTERNAL ORDER
-    controlling_area ||--|{ internal_order : "controllingArea"
     cost_center |o--|{ internal_order : "defaultResponsibleCostCenter"
 
     %% TAX CONFIGURATION
-    gl_account ||--|{ tax_code  : "postingAccount"
+    gl_account ||--o{ tax_code  : "postingAccount"
 
     %% PLANNING
     planning_level ||--|{ planning_group : "planningGroup"
 
     %% SKF
-    unit    ||--|{ skf  : "skfUnit"
+    skf }|--|| unit: "skfUnit"
 
+    company_code ||--o{ profit_center : "company_code"
+    company_code }o--|| coa : "coa"
     company_code ||--|{ house_bank : "companyCode"
     house_bank }|--|| bank_key : "bankKey"
     house_bank ||--|{ account_bank : "accountBank"
