@@ -128,6 +128,6 @@ erDiagram
 
     company_code ||--o{ profit_center : "company_code"
     company_code }o--|| coa : "coa"
-    company_code ||--|{ house_bank : "companyCode"
+    company_code ||--o{ house_bank : "companyCode"
     house_bank }|--|| bank_key : "bankKey"
     house_bank ||--|{ account_bank : "accountBank"

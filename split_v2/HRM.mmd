@@ -108,14 +108,25 @@ Direction LR
     education_level{
         education_level_id BigInteger PK
     }
-    province_city{
+       province_city{
         province_city_id BigInteger PK
     }
-    district{
-        district_id BigInteger PK
+    ward {
+        province_city_id BigInteger PK
     }
-    ward{
-        ward_id BigInteger PK
+    old_province_city{
+        old_province_city_id BigInteger PK
+        province_city_id BigInteger FK
+    }
+    old_district{
+        old_district_id BigInteger PK
+        old_province_city_id BigInteger FK
+        ward_id BigInteger FK
+    }
+    old_ward {
+        old_ward_id BigInteger PK
+        old_district_id BigInteger FK
+        ward_id BigInteger FK
     }
     attendance_machine{
         attendance_machine_id BigInteger PK
@@ -192,5 +203,9 @@ Direction LR
     employee_workshift }|--|| attendance_object : attendanceType
     employee_workshift }|--|| ot_object : overtimeType
 
-    province_city ||--o{ district : district
-    district ||--o{ ward : ward
+    province_city ||--|{ old_province_city: new_province_city
+    ward ||--|{ old_district: new_ward
+    ward ||--|{ old_ward: new_ward
+    old_province_city ||--|{ old_district : old_province_city
+    old_district ||--|{ old_ward : old_district
+    province_city ||--|{ ward: new_province_city
