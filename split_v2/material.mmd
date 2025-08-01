@@ -24,30 +24,25 @@ erDiagram
         material_group_id BigInteger PK
     }
     classification_class {
-        material_type_id BigInteger PK
-        item_account_code BigInteger FK   
+        classification_class_id BigInteger PK
     }
     characteristic {
         characteristic_id BigInteger PK
     }
-    material_classification {
-        material_classification_id BigInteger PK
-        material_id BigInteger FK   
-        classification_id BigInteger FK   
-    }
     material_batch {
         material_batch_id BigInteger PK
         material_id BigInteger FK   
+        classification_class_id BigInteger FK
         batch_number Varchar
     }
-    class_characteristic {
-        class_characteristic BigInteger PK
+    classification_class_characteristic {
+        classification_class_characteristic_id BigInteger PK
         classification_class_id BigInteger FK   
         characteristic_id BigInteger FK   
     }
-    characteristic_value {
+    material_characteristic_value {
+        material_id BigInteger FK
         material_batch_id BigInteger FK
-        material_classification_id BigInteger FK
         characteristic_id BigInteger FK
     }
     material_alternative_unit {
@@ -121,9 +116,9 @@ erDiagram
     %% MATERIAL MASTER
     material }o--|| material_type : "materialType"
     material }o--|| material_group : "materialGroup"
-    material }|--|| unit: "baseUnit"
-    material }|--|| unit: "weightUnit"
-    material }|--|| unit: "volumeUnit"
+    material }o--|| unit: "baseUnit"
+    material }o--|| unit: "weightUnit"
+    material }o--|| unit: "volumeUnit"
     material ||--o{ material_alternative_unit : "material"
     material_alternative_unit }o--|| unit: "alternativeUnit"
     
@@ -151,26 +146,41 @@ erDiagram
     sales_org ||--o{ material_sales_data: "salesOrg"
     distribution_channel ||--o{ material_sales_data: "distributionChannel"
     division ||--o{ material_sales_data: "division"
-    material ||--|{ material_sales_data : "material"
+    material ||--o{ material_sales_data : "material"
     material_sales_data }o--|| unit: "salesUnit"
     material_sales_data ||--o{ material_tax_assignment: "tax"
     
     %% MATERIAL CLASSIFICATION
-    classification_class ||--o{ class_characteristic: "class"
-    characteristic ||--o{ class_characteristic: "characteristic"
+    classification_class ||--o{ classification_class_characteristic: "classsification_class"
+    characteristic ||--o{ classification_class_characteristic: "characteristic"
     material ||--o{ material_batch: "materialBatch"
-    material ||--o{ material_classification: "materialClassification"
-    material_classification }o--|| classification_class: "classification"
     material_batch }o--|| classification_class: "batchClass"
-    material_classification ||--o{ characteristic_value: "classificationValue"
-    material_batch ||--o{ characteristic_value: "value"
-    characteristic ||--o{ characteristic_value: "characteristic"
+    material ||--o{ material_characteristic_value: "material"
+    material_batch ||--o{ material_characteristic_value: "value"
+    characteristic ||--o{ material_characteristic_value: "characteristic"
     
     %% PURCHASING INFO RECORD
     purchasing_group |o--o{ purchasing_info_record: "purchasingGroup"
-    material ||--|{ purchasing_info_record: "material"
+    material ||--o{ purchasing_info_record: "material"
     vendor ||--o{ purchasing_info_record: "vendor"
     plant |o--o{ purchasing_info_record: "plant"
     purchasing_info_record }o--|| unit : "priceUnit"
     purchasing_info_record }o--|| unit : "orderUnit"
+
+    origin {
+        origin_id BigInteger PK
+    }
+    brand {
+        brand_id BigInteger PK
+    }
+    manufacturer {
+        manufacturer_id BigInteger PK
+    }
     
+    material }o--|| origin: "origin"
+    material }o--|| brand: "brand"
+    material }o--|| manufacturer: "manufacturer"
+
+    material_batch }o--|| origin: "origin"
+    material_batch }o--|| brand: "brand"
+    material_batch }o--|| manufacturer: "manufacturer"

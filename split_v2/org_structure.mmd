@@ -35,9 +35,10 @@ erDiagram
         division_id BigInteger PK
     }
     sales_area {
-        sales_org_id BigInteger FK, PK
-        distribution_channel_id BigInteger FK, PK
-        division_id BigInteger FK, PK
+        sales_area_id BigInteger PK
+        sales_org_id BigInteger FK
+        distribution_channel_id BigInteger FK
+        division_id BigInteger FK
     }
     purchasing_org {
         purchasing_org_id BigInteger PK

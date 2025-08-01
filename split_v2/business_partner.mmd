@@ -116,5 +116,5 @@ erDiagram
     business_partner ||--o{ business_partner_bank_account : "bankAccount"
     bank_key ||--o{ business_partner_bank_account : "bankKey"
     company_code ||--|{ house_bank : "houseBank"
-    house_bank }|--|| bank_key : "bankKey"
-    house_bank ||--|{ account_bank : "accountBank"
+    house_bank }o--|| bank_key : "bankKey"
+    house_bank ||--o{ account_bank : "accountBank"
