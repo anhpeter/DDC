@@ -1,0 +1,32 @@
+---
+title: ERD
+config:
+  layout: elk
+---
+erDiagram
+    direction lr 
+   
+    business_partner {
+      business_partner_id BigInteger PK
+    }
+    customer {
+      customer_id BigInteger PK
+      business_partner_id BigInteger FK
+    }
+
+    material_type {
+      material_type_id BigInteger PK
+    }
+    material {
+      material_id BigInteger PK
+      material_type_id BigInteger FK
+    }
+    material {
+      material_id BigInteger PK
+      material_type_id BigInteger FK
+    }
+    
+
+    material_type ||--o{ material: "material_type"
+    business_partner ||--o| customer: "businessPartner"
+    Z }o--|| ZZ: "xxxxxxxxxxxxxxxxx"

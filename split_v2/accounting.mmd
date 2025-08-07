@@ -69,6 +69,7 @@ erDiagram
         account_bank_id BigInteger PK
         house_bank_id BigInteger FK
         currency_id BigInteger FK
+        gl_account_id BigInteger FK
     }
     counterparty {
         counterparty_id BigInteger PK
@@ -131,3 +132,4 @@ erDiagram
     company_code ||--o{ house_bank : "companyCode"
     house_bank }o--|| bank_key : "bankKey"
     house_bank ||--o{ account_bank : "accountBank"
+    gl_account |o--o{ account_bank : "glAccount"

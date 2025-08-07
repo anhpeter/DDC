@@ -13,8 +13,6 @@ erDiagram
         base_unit_id BigInteger FK   
         weight_unit_id BigInteger FK   
         volume_unit_id BigInteger FK   
-        TEMPT_source_id BigInteger FK   
-        TEMPT_qc_status_id BigInteger FK   
     }
     material_type {
         material_type_id BigInteger PK
@@ -22,6 +20,7 @@ erDiagram
     }
     material_group {
         material_group_id BigInteger PK
+        material_type_id BigInteger FK
     }
     classification_class {
         classification_class_id BigInteger PK
@@ -98,6 +97,7 @@ erDiagram
     }
     purchasing_info_record {
         purchasing_info_record_id BigInteger PK
+        purchasing_org_id BigInteger FK
         material_id BigInteger FK
         vendor_id BigInteger FK
         plant_id BigInteger FK
@@ -132,6 +132,7 @@ erDiagram
     material_plant_assignment ||--o| material_storage_location_data: "materialPlant"
     material_plant_assignment ||--o| material_accounting_data: "materialPlant"
     material_accounting_data }o--|| valuation_class: "valueationClass"
+    material_type ||--o{ material_group: "materialType"
     material_type ||--|| valuation_class: "valuationClass"
     valuation_class |o--|| gl_account: "glAccount"
 
@@ -160,10 +161,11 @@ erDiagram
     characteristic ||--o{ material_characteristic_value: "characteristic"
     
     %% PURCHASING INFO RECORD
-    purchasing_group |o--o{ purchasing_info_record: "purchasingGroup"
+    %% purchasing_group |o--o{ purchasing_info_record: "purchasingGroup"
     material ||--o{ purchasing_info_record: "material"
     vendor ||--o{ purchasing_info_record: "vendor"
     plant |o--o{ purchasing_info_record: "plant"
+    purchasing_org ||--o{ purchasing_info_record: "purchasingOrg"
     purchasing_info_record }o--|| unit : "priceUnit"
     purchasing_info_record }o--|| unit : "orderUnit"
 
@@ -184,3 +186,4 @@ erDiagram
     material_batch }o--|| origin: "origin"
     material_batch }o--|| brand: "brand"
     material_batch }o--|| manufacturer: "manufacturer"
+    purchasing_org ||--o{ purchasing_group: "purchasingOrg"
