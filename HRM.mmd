@@ -1,0 +1,213 @@
+---
+title: Humance Resource
+config:
+  layout: elk
+---
+erDiagram
+Direction LR
+    employee {
+        employee_id BigInteger PK
+        gender_id BigInteger FK
+        marital_status_id BigInteger FK
+        labor_status_id BigInteger FK
+        nationality_id BigInteger FK
+        manager_id BigInteger FK
+        graduation_school_id BigInteger FK
+        blood_group_id BigInteger FK
+        current_address_ward_id BigInteger FK
+        permanent_address_ward_id BigInteger FK
+        hometown_id BigInteger FK
+        place_of_birth_id BigInteger FK
+        bank_id BigInteger FK
+        medical_registration BigInteger FK
+        language_1_id BigInteger FK
+        language_2_id BigInteger FK
+        language_3_id BigInteger FK
+    }
+    employee_decision {
+        employee_decision_id BigInteger PK
+        employee_id BigInteger FK
+        department_id Integer FK
+        employee_type Integer FK
+        job_position Integer FK
+        job_title Integer FK
+        rank_id Integer FK
+        cost_category_level_1 Integer FK
+        cost_category_level_2 Integer FK
+        decision_no Varchar
+    }
+    employee_education {
+        employee_education_id BigInteger PK
+        employee_id BigInteger FK
+        major_field_id BigInteger FK
+        specialization_id BigInteger FK
+        education_level_id BigInteger FK
+        school_id BigInteger FK
+    }
+    employee_work_shift {
+        employee_work_shift_id BigInteger PK
+        employee_id BigInteger FK
+        work_shift_id BigInteger FK
+        work_shift_group_id BigInteger FK
+        attendance_type_id BigInteger FK
+        overtime_type_id BigInteger FK
+    }
+    employee_attendance_machine {
+        employee_attendance_machine_id BigInteger PK
+        employee_id BigInteger FK
+        attendance_machine_id BigInteger FK
+    }
+    employee_work_location {
+        employee_work_location_id BigInteger PK
+        employee_id BigInteger FK
+        work_location_id BigInteger FK
+    }
+    expense_type {
+        expense_type_id BigInteger PK
+    }
+    employee_type {
+        employee_type_id BigInteger PK
+    }
+    labor_status {
+        labor_status_id BigInteger PK
+    }
+    department {
+        department_id BigInteger PK
+    }
+    rank {
+        rank_id BigInteger PK
+    }
+    job_title {
+        job_title_id BigInteger PK
+    }
+    job_position {
+        job_position_id BigInteger PK
+    }
+    language {
+        language_id BigInteger PK
+    }
+    nationality {
+        nationality_id BigInteger PK
+    }
+    marital_status {
+        marital_status_id BigInteger PK
+    }
+    bank{
+        bank_id BigInteger PK
+    }
+    ot_type{
+        ot_type_id BigInteger PK
+    }
+    major{
+        major_id BigInteger PK
+    }
+    specialization{
+        specialization_id BigInteger PK
+    }
+    school{
+        school_id BigInteger PK
+    }
+    education_level{
+        education_level_id BigInteger PK
+    }
+    province_city{
+        province_city_id BigInteger PK
+    }
+    ward {
+        ward_id BigInteger PK
+    }
+    old_province_city{
+        old_province_city_id BigInteger PK
+        province_city_id BigInteger FK
+    }
+    old_district{
+        old_district_id BigInteger PK
+        old_province_city_id BigInteger FK
+        ward_id BigInteger FK
+    }
+    old_ward {
+        old_ward_id BigInteger PK
+        old_district_id BigInteger FK
+        ward_id BigInteger FK
+    }
+    attendance_machine{
+        attendance_machine_id BigInteger PK
+    }
+    work_shift_group{
+        work_shift_group_id BigInteger PK
+    }
+    work_shift{
+        work_shift_id BigInteger PK
+    }
+    attendance_type{
+        attendance_type_id BigInteger PK
+    }
+    medical_facility{
+        medical_facility_id BigInteger PK
+    }
+    blood_group{
+        blood_group_id BigInteger PK
+    }
+    gender{
+        gender_id BigInteger PK
+    }
+    work_location{
+        work_location_id BigInteger PK
+    }
+
+        %% ==== ENTITY CHÍNH ====
+    employee ||--|{ employee_decision : employee
+    employee ||--|{ employee_education : employee
+    employee ||--o{ employee_attendance_machine : employee
+    employee ||--o{ employee_work_location : employee
+    employee }o--o| blood_group : bloodGroup
+
+    employee_work_location }o--|| work_location: workLocation
+
+    employee }o--o| ward : currentAddressWard
+    employee }o--|| ward : permanentAddressWard
+    employee }o--|| province_city : hometown
+    employee }o--|| province_city : placeOfBirth
+
+    %% ==== LIÊN KẾT DANH MỤC ====
+    employee }o--o| gender : gender
+    employee }o--o| marital_status : maritalStatus
+    employee }o--o| nationality : nationality
+    employee }o--o| labor_status : laborStatus
+    employee }o--o| language  : language1
+    employee }o--o| language  : language2
+    employee }o--o| language  : language3
+    employee }o--o| school  : graduationSchool
+
+    employee }o--o| bank : bank
+
+    employee_decision }o--o| expense_type: costCategoryLevel1
+    employee_decision }o--o| expense_type: costCategoryLevel2
+
+    employee_decision }o--|| department : department
+    employee_decision }o--|| job_position : jobPosition
+    employee_decision }o--|| rank : rank
+    employee_decision }o--o| employee_type : employeeType
+    employee_decision }o--|| job_title : jobTitle
+    employee }o--o| employee: manager
+
+    employee_education }o--o|  education_level: educationLevel
+    employee_education }o--o| school : school
+    employee_education }o--o| major : majorField
+    employee_education }o--o| specialization : specialization
+
+    employee }o--o| medical_facility : medicalRegistration
+
+    employee_attendance_machine }o--|| attendance_machine : attendanceMachine
+    employee ||--o| employee_work_shift: employee
+    employee_work_shift }o--o| work_shift: workShift
+    employee_work_shift }o--o| work_shift_group: workShiftGroup
+    employee_work_shift }o--o| attendance_type : attendanceType
+    employee_work_shift }o--o| ot_type : overtimeType
+
+    province_city ||--|{ old_province_city: newProvinceCity
+    ward ||--|{ old_district: newWard
+    ward ||--|{ old_ward: newWard
+    old_province_city ||--|{ old_district : oldProvinceCity
+    old_district ||--|{ old_ward : oldDistrict
+    province_city ||--|{ ward: newProvinceCity

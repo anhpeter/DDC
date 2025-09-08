@@ -1,0 +1,16 @@
+help to create 
+work_location
+expense_type
+employee_type
+labor_status 
+job_rank
+steps:
+
+- create dtos under dto package (reference language dtos - must create follow sample template):
+
+- create controller under internal, ref PlantController
+work_location
+expense_type
+employee_type
+labor_status 
+job_rank

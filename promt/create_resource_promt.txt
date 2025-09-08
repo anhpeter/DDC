@@ -1,0 +1,8 @@
+help to add coa (domain accounting), follow department structure of domain humanresource
+steps:
+- add config to accounting.yaml including 2 section: __desc__, internal (ref department in humanresource.yaml)
+- update to swagger-entities.yaml under coa section
+- create dtos, ref department structure under dto package
+- add controller following department controller structure 
+--
+must apply exactly department structure just replace the name appriately

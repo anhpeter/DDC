@@ -1,0 +1,81 @@
+---
+title: Organization Structure
+config:
+  layout: elk
+---
+erDiagram
+    direction lr 
+    company_code {
+        company_code_id BigInteger PK
+        coa_id BigInteger FK
+        country_id BigInteger FK
+        currency_id BigInteger FK
+    }
+    plant {
+        plant_id BigInteger PK
+        company_code_id BigInteger FK
+    }
+    storage_location {
+        storage_location_id BigInteger PK
+        plant_id BigInteger FK
+    }
+    sales_org {
+        sales_org_id BigInteger PK
+        company_code_id BigInteger FK
+    }
+    sales_office {
+        sales_office_id BigInteger PK
+        sales_org_id BigInteger FK
+    }
+    sales_group {
+        sales_group_id BigInteger PK
+        sales_office_id BigInteger FK
+    }
+    distribution_channel {
+        distribution_channel_id BigInteger PK
+    }
+    division {
+        division_id BigInteger PK
+    }
+    sales_area {
+        sales_area_id BigInteger PK
+        sales_org_id BigInteger FK
+        distribution_channel_id BigInteger FK
+        division_id BigInteger FK
+    }
+    purchasing_org {
+        purchasing_org_id BigInteger PK
+        company_code_id BigInteger FK
+    }
+    purchasing_group {
+        purchasing_group_id BigInteger PK
+        purchasing_org_id BigInteger FK
+    }
+
+    company_code ||--o{ project : "company_code"
+    project ||--o{ wbs : "project"
+    wbs |o--o{ wbs : "parentWBS"
+
+    %% ORGANIZATIONAL STRUCTURE
+    company_code ||--o{ plant : "companyCode"
+    plant ||--o{ storage_location : "plant"
+
+    %% PROFIT CENTER COST CENTER
+    company_code }o--|| coa: "coa"
+    company_code ||--o{ cost_center: "companyCode"
+    company_code ||--o{ profit_center_company_code_assignment: "companyCode"
+    profit_center_company_code_assignment }o--|| profit_center: "profitCenter"
+    profit_center ||--o{ cost_center: "profitCenter"
+    cost_center ||--o{ work_center: "costCenter"
+    
+    %% SALES ORGANIZATION
+    company_code ||--o| sales_org: "companyCode"
+    sales_org ||--o{ sales_area: "salesOrg"
+    sales_org ||--o{ sales_office: "salesOrg"
+    sales_office ||--o{ sales_group: "salesOffice"
+    distribution_channel ||--o{ sales_area: "distributionChannel"
+    division ||--o{ sales_area: "division"
+    
+    %% PURCHASING ORGANIZATION
+    company_code ||--o| purchasing_org: "companyCode"
+    purchasing_org ||--o{ purchasing_group: "purchasingOrg"

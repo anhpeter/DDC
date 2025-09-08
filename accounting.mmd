@@ -1,0 +1,135 @@
+---
+title: Accounting
+config:
+  layout: elk
+---
+erDiagram
+    direction lr
+
+    coa {
+        coa_id BigInteger PK
+    }
+    gl_account_group {
+        gl_account_group_id BigInteger PK
+    }
+    gl_account {
+        gl_account_id BigInteger PK
+        coa_id BigInteger FK
+        account_group_id BigInteger FK
+    }
+    gl_account_company_code_assignment {
+        gl_account_company_code_assignment_id BigInteger PK
+        gl_account_id BigInteger FK
+        company_code_id BigInteger FK
+        currency_id BigInteger FK
+        reconciliation_account_id BigInteger FK
+        planning_level_id BigInteger FK
+    }
+    cost_center {
+        cost_center_id BigInteger PK
+        plant_id BigInteger FK
+        profit_center_id BigInteger FK
+    }
+    profit_center {
+        profit_center_id BigInteger PK
+        plant_id BigInteger FK
+    }
+    profit_center_company_code_assignment {
+        profit_center_company_code_assignment_id BigInteger PK
+        company_code_id BigInteger FK
+        profit_center_id BigInteger FK
+    }
+    internal_order {
+        internal_order_id BigInteger PK
+        cost_center_id BigInteger FK
+    }
+    activity_type {
+        activity_type_id BigInteger PK
+        primaryCostElement BigInteger FK
+        secondaryCostElement BigInteger FK
+    }
+    skf {
+        skf_id BigInteger PK
+        unit_id BigInteger FK
+    }
+    planning_level {
+        planning_level_id BigInteger PK
+    }
+    planning_group {
+        planning_group_id BigInteger PK
+        planning_level_id BigInteger FK
+    }
+    tax_code {
+        tax_code_id BigInteger PK
+        country_id BigInteger FK
+        posting_account_id BigInteger FK
+
+    }
+    house_bank {
+        house_bank_id BigInteger PK
+        company_code_id BigInteger FK
+        bank_key_id BigInteger FK
+    }
+    account_bank {
+        account_bank_id BigInteger PK
+        house_bank_id BigInteger FK
+        currency_id BigInteger FK
+        gl_account_id BigInteger FK
+    }
+    bank_key {
+        bank_key_id BigInteger PK
+    }
+    %% %%
+    %% payment_term {
+    %%     payment_term_id BigInteger PK
+    %% }
+    %% payment_method {
+    %%     payment_method BigInteger PK
+    %% }
+    %% document_type {
+    %%     document_type_id BigInteger PK
+    %% }
+    %% tax_category {
+    %%     tax_category_id BigInteger PK
+    %% }
+    %% tax_classification {
+    %%     tax_classification_id BigInteger PK
+    %% }
+
+
+    %% CONTROLLING AREA
+    company_code ||--o{ cost_center : "companyCode"
+    profit_center ||--o{ cost_center : "profitCenter"
+
+    %% ACTIVITY TYPE
+    activity_type }o--|| unit  : "unit"
+
+    %% GL ACCOUNT
+    gl_account_group ||--o{  gl_account: "glAccountGroup"
+    coa ||--o{  gl_account: "coa"
+    gl_account ||--o{ gl_account_company_code_assignment : "glAccount"
+    company_code ||--o{ gl_account_company_code_assignment : "companyCode"
+    planning_level |o--o{ gl_account_company_code_assignment: "planningLevel"
+    gl_account |o--o{ activity_type : "primaryCostElement"
+    gl_account |o--o{ activity_type : "secondaryCostElement"
+
+    %% INTERNAL ORDER
+    cost_center |o--o{ internal_order : "defaultResponsibleCostCenter"
+
+    %% TAX CONFIGURATION
+    gl_account ||--o{ tax_code  : "postingAccount"
+
+    %% PLANNING
+    planning_level ||--o{ planning_group : "planningGroup"
+
+    %% SKF
+    skf }o--|| unit: "unit"
+
+    company_code ||--o{ profit_center_company_code_assignment: "companyCode"
+    profit_center_company_code_assignment }o--|| profit_center: "profitCenter"
+
+    company_code }o--|| coa : "coa"
+    company_code ||--o{ house_bank : "companyCode"
+    house_bank }o--|| bank_key : "bankKey"
+    house_bank ||--o{ account_bank : "accountBank"
+    gl_account |o--o{ account_bank : "glAccount"
