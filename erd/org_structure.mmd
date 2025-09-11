@@ -27,10 +27,6 @@ erDiagram
         sales_office_id BigInteger PK
         sales_org_id BigInteger FK
     }
-    sales_group {
-        sales_group_id BigInteger PK
-        sales_office_id BigInteger FK
-    }
     distribution_channel {
         distribution_channel_id BigInteger PK
     }
@@ -72,7 +68,6 @@ erDiagram
     company_code ||--o| sales_org: "companyCode"
     sales_org ||--o{ sales_area: "salesOrg"
     sales_org ||--o{ sales_office: "salesOrg"
-    sales_office ||--o{ sales_group: "salesOffice"
     distribution_channel ||--o{ sales_area: "distributionChannel"
     division ||--o{ sales_area: "division"
     

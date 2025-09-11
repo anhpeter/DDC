@@ -1,3 +1,0 @@
-update to add entity prefix (if not exists) to all the yml description key, 
-using snake case instead of kebab case for entity name, 
-eg:   @Schema(description = "${business-partner.businessPartnerCode}") ->   @Schema(description = "${entity.business_partner.businessPartnerCode}")

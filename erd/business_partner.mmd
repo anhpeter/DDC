@@ -8,9 +8,13 @@ erDiagram
 
     business_partner {
         business_partner_id BigInteger PK
+        trading_partner_id BigInteger FK
         business_partner_group_id BigInteger FK
-        region_id BigInteger FK
+        title_id BigInteger FK
+        street3 BigInteger FK
+        street4 BigInteger FK
         country_id BigInteger FK
+        idCardIssuePlace BigInteger FK
     }
     business_partner_group {
         business_partner_group_id BigInteger PK
@@ -24,6 +28,7 @@ erDiagram
         customer_id BigInteger FK
         company_code_id BigInteger FK
         reconciliation_account BigInteger FK
+        planning_group_id BigInteger FK
         payment_method_id BigInteger FK
         payment_term_id BigInteger FK
     }
@@ -34,18 +39,13 @@ erDiagram
         distribution_channel_id BigInteger FK
         division_id BigInteger FK
         sales_office_id BigInteger FK
-        sales_group_id BigInteger FK
+        sales_district_id BigInteger FK
         currency_id BigInteger FK
-        account_assignment_group_id BigInteger FK
-        delivery_plant BigInteger FK
+        tax_classification BigInteger FK
         customer_group_1 BigInteger FK
-        customer_group_2 BigInteger FK
     }
     customer_group {
         customer_group_id BigInteger PK
-    }
-    sales_group {
-        sales_group_id BigInteger PK
     }
     sales_office {
         sales_office_id BigInteger PK
@@ -53,8 +53,6 @@ erDiagram
     vendor {
         vendor_id BigInteger PK
         business_partner_id BigInteger FK
-
-
     }
     vendor_accounting_data {
         vendor_accounting_data_id BigInteger PK
@@ -68,8 +66,8 @@ erDiagram
     vendor_purchasing_data {
         vendor_purchasing_data_id BigInteger PK
         vendor_id BigInteger FK
+        vendor_group BigInteger FK
         purchasing_org_id BigInteger FK
-        sales_person BigInteger FK
         order_currency BigInteger FK
     }
     
@@ -77,7 +75,6 @@ erDiagram
         business_partner_bank_account_id BigInteger PK
         business_partner_id BigInteger FK
         bank_key_id BigInteger FK
-        country_id BigInteger FK
     }
 
     counterparty {
@@ -89,20 +86,37 @@ erDiagram
         counterparty_id BigInteger FK
         company_code_id BigInteger FK
     }
+    sales_district {
+        sales_district_id BigInteger PK
+    }
+    customer_tax_classification {
+        tax_classification_id BigInteger PK
+    }
+    vendor_group {
+        vendor_group_id BigInteger PK
+    }
+    title {
+        title_id BigInteger PK
+    }
 
     %% BUSINESS PARTNER ENHANCED
     business_partner ||--o| customer : "businessPartner"
     business_partner ||--o| vendor : "businessPartner"
-    business_partner ||--o| employee : "businessPartner"
+    business_partner |o--o| employee : "businessPartner"
     business_partner ||--o| counterparty : "businessPartner"
+    business_partner }o--|| title : "title"
+    business_partner }o--o| ward : "street3"
+    business_partner }o--o| province_city : "street4"
+    business_partner }o--o| identity_issuing_authority : "idCardIssuePlace"
+    company_code |o--o{ business_partner : "tradingPartner"
     business_partner_group ||--o{ business_partner : "businessPartnerGroup"
 
     %% VENDOR ENHANCED
     vendor ||--|{ vendor_purchasing_data : "vendor"
+    vendor_purchasing_data }o--o|  vendor_group  : "vendorGroup"
     vendor_purchasing_data }o--||  purchasing_org  : "purchasingOrg"
-    vendor_purchasing_data }o--o| employee: "salesPerson"
     vendor ||--|{ vendor_accounting_data : "vendor"
-    vendor_accounting_data }o--|| GlAccount: "reconciliationAccount"
+    vendor_accounting_data }o--|| gl_account: "reconciliationAccount"
     vendor_accounting_data }o--o| payment_term: "paymentTerm"
     vendor_accounting_data }o--o| payment_method: "paymentMethod"
     vendor_accounting_data }o--|| planning_group: "planningGroup"
@@ -117,16 +131,15 @@ erDiagram
     customer_accounting_data }|--|| GlAccount: "reconciliationAccount"
     customer_accounting_data }o--o| payment_term: "paymentTerm"
     customer_accounting_data }o--o| payment_method: "paymentMethod"
+    customer_accounting_data }o--|| planning_group: "planningGroup"
     customer ||--|{ customer_sales_data : "customer"
     customer_sales_data }o--|| sales_org : "salesOrg"
     customer_sales_data }o--|| distribution_channel : "distributionChannel"
     customer_sales_data }o--|| division : "division"
     customer_sales_data }o--|| sales_office : "salesOffice"
-    customer_sales_data }o--|| sales_group : "salesGroup"
-    customer_sales_data }o--o| plant : "deliveryPlant"
-    customer_sales_data }o--|| tax_classification : "taxClassification"
-    customer_sales_data }|--|| customer_group : "customerGroup1"
-    customer_sales_data }|--|| customer_group : "customerGroup2"
+    customer_sales_data }o--o| sales_district : "salesDistrict"
+    customer_sales_data }o--|| customer_tax_classification : "taxClassification"
+    customer_sales_data }|--o| customer_group : "customerGroup1"
 
     %% BANK DETAILS
     business_partner ||--o{ business_partner_bank_account : "businessPartner"

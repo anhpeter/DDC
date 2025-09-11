@@ -1,0 +1,135 @@
+---
+title: Material
+config:
+  layout: elk
+---
+erDiagram
+    direction lr
+
+    material {
+        material_id BigInteger PK
+        division_id BigInteger FK   
+        material_type_id BigInteger FK   
+        material_group_id BigInteger FK   
+        base_unit_id BigInteger FK   
+    }
+    material_type {
+        material_type_id BigInteger PK
+    }
+    material_group {
+        material_group_id BigInteger PK
+    }
+    material_type_material_group_assignment {
+        material_type_material_group_assignment BigInteger PK
+        material_type BigInteger FK
+        material_group BigInteger FK
+        valuation_class_id BigInteger FK
+        unit_1_id BigInteger FK
+        unit_2_id BigInteger FK
+        unit_3_id BigInteger FK
+        unit_4_id BigInteger FK
+    }
+    material_batch {
+        material_batch_id BigInteger PK
+        material_id BigInteger FK   
+        z_origin BigInteger FK
+    }
+    origin {
+        origin_id BigInteger PK
+    }
+    material_alternative_unit {
+        material_alternative_unit_id BigInteger PK
+        material_id BigInteger FK
+        unit_id BigInteger FK
+    }
+    material_plant_assignment {
+        material_plant_assignment_id BigInteger PK
+        material_id BigInteger FK
+        plant_id BigInteger FK
+    }
+    material_purchasing_data {
+        material_purchasing_data_id BigInteger PK
+        material_plant_id BigInteger FK
+        order_unit_id BigInteger FK
+        purchasing_group_id BigInteger FK
+        material_tax_classification_id BigInteger FK
+    }
+    material_mrp_data {
+        material_mrp_data_id BigInteger PK
+        material_plant_id BigInteger FK
+        mrp_profile_id BigInteger FK
+    }
+    material_accounting_data {
+        material_accounting_data_id BigInteger PK
+        material_plant_id BigInteger FK
+        valuation_class_id BigInteger FK
+    }
+    mrp_profile {
+        mrp_profile_id BigInteger PK
+    }   
+    valuation_class {
+        valuation_class_id BigInteger PK
+        gl_account_id BigInteger FK
+    }
+    material_sales_data {
+        material_sales_data_id BigInteger PK
+        sales_org_id BigInteger FK
+        distribution_channel_id BigInteger FK
+        material_id BigInteger FK
+        account_assignment_group_id BigInteger FK
+        material_tax_classification_id BigInteger FK
+    }
+    account_assignment_group {
+        account_assignment_group_id BigInteger PK
+    }
+    material_tax_classification {
+        material_tax_classification_id BigInteger PK
+    }
+    unit {
+        unit_id BigInteger PK
+    }
+
+    %% MATERIAL MASTER
+    material }o--|| material_type : "materialType"
+    material }o--|| material_group : "materialGroup"
+    material }o--|| unit: "baseUnit"
+    material ||--o{ material_alternative_unit : "material"
+    material_alternative_unit }o--|| unit: "alternativeUnit"
+
+    %% MATERIAL TYPE MATERIAL GROUP
+    material_type ||--o{ material_type_material_group_assignment: "materialType"
+    material_type_material_group_assignment }o--|| material_group: "materialGroup"
+    material_type_material_group_assignment }o--o| unit: "unit1"
+    material_type_material_group_assignment }o--o| unit: "unit2"
+    material_type_material_group_assignment }o--o| unit: "unit3"
+    material_type_material_group_assignment }o--o| unit: "unit4"
+
+    %% MATERIAL PLANT
+    plant ||--o{ material_plant_assignment: "plant"
+    material ||--o{ material_plant_assignment : "material"
+    
+    material_plant_assignment ||--o| material_purchasing_data : "materialPlant"
+    material_plant_assignment ||--o| material_mrp_data: "materialPlant"
+    material_plant_assignment ||--o| material_accounting_data: "materialPlant"
+    material_accounting_data }o--|| valuation_class: "valueationClass"
+    valuation_class }o--|| gl_account: "glAccount"
+
+    material_purchasing_data }o--o| unit: "orderUnit"
+    material_purchasing_data }o--|| purchasing_group: "purchasingGroup"
+    material_purchasing_data }o--o| material_tax_classification: "materialTaxClassification"
+
+    material_mrp_data }o--|| mrp_profile: "mrpProfile"
+    
+    %% MATERIAL SALES
+    sales_org ||--o{ material_sales_data: "salesOrg"
+    distribution_channel ||--o{ material_sales_data: "distributionChannel"
+    material }o--|| division: "division"
+    material }o--o| member_group: "memberGroup"
+    material ||--o{ material_sales_data : "material"
+    material_sales_data }o--o| account_assignment_group: "accountAssignmentGroup"
+    material_sales_data }o--o| material_tax_classification: "materialTaxClassification"
+    
+    %% MATERIAL CLASSIFICATION
+    material ||--o{ material_batch: "materialBatch"
+    material_batch }o--o| origin: "z_origin"
+    purchasing_org ||--o{ purchasing_group: "purchasingOrg"

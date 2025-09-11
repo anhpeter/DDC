@@ -1,0 +1,3 @@
+mmdc -i org_structure.mmd -o "export/01. Organization Structure-v2.pdf"
+mmdc -i material.mmd -o "export/02. Material-v2.pdf"
+mmdc -i business_partner.mmd -o "export/03. Business Partner-v2.pdf"
